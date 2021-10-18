@@ -122,7 +122,6 @@ public class EmployeeVO {
         DateTimeFormatter dateFormatter 
                 = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         String dateAsString = dateOfBirth.format(dateFormatter);
-        //LocalDate localDate = LocalDate.parse(date, formatter);
         return (LocalDate.parse(dateAsString, dateFormatter));
     }
 
