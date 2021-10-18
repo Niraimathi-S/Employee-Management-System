@@ -7,7 +7,7 @@ package com.ideas2it.employeemanagement.service;
 
 import com.ideas2it.employeemanagement.model.Employee;
 import com.ideas2it.employeemanagement.model.EmployeeVO;
-import com.ideas2it.employeemanagement.mapper.Mapper;
+import com.ideas2it.employeemanagement.util.Mapper;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,7 +40,7 @@ public class EmployeeService {
      *
      */
     public void createEmployee(int employeeId, EmployeeVO employeeVO) { 
-        Employees.put(employeeId, Mapper.DTOToEmployee(employeeId, employeeVO));
+        Employees.put(employeeId, Mapper.EmployeeDTOToEmployee(employeeId, employeeVO));
     }
 
     /**
@@ -111,14 +111,8 @@ public class EmployeeService {
      * This method updates all fields of one employee. 
      *
      */
-    /*public void updateAllFields(int employeeId, String name, String email, 
-            long contactNumber, LocalDate dateOfBirth, float salary) {
-        Employees.put(employeeId,new Employee(employeeId,name, email, contactNumber,
-                                              dateOfBirth, salary));
-    }*/
-
     public void updateAllFields(int employeeId, EmployeeVO employeeVO) { 
-        Employees.put(employeeId, Mapper.DTOToEmployee(employeeId, employeeVO));
+        Employees.put(employeeId, Mapper.EmployeeDTOToEmployee(employeeId, employeeVO));
     }
 
     /**
@@ -126,8 +120,8 @@ public class EmployeeService {
      *
      */
     public void updateName(int employeeId, String name) {
-        Employee updateEmployee = Employees.get(employeeId);
-        updateEmployee.setName(name);
+        Employee employeeToUpdate = Employees.get(employeeId);
+        employeeToUpdate.setName(name);
     }
 
     /**
@@ -135,8 +129,8 @@ public class EmployeeService {
      *
      */
     public void updateEmail(int employeeId, String email) {
-        Employee updateEmployee = Employees.get(employeeId);
-        updateEmployee.setEmail(email);
+        Employee employeeToUpdate = Employees.get(employeeId);
+        employeeToUpdate.setEmail(email);
     }
 
     /**
@@ -144,8 +138,8 @@ public class EmployeeService {
      *
      */
     public void updateContactNumber(int employeeId, long contactNumber) {
-        Employee updateEmployee = Employees.get(employeeId);
-        updateEmployee.setContactNumber(contactNumber);
+        Employee employeeToUpdate = Employees.get(employeeId);
+        employeeToUpdate.setContactNumber(contactNumber);
     }
 
     /**
@@ -153,8 +147,8 @@ public class EmployeeService {
      *
      */
     public void updateDateOfBirth(int employeeId, LocalDate dateOfBirth) {
-        Employee updateEmployee = Employees.get(employeeId);
-        updateEmployee.setDateOfBirth(dateOfBirth);
+        Employee employeeToUpdate = Employees.get(employeeId);
+        employeeToUpdate.setDateOfBirth(dateOfBirth);
     }
 
     /**
@@ -162,8 +156,8 @@ public class EmployeeService {
      *
      */
     public void updateSalary(int employeeId, float salary) {
-        Employee updateEmployee = Employees.get(employeeId);
-        updateEmployee.setSalary(salary);
+        Employee employeeToUpdate = Employees.get(employeeId);
+        employeeToUpdate.setSalary(salary);
     }
 
     /**
@@ -174,7 +168,7 @@ public class EmployeeService {
     public EmployeeVO viewOneEmployee(Integer employeeId) {
         Employee employee = Employees.get(employeeId);
 
-        return (Mapper.EmployeeToDTO(employeeId, employee));
+        return (Mapper.EmployeeToEmployeeDTO(employeeId, employee));
     }
 
     /**
@@ -189,7 +183,7 @@ public class EmployeeService {
 
         for (Integer id : Employees.keySet()) {
             employee = Employees.get(id);
-            employeeVO = Mapper.EmployeeToDTO(id, employee);
+            employeeVO = Mapper.EmployeeToEmployeeDTO(id, employee);
             employeeDetails.add(employeeVO);
         }
         return employeeDetails;

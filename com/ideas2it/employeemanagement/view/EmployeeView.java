@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- * View class gets input and view output to the user
+ * View class gets input and view output to the user.
  * 
  * @author Niraimathi S
  * @ version 1.0 12-11-2021
@@ -57,8 +57,7 @@ public class EmployeeView {
                     System.out.println("Please enter valid option");
                     break;
             }
-            System.out.println("-----------------------");
-           
+            System.out.println("-----------------------");   
         } while (1 != choiceToContinue);
     }
 
@@ -209,7 +208,7 @@ public class EmployeeView {
     private String getEmail() {
         String pattern = "[a-zA-Z][\\w&&[^_]]{2,}" 
                 + "([#$%&*!?\\.\\-_]{1}[\\w&&[^_]]+)*?@[a-zA-Z][a-zA-Z0-9]+" 
-                + "(([\\.\\-]{1}[a-zA-Z0-9]+){0,4})?.[\\w]{2,5}";
+                + "([\\.\\-]{1}[a-zA-Z0-9]+){0,4}.[\\w]{2,5}";
 
         System.out.print("Email ID:");
         String email = scanner.nextLine();
@@ -247,26 +246,26 @@ public class EmployeeView {
             
                 String[] dateArray = dateAsString.split("-");
 
-            
-            String formattedDate  = String.join("-",dateArray[2], dateArray[1],
-                                                dateArray[0]);
+                String formattedDate  = String.join("-",dateArray[2], 
+                                                    dateArray[1], dateArray[0]);
 
-            try {
-                dateOfBirth = LocalDate.parse(formattedDate);
-                if (dateOfBirth.isAfter(today)) {
-                    System.out.println("Invalid Date Of birth!!");
-                } else {
-                    int age = (int) ChronoUnit.YEARS.between(dateOfBirth, 
-                                                             today);
-                    if (( age < 18) || (age > 60)) {
-                        System.out.println("Employee should be 18-60years old");
+                try {
+                    dateOfBirth = LocalDate.parse(formattedDate);
+                    if (dateOfBirth.isAfter(today)) {
+                        System.out.println("Invalid Date Of birth!!");
                     } else {
-                        break;
+                        int age = (int) ChronoUnit.YEARS.between(dateOfBirth, 
+                                                             today);
+                        if (( age < 18) || (age > 60)) {
+                            System.out.println("Employee should be 18-60 " 
+                                               + "years old");
+                        } else {
+                            break;
+                        }
                     }
+                } catch (Exception e) {
+                    System.out.println("\n*not a valid date*\n");
                 }
-            } catch (Exception e) {
-                System.out.println("\n*not a valid date*\n");
-            }
             } catch (ArrayIndexOutOfBoundsException e) {
                 System.out.println("\n*not a valid date*\n");
             }
@@ -427,9 +426,6 @@ public class EmployeeView {
      *
      */
     private void updateAllFields(int employeeId) {
-      /*  employeeController.updateAllFields(employeeId, getName(), getEmail(), 
-                                      getContactNumber(), getDateOfBirth(),
-                                      getSalary());*/
             employeeController.updateAllFields(employeeId, 
                     new EmployeeVO(employeeId, getName(), getEmail(), 
                                    getContactNumber(), getDateOfBirth(),

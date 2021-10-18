@@ -4,7 +4,7 @@
  * Copyrights (C) Ideas2IT
  */
 
-package com.ideas2it.employeemanagement.mapper;
+package com.ideas2it.employeemanagement.util;
 
 import com.ideas2it.employeemanagement.model.Employee;
 import com.ideas2it.employeemanagement.model.EmployeeVO;
@@ -24,7 +24,7 @@ public class Mapper{
      *
      * @return employeeVO-converted employeeVO object.
      */
-    public static EmployeeVO EmployeeToDTO(int employeeId, Employee employee) {
+    public static EmployeeVO EmployeeToEmployeeDTO(int employeeId, Employee employee) {
         EmployeeVO employeeVO = new EmployeeVO();
         employeeVO.setEmployeeId(employeeId);
         employeeVO.setName(employee.getName());
@@ -40,7 +40,7 @@ public class Mapper{
      *
      * @return employee-converted employee object.
      */
-    public static Employee DTOToEmployee(int employeeId, 
+    public static Employee EmployeeDTOToEmployee(int employeeId, 
                                          EmployeeVO employeeVO) {
         Employee employee = new Employee();
         employee.setEmployeeId(employeeId);

@@ -97,11 +97,6 @@ public class EmployeeController {
      * all employees.
      *
      */
-   /* public void updateAllFields(int employeeId, String name, String email, 
-            long contactNumber, LocalDate dateOfBirth, float salary) {
-        employeeService.updateAllFields(employeeId, name, email, contactNumber, 
-                                        dateOfBirth, salary);
-    }*/
     public void updateAllFields(int employeeId, EmployeeVO employeeVO) {
         employeeService.updateAllFields(employeeId, employeeVO);
     }
