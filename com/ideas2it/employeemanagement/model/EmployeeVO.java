@@ -96,7 +96,7 @@ public class EmployeeVO {
     }
 
     /**
-     * Method to get Employee Contact Number
+     * Method to get Employee Contact Number.
      *
      * @return contactNumber	Employee Phone number
      */
