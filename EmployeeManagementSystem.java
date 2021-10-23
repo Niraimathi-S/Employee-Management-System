@@ -1,29 +1,24 @@
 /*
  * EmployeeManagementSystem.java
  * 
- * Copyrights (C) IdeasIT
+ * Copyrights (C) IdeasIT.
  */
 
 import com.ideas2it.employeemanagement.view.EmployeeView;
-import java.time.format.DateTimeFormatter;
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
-import java.util.Scanner;
 
 /*
- * This class create an obeject for the view class and calls it.
+ * This class create an object for the view class and calls the showoption()
+ * method, which inturn shows the available options in the main menu of the 
+ * employee management system. 
+ * We can create, update, view and delete a employee
+ * detail using the options shown in the main menu.
  * 
  * Copyrights (C) IdeasIT
  */
 public class EmployeeManagementSystem {
 
     /**
-     * main() method calls the view class
+     * main() method calls the EmployeeView class, which shows the main menu.
      *
      */
     public static void main(String[] args) {
@@ -31,4 +26,3 @@ public class EmployeeManagementSystem {
         employeeView.showOptions(); 
     }
 }
-

@@ -5,15 +5,16 @@
  */
 package com.ideas2it.employeemanagement.service;
 
-import com.ideas2it.employeemanagement.model.Employee;
-import com.ideas2it.employeemanagement.model.EmployeeVO;
-import com.ideas2it.employeemanagement.util.Mapper;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+
+import com.ideas2it.employeemanagement.model.Employee;
+import com.ideas2it.employeemanagement.model.EmployeeVO;
+import com.ideas2it.employeemanagement.util.Mapper;
 
 /**
  * This class interacts with Employee POJO, and EmployeeVO.
@@ -24,11 +25,12 @@ import java.util.Scanner;
 public class EmployeeService {
     private static Map<Integer, Employee> Employees 
             = new HashMap<Integer, Employee>();
-    private static Scanner scanner = new Scanner(System.in);
 
     /**
      * This method validates the given input 
      *
+     * @param input- the input to be validated.
+     * @param patternToValidate-the pattern used to validate th input.
      * @return input-validated input
      */
     public boolean validateInput(String input, String patternToValidate) { 
@@ -36,16 +38,50 @@ public class EmployeeService {
     }
  
     /**
+     * This method converts string input into integer.
+     *
+     * @param input-input to be converted to integer type.
+     * @return input in integer data type.
+     */
+    public int stringToInteger(String input) {
+        return Integer.parseInt(input);
+    }
+
+    /**
+     * This method converts string input into float datatype.
+     *
+     * @param input-input to be converted to float type.
+     * @return input in float data type.
+     */
+    public float stringToFloat(String input) {
+        return Float.parseFloat(input);
+    }
+
+    /**
+     * This method converts string input into long datatype.
+     *
+     * @param input-input to be converted to long type.
+     * @return input in long data type.
+     */
+    public long stringToLong(String input) {
+        return Long.parseLong(input);
+    }
+
+    /**
      * This method creates a new employee. 
      *
+     * @param employeeid-employeeid
+     * @param employeeVO-The VO object to store the created employee.
      */
     public void createEmployee(int employeeId, EmployeeVO employeeVO) { 
-        Employees.put(employeeId, Mapper.EmployeeDTOToEmployee(employeeId, employeeVO));
+        Employees.put(employeeId, Mapper.EmployeeDTOToEmployee(employeeId,
+                                                               employeeVO));
     }
 
     /**
      * This method check if a employeeId exists or not.
      *
+     * @param employeeid-employeeid to check if a record already exist.
      * @return boolean-true if given employeeId exist, else false.
      */
     public boolean checkContainskey(int employeeId) {
@@ -64,6 +100,7 @@ public class EmployeeService {
     /**
      * This method check if a contactnumber already exists or not 
      *
+     * @param contactNumber-the number to be checked for duplicate.
      * @return boolean-true if given contactnumber exist, else false.
      */
     public boolean checkDuplicateContactNumber(long contactNumber) {
@@ -79,6 +116,7 @@ public class EmployeeService {
     /**
      * This method check if a email already exists or not 
      *
+     * @param email- email to be checked for duplicate.
      * @return boolean-true if given email exist, else false.
      */
     public boolean checkDuplicateEmail(String email) {
@@ -102,6 +140,7 @@ public class EmployeeService {
     /**
      * This method deletes one employee's detail. 
      *
+     * @param employeeid-The employeeId of the employee to be deleted.
      */
     public void deleteOneEmployee(int employeeId) {
         Employees.remove(employeeId);
@@ -110,6 +149,9 @@ public class EmployeeService {
     /**
      * This method updates all fields of one employee. 
      *
+     * @param employeeid-employeeid to update all fields
+     * @param employeeVO-employeeVO object containing updated
+     *                   values get from user
      */
     public void updateAllFields(int employeeId, EmployeeVO employeeVO) { 
         Employees.put(employeeId, Mapper.EmployeeDTOToEmployee(employeeId, employeeVO));
@@ -118,6 +160,8 @@ public class EmployeeService {
     /**
      * This method updates name of the employee. 
      *
+     * @param employeeid-employeeid to update.
+     * @param name-the updated name of the employee.
      */
     public void updateName(int employeeId, String name) {
         Employee employeeToUpdate = Employees.get(employeeId);
@@ -127,6 +171,8 @@ public class EmployeeService {
     /**
      * This method updates email of the employee. 
      *
+     * @param employeeid-employeeid to update.
+     * @param email-the updated email of the employee.
      */
     public void updateEmail(int employeeId, String email) {
         Employee employeeToUpdate = Employees.get(employeeId);
@@ -136,6 +182,8 @@ public class EmployeeService {
     /**
      * This method updates contact number of the employee. 
      *
+     * @param employeeid-employeeid to update.
+     * @param contactNumber-the updated mobile number of the employee.
      */
     public void updateContactNumber(int employeeId, long contactNumber) {
         Employee employeeToUpdate = Employees.get(employeeId);
@@ -145,6 +193,8 @@ public class EmployeeService {
     /**
      * This method updates date of birth of the employee. 
      *
+     * @param employeeid-employeeid to update.
+     * @param dateOfBirth-the updated date of birth of the employee.
      */
     public void updateDateOfBirth(int employeeId, LocalDate dateOfBirth) {
         Employee employeeToUpdate = Employees.get(employeeId);
@@ -154,6 +204,8 @@ public class EmployeeService {
     /**
      * This method updates salary of the employee. 
      *
+     * @param employeeid-employeeid to update.
+     * @param salary-the updated salary of the employee.
      */
     public void updateSalary(int employeeId, float salary) {
         Employee employeeToUpdate = Employees.get(employeeId);
@@ -163,6 +215,7 @@ public class EmployeeService {
     /**
      * This method retrives one employee from the collection.
      *
+     * @param employeeid-employeeid to view.
      * @return employeeVO- view object for one employee.
      */
     public EmployeeVO viewOneEmployee(Integer employeeId) {

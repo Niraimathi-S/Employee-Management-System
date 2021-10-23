@@ -6,13 +6,14 @@
 
 package com.ideas2it.employeemanagement.util;
 
-import com.ideas2it.employeemanagement.model.Employee;
-import com.ideas2it.employeemanagement.model.EmployeeVO;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDate;
 
+import com.ideas2it.employeemanagement.model.Employee;
+import com.ideas2it.employeemanagement.model.EmployeeVO;
+
 /**
- * This class contains methods to convert VO object to POJO and viceversa.
+ * This class contains methods to convert View object to POJO and viceversa.
  * 
  * @author Niraimathi S
  * @ version 1.0 12-11-2021
@@ -21,7 +22,9 @@ public class Mapper{
 
     /**
      * This method converts Employee object to EmployeeVO object.
-     *
+     * 
+     * @param employeeid-employeeid
+     * @param employee-employee object which is to be converted into DTO.
      * @return employeeVO-converted employeeVO object.
      */
     public static EmployeeVO EmployeeToEmployeeDTO(int employeeId, Employee employee) {
@@ -38,6 +41,8 @@ public class Mapper{
     /**
      * This method converts EmployeeVO object to Employee object.
      *
+     * @param employeeid-employeeid
+     * @param employeeVO-employeeVO object to convert into POJO object.
      * @return employee-converted employee object.
      */
     public static Employee EmployeeDTOToEmployee(int employeeId, 
