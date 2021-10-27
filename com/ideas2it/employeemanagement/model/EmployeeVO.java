@@ -1,5 +1,4 @@
 /* 
- * EmployeeVO.java 
  * Copyrights (c) Ideas2It
  */
 
@@ -16,11 +15,11 @@ import java.time.LocalDate;
  */
 public class EmployeeVO {
     private int employeeId;
+    private long mobileNumber;
+    private float salary;
+    private LocalDate dateOfBirth;
     private String name;
     private String email;
-    private long contactNumber;
-    private LocalDate dateOfBirth;
-    private float salary;
 
     /**
      * Empty Constructor for EmployeeVO
@@ -32,11 +31,11 @@ public class EmployeeVO {
      * Constructor for Employee class to initialize values
      */
     public EmployeeVO (int employeeId, String name, String email,  
-            long contactNumber, LocalDate dateOfBirth, float salary) {
+            long mobileNumber, LocalDate dateOfBirth, float salary) {
         this.employeeId = employeeId;
         this.name = name;
         this.email = email;
-        this.contactNumber = contactNumber;
+        this.mobileNumber = mobileNumber;
         this.dateOfBirth = dateOfBirth;
         this.salary = salary;
     }
@@ -98,19 +97,19 @@ public class EmployeeVO {
     /**
      * Method to get Employee Contact Number
      *
-     * @return contactNumber	Employee Phone number
+     * @return mobileNumber	Employee Phone number
      */
-    public long getContactNumber() {
-        return contactNumber;
+    public long getMobileNumber() {
+        return mobileNumber;
     }
 
     /**
      * Method to set Employee contact number
      *
-     * @param contactNumber	Employee Contact Number
+     * @param mobileNumber	Employee Contact Number
      */
-    public void setContactNumber(long contactNumber) {
-        this.contactNumber = contactNumber;
+    public void setMobileNumber(long mobileNumber) {
+        this.mobileNumber = mobileNumber;
     }
 
     /**
@@ -150,5 +149,16 @@ public class EmployeeVO {
      */
     public void setSalary(float salary) {
         this.salary = salary;
+    }
+
+    public String toString() {
+        StringBuilder employeeDetails = new StringBuilder();
+        employeeDetails.append("\nEmployee ID\t:").append(employeeId)
+                .append("\nName\t\t:").append(name).append("\nEmail\t\t:")
+                .append(email).append("\nMobile number\t:").append(mobileNumber)
+                .append("\nSalary\t\t:").append(salary)
+                .append("\nDate Of birth\t:")
+                .append(dateOfBirth);
+        return employeeDetails.toString();
     }
 }

@@ -1,6 +1,4 @@
 /*
- * EmployeeController.java
- * 
  * Copyrights (C) Ideas2IT
  */
 
@@ -14,16 +12,17 @@ import com.ideas2it.employeemanagement.model.EmployeeVO;
 import com.ideas2it.employeemanagement.service.EmployeeService;
 
 /**
- * Controller class acts as intermediate between view and service classes.
+ * Controller class is responsible for the flow control logic and
+ * acts as intermediate between view and service classes.
  * 
  * @author Niraimathi S
- * @ version 1.0 12-11-2021
+ * @version 1.0 12-11-2021
  */
 public class EmployeeController {
     private EmployeeService employeeService = new EmployeeService();
 
     /**
-     * This method calls validateInput() from EmployeeService.
+     * Validates the given input from the user. 
      *
      * @param input- the input to be validated.
      * @param patternToValidate-the pattern used to validate th input.
@@ -34,66 +33,36 @@ public class EmployeeController {
     }
 
     /**
-     * This method calls stringToInteger() from EMployeeService.
-     *
-     * @param input-input to be converted to integer type.
-     * @return input in integer data type.
-     */
-    public int stringToInteger(String input) {
-        return employeeService.stringToInteger(input);
-    }
-
-    /**
-     * This method calls stringToFloat() from EMployeeService.
-     *
-     * @param input-input to be converted to float type.
-     * @return input in float data type.
-     */
-    public float stringToFloat(String input) {
-        return employeeService.stringToFloat(input);
-    }
-
-    /**
-     * This method calls stringToLong() from EMployeeService.
-     *
-     * @param input-input to be converted to long type.
-     * @return input in long data type.
-     */
-    public long stringToLong(String input) {
-        return employeeService.stringToLong(input);
-    }
-
-    /**
-     * This method calls createEmployee() from EMployeeService.
+     * Creates a new employee with the data given by the user. 
      *
      * @param employeeid-employeeid
      * @param employeeVO-The VO object to store the created employee.
      */
-    public void createEmployee(int employeeId, EmployeeVO employeeVO) {
-        employeeService.createEmployee(employeeId, employeeVO);
+    public boolean createEmployee(int employeeId, EmployeeVO employeeVO) {
+        return employeeService.createEmployee(employeeId, employeeVO);
     }
 
     /**
-     * This method calls checkEmpty() from EmployeeService.
+     * Checks if employees is empty.
      *
      * @return boolean-true if Empty, else false
      */
-    public boolean checkEmpty() {
-        return employeeService.checkEmpty();
+    public boolean isRecordsEmpty() {
+        return employeeService.isRecordsEmpty();
     }
 
     /**
-     * This method calls checkDuplicateContactNumber() from EmployeeService.
+     * Checks if a mobileNumber already exists or not.
      *
-     * @param contactNumber-the number to be checked for duplicate.
+     * @param mobileNumber-the number to be checked for duplicate.
      * @return boolean-true if duplicate, else false.
      */
-    public boolean checkDuplicateContactNumber(long contactNumber) {
-        return employeeService.checkDuplicateContactNumber(contactNumber);
+    public boolean checkDuplicateMobileNumber(long mobileNumber) {
+        return employeeService.checkDuplicateMobileNumber(mobileNumber);
     }
 
     /**
-     * This method calls checkDuplicateEmail() from EmployeeService.
+     * Checks if a email already exists or not.
      *
      * @param email- email to be checked for duplicate.
      * @return boolean-true if duplicate, else false.
@@ -103,27 +72,24 @@ public class EmployeeController {
     }
 
     /**
-     * This method calls deleteAllEmployee() from EmployeeService which deletes 
-     * all employees.
-     *
+     * Deletes all employees. 
      */
     public void deleteAllEmployee() {
         employeeService.deleteAllEmployee();
     }
 
     /**
-     * This method calls checkContainskey() from EmployeeService which checks.
+     * Checks if a employeeId exists or not.
      *
      * @param employeeId-Employee Id to check if a record already exist.
      * @return boolean-true if given employeeId exist, else false.
      */
-    public boolean checkContainskey(int employeeId) {
-        return (employeeService.checkContainskey(employeeId));
+    public boolean isEmployeeExist(int employeeId) {
+        return (employeeService.isEmployeeExist(employeeId));
     }
     
     /**
-     * This method calls deleteOneEmployee() from EmployeeService which deletes 
-     * one employee from the records.
+     * Deletes one employee.
      *
      * @param employeeid-The employeeId of the employee to be deleted.
      */
@@ -132,20 +98,18 @@ public class EmployeeController {
     }
 
     /**
-     * This method calls updateAllFields() from EmployeeService which updates 
-     * all employees.
+     * Updates all fields of one employee. 
      *
      * @param employeeid-employeeid to update all fields
      * @param employeeVO-employeeVO object containing updated
      *                   values get from user
      */
-    public void updateAllFields(int employeeId, EmployeeVO employeeVO) {
-        employeeService.updateAllFields(employeeId, employeeVO);
+    public boolean updateAllFields(int employeeId, EmployeeVO employeeVO) {
+        return employeeService.updateAllFields(employeeId, employeeVO);
     }
 
     /**
-     * This method calls updateName() from EmployeeService which updates 
-     * employee name.
+     * Updates name of a single employee. 
      *
      * @param employeeid-employeeid to update.
      * @param name-the updated name of the employee.
@@ -155,8 +119,7 @@ public class EmployeeController {
     }
 
     /**
-     * This method calls updateEmail() from EmployeeService which updates 
-     * employee email.
+     * Updates email of a single employee. 
      *
      * @param employeeid-employeeid to update.
      * @param email-the updated email of the employee.
@@ -166,19 +129,17 @@ public class EmployeeController {
     }
 
     /**
-     * This method calls updateContactNumber() from EmployeeService which  
-     * updates employee contact number.
+     * Updates mobile number of a single employee. 
      *
      * @param employeeid-employeeid to update.
-     * @param contactNumber-the updated mobile number of the employee.
+     * @param mobileNumber-the updated mobile number of the employee.
      */
-    public void updateContactNumber(int employeeId, long contactNumber) {
-        employeeService.updateContactNumber(employeeId, contactNumber);
+    public void updateMobileNumber(int employeeId, long mobileNumber) {
+        employeeService.updateMobileNumber(employeeId, mobileNumber);
     }
 
     /**
-     * This method calls updateDateOfBirth() from EmployeeService which updates. 
-     * employee date of birth.
+     * Updates date of birth of a single employee. 
      *
      * @param employeeid-employeeid to update.
      * @param dateOfBirth-the updated date of birth of the employee.
@@ -188,8 +149,7 @@ public class EmployeeController {
     }
 
     /**
-     * This method calls updateSalary() from EmployeeService which updates 
-     * employees salary.
+     * Updates salary of a single employee. 
      *
      * @param employeeid-employeeid to update.
      * @param salary-the updated salary of the employee.
@@ -199,7 +159,7 @@ public class EmployeeController {
     }
 
     /**
-     * This method calls viewOneEmployee() from EmployeeService.
+     * Views one employee to the user.
      *
      * @param employeeid-employeeid to view.
      * @return employeeVO-object which contains details of the single employee.
@@ -209,7 +169,7 @@ public class EmployeeController {
     }
 
     /**
-     * This method calls viewAllEmployee() from EmployeeService.
+     * Views all employees to the user.
      *
      * @return List of all employees
      */

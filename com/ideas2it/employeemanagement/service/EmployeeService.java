@@ -1,8 +1,7 @@
 /*
- * EmployeeSevice.java
- * 
  * Copyrights (C) Ideas2IT
  */
+
 package com.ideas2it.employeemanagement.service;
 
 import java.time.LocalDate;
@@ -17,7 +16,8 @@ import com.ideas2it.employeemanagement.model.EmployeeVO;
 import com.ideas2it.employeemanagement.util.Mapper;
 
 /**
- * This class interacts with Employee POJO, and EmployeeVO.
+ * Performs logical operations and data manupulation.
+ * Interacts with Employee POJO, and EmployeeVO and validates user inputs.
  * 
  * @author Niraimathi S
  * @version 1.0 12-11-2021
@@ -27,7 +27,7 @@ public class EmployeeService {
             = new HashMap<Integer, Employee>();
 
     /**
-     * This method validates the given input 
+     * Validates the given input from the user. 
      *
      * @param input- the input to be validated.
      * @param patternToValidate-the pattern used to validate th input.
@@ -36,101 +36,72 @@ public class EmployeeService {
     public boolean validateInput(String input, String patternToValidate) { 
         return input.matches(patternToValidate);
     }
- 
-    /**
-     * This method converts string input into integer.
-     *
-     * @param input-input to be converted to integer type.
-     * @return input in integer data type.
-     */
-    public int stringToInteger(String input) {
-        return Integer.parseInt(input);
-    }
 
     /**
-     * This method converts string input into float datatype.
-     *
-     * @param input-input to be converted to float type.
-     * @return input in float data type.
-     */
-    public float stringToFloat(String input) {
-        return Float.parseFloat(input);
-    }
-
-    /**
-     * This method converts string input into long datatype.
-     *
-     * @param input-input to be converted to long type.
-     * @return input in long data type.
-     */
-    public long stringToLong(String input) {
-        return Long.parseLong(input);
-    }
-
-    /**
-     * This method creates a new employee. 
+     * Creates a new employee. 
      *
      * @param employeeid-employeeid
      * @param employeeVO-The VO object to store the created employee.
+     * @return boolean-true if employee created, else false.
      */
-    public void createEmployee(int employeeId, EmployeeVO employeeVO) { 
-        Employees.put(employeeId, Mapper.EmployeeDTOToEmployee(employeeId,
-                                                               employeeVO));
+    public boolean createEmployee(int employeeId, EmployeeVO employeeVO) { 
+        return (null == Employees.put(employeeId, 
+                Mapper.EmployeeDTOToEmployee(employeeVO)));
     }
 
     /**
-     * This method check if a employeeId exists or not.
+     * Checks if a employeeId exists or not.
      *
      * @param employeeid-employeeid to check if a record already exist.
      * @return boolean-true if given employeeId exist, else false.
      */
-    public boolean checkContainskey(int employeeId) {
+    public boolean isEmployeeExist(int employeeId) {
         return Employees.containsKey(employeeId);
     }
 
     /**
-     * This method check if the hashmap is empty.
+     * Checks if employees is empty.
      *
      * @return boolean-true if empty, else false.
      */
-    public boolean checkEmpty() {
+    public boolean isRecordsEmpty() {
         return Employees.isEmpty();
     }
 
     /**
-     * This method check if a contactnumber already exists or not 
+     * Checks if a mobileNumber already exists or not.
      *
-     * @param contactNumber-the number to be checked for duplicate.
-     * @return boolean-true if given contactnumber exist, else false.
+     * @param mobileNumber-the number to be checked for duplicate.
+     * @return boolean-true if given mobileNumber exist, else false.
      */
-    public boolean checkDuplicateContactNumber(long contactNumber) {
-        boolean isDuplicate = false;
+    public boolean checkDuplicateMobileNumber(long mobileNumber) {
+        boolean isMobileNumberDuplicate = false;
         for (Employee value:Employees.values()) {
-            if (contactNumber == value.getContactNumber()) {
-                isDuplicate = true; 
+            if (mobileNumber == value.getMobileNumber()) {
+                isMobileNumberDuplicate = true; 
             }   
         } 
-        return isDuplicate;
+        return isMobileNumberDuplicate;
     }
 
     /**
-     * This method check if a email already exists or not 
+     * Checks if a email already exists or not.
      *
      * @param email- email to be checked for duplicate.
      * @return boolean-true if given email exist, else false.
      */
     public boolean checkDuplicateEmail(String email) {
-        boolean isDuplicate = false;
+        boolean isEmailDuplicate = false;
         for (Employee value:Employees.values()) {
             if (email.equalsIgnoreCase(value.getEmail())) {
-                isDuplicate = true; 
+                isEmailDuplicate = true; 
             }   
         } 
-        return isDuplicate;
+        return isEmailDuplicate;
     }
 
     /**
-     * This method deletes all employees. 
+     * Deletes all employees. 
      *
      */
     public void deleteAllEmployee() {
@@ -138,7 +109,7 @@ public class EmployeeService {
     }
 
     /**
-     * This method deletes one employee's detail. 
+     * Deletes one employee. 
      *
      * @param employeeid-The employeeId of the employee to be deleted.
      */
@@ -147,18 +118,20 @@ public class EmployeeService {
     }
 
     /**
-     * This method updates all fields of one employee. 
+     * Updates all fields of one employee. 
      *
      * @param employeeid-employeeid to update all fields
      * @param employeeVO-employeeVO object containing updated
      *                   values get from user
+     * @return boolean-true if employee updated, else false.
      */
-    public void updateAllFields(int employeeId, EmployeeVO employeeVO) { 
-        Employees.put(employeeId, Mapper.EmployeeDTOToEmployee(employeeId, employeeVO));
+    public boolean updateAllFields(int employeeId, EmployeeVO employeeVO) { 
+        return (null != Employees.replace(employeeId,
+                        Mapper.EmployeeDTOToEmployee(employeeVO)));
     }
 
     /**
-     * This method updates name of the employee. 
+     * Updates name of a single employee. 
      *
      * @param employeeid-employeeid to update.
      * @param name-the updated name of the employee.
@@ -169,7 +142,7 @@ public class EmployeeService {
     }
 
     /**
-     * This method updates email of the employee. 
+     * Updates email of a single employee. 
      *
      * @param employeeid-employeeid to update.
      * @param email-the updated email of the employee.
@@ -180,18 +153,18 @@ public class EmployeeService {
     }
 
     /**
-     * This method updates contact number of the employee. 
+     * Updates contact number of a single employee. 
      *
      * @param employeeid-employeeid to update.
-     * @param contactNumber-the updated mobile number of the employee.
+     * @param mobileNumber-the updated mobile number of the employee.
      */
-    public void updateContactNumber(int employeeId, long contactNumber) {
+    public void updateMobileNumber(int employeeId, long mobileNumber) {
         Employee employeeToUpdate = Employees.get(employeeId);
-        employeeToUpdate.setContactNumber(contactNumber);
+        employeeToUpdate.setMobileNumber(mobileNumber);
     }
 
     /**
-     * This method updates date of birth of the employee. 
+     * Updates date of birth of a single employee. 
      *
      * @param employeeid-employeeid to update.
      * @param dateOfBirth-the updated date of birth of the employee.
@@ -202,7 +175,7 @@ public class EmployeeService {
     }
 
     /**
-     * This method updates salary of the employee. 
+     * Updates salary of a single employee. 
      *
      * @param employeeid-employeeid to update.
      * @param salary-the updated salary of the employee.
@@ -213,31 +186,25 @@ public class EmployeeService {
     }
 
     /**
-     * This method retrives one employee from the collection.
+     * Displays one employee to the user.
      *
      * @param employeeid-employeeid to view.
      * @return employeeVO- view object for one employee.
      */
     public EmployeeVO viewOneEmployee(Integer employeeId) {
         Employee employee = Employees.get(employeeId);
-
-        return (Mapper.EmployeeToEmployeeDTO(employeeId, employee));
+        return (Mapper.EmployeeToEmployeeDTO(employee));
     }
 
     /**
-     * This method retrives all employee from the collection.
+     * Displays all employees to the user.
      *
      * @return List<employeeVO>- view object list containing all employees.
      */
     public List<EmployeeVO> viewAllEmployee() {
-        Employee employee = new Employee();
-        EmployeeVO employeeVO = new EmployeeVO();
         List<EmployeeVO> employeeDetails = new ArrayList<>();
-
         for (Integer id : Employees.keySet()) {
-            employee = Employees.get(id);
-            employeeVO = Mapper.EmployeeToEmployeeDTO(id, employee);
-            employeeDetails.add(employeeVO);
+            employeeDetails.add(Mapper.EmployeeToEmployeeDTO(Employees.get(id)));
         }
         return employeeDetails;
     }

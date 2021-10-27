@@ -1,8 +1,7 @@
 /*
- * EmployeeView.java
- * 
  * Copyrights (C) Ideas2IT
  */
+
 package com.ideas2it.employeemanagement.view;
 
 import java.time.LocalDate;
@@ -15,26 +14,24 @@ import com.ideas2it.employeemanagement.controller.EmployeeController;
 import com.ideas2it.employeemanagement.model.EmployeeVO;
 
 /**
- * EmployeeView class gets input and view output to the user.
+ * EmployeeView class deals with user interaction and is responsible for
+ * displaying the output to the user.
  * 
  * @author Niraimathi S
  * @version 1.0 12-11-2021
  */
 public class EmployeeView {
-    private static Scanner scanner = new Scanner(System.in);
+    private Scanner scanner = new Scanner(System.in);
     private EmployeeController employeeController = new EmployeeController();
     
     /**
-     * This method shows the main menu options
+     * Shows the main menu to the user.
      */
-    public void showOptions() {
+    public void showMainMenu() {
         int choice = 0;
-        int choiceToContinue = 0;
-
-        System.out.println();
-        StringBuilder menu = new StringBuilder("EMPLOYEE MANAGEMENT SYSTEM\n"); 
-        menu.append("--------------------------\n1.Create\n2.Update\n3.View\n"); 
-        menu.append("4.Delete\n5.Exit\n\nPlease choose an option\nYour choice");
+        StringBuilder menu = new StringBuilder("EMPLOYEE MANAGEMENT SYSTEM\n")
+            .append("--------------------------\n1.Create\n2.Update\n3.View\n") 
+            .append("4.Delete\n5.Exit\n\nPlease choose an option\nYour choice");
         do {
             System.out.print(menu);
             choice = getChoice(5);
@@ -47,17 +44,16 @@ public class EmployeeView {
                         break;
                 case 4: deleteDetails();
                         break;
-                case 5: choiceToContinue = 1;
-                        break;
+                case 5: break;
                 default: System.out.println("Please enter valid option");
                          break;
             }
             System.out.println("-----------------------");   
-        } while (1 != choiceToContinue);
+        } while (5 != choice);
     }
 
     /**
-     * This method creates a new employee 
+     * Creates a new employee with the validated inputs.
      * 
      */
     private void createNewEmployee() {
@@ -66,42 +62,41 @@ public class EmployeeView {
         String employeeIdAsString = scanner.nextLine();
         Integer employeeId = getEmployeeId(employeeIdAsString);
        
-        if(!employeeController.checkContainskey(employeeId)) {
-            employeeController.createEmployee(employeeId, 
+        if(!employeeController.isEmployeeExist(employeeId)) {
+            System.out.println(employeeController.createEmployee(employeeId, 
                     new EmployeeVO(employeeId, getName(), getEmail(), 
-                                   getContactNumber(), getDateOfBirth(),
-                                   getSalary()));
+                                   getMobileNumber(), getDateOfBirth(),
+                                   getSalary())) ? "Employee Created"
+                                   : "Employee not created");
         } else {
             System.out.println("There is already a record exist with same ID");
         }
     }
 
     /**
-     * This method get choice for the switch case and validate it
+     * Gets total number of choice and validate it.
      *
-     * @return choice-validated choice for the switch case
+     * @param noOfChoices-total number of choices
+     * @return choice-validated choice.
      */
     public int getChoice(int noOfChoices) {
         int choice = 0;
-
-        try {
-            choice = employeeController.stringToInteger(scanner.nextLine());
-        } catch (Exception exception) {
-            System.out.println("choice must be an integer\n"
-                    + "Please Reenter the choice: ");
-            getChoice(noOfChoices);
+        boolean isChoiceValid = true;
+        while (isChoiceValid) {      
+            try {
+                choice = Integer.parseInt(scanner.nextLine());
+                isChoiceValid = false;
+            } catch (Exception exception) {
+                System.out.println("choice must be an integer\n"
+                        + "Please Reenter the choice: ");
+                isChoiceValid = true;
+            }
         }
-
-        if ((choice > noOfChoices) && (0 > choice)) {
-            System.out.println("choice must be between 1 to "+ noOfChoices);
-            getChoice(noOfChoices);
-        }
-            return choice;
-
+        return choice;
     }
 
     /**
-     * This method check the validity of the input.
+     * Checks the validity of the input.
      *
      * @param input- the input to be validated.
      * @param patternToValidate-the pattern used to validate th input.
@@ -118,7 +113,7 @@ public class EmployeeView {
     }
 
     /**
-     * This method get and check the employee Id's validity.
+     * Gets and check the employee Id's validity.
      *
      * @param employeeId-employee id to validate.
      * @return employeeId-validated ID of the employee
@@ -126,17 +121,16 @@ public class EmployeeView {
     private Integer getEmployeeId(String employeeId) {
         String pattern = "[1-9][0-9]{0,4}";
         
-        StringBuilder errorMessage = new StringBuilder("Invalid EmployeeID");
-        errorMessage.append("!\nEmployee ID must only be numeric with maximum");
-        errorMessage.append(" of 5 digits\n\nPlease reenter Employee ID\n");
-        errorMessage.append("\nEmployeeID:");
-        employeeId = validateInput(employeeId, 
-                    pattern, errorMessage);
-        return (employeeController.stringToInteger(employeeId));   
+        StringBuilder errorMessage = new StringBuilder("Invalid EmployeeID")
+            .append("!\nEmployee ID must only be numeric with maximum")
+            .append(" of 5 digits\n\nPlease reenter Employee ID\n")
+            .append("\nEmployeeID:");
+        employeeId = validateInput(employeeId, pattern, errorMessage);
+        return (Integer.parseInt(employeeId));   
     }
 
     /**
-     * This method gets and checks if the given name is valid.
+     * Gets and checks if the given name is valid.
      *
      * @return name-validated name of the employee
      */
@@ -144,44 +138,50 @@ public class EmployeeView {
         String pattern = "([a-zA-Z]{3,}([\\s]{1}[a-zA-Z]+)*){0,100}";
         System.out.print("Name:");
         String name = scanner.nextLine();
-        StringBuilder errorMessage = new StringBuilder("Invalid name! \n");
-        errorMessage.append("Name shouldn't contain special characters");
-        errorMessage.append(",\nnumbers and more than one blankspace\nPlease");
-        errorMessage.append(" reenter Employee name\nName:");
-        name = validateInput(name, pattern, errorMessage);
-        return name;   
+        StringBuilder errorMessage = new StringBuilder("Invalid name! \n")
+            .append("Name shouldn't contain special characters")
+            .append(",\nnumbers and more than one blankspace\nPlease")
+            .append(" reenter Employee name\nName:");
+        return validateInput(name, pattern, errorMessage);
     }
 
     /**
-     * This method gets and checks if the employee contact number is valid. 
+     * Gets and checks if the employee mobile number given by user is valid. 
      *
-     * @return contactNumber-validated phone number of the employee
+     * @return mobileNumber-validated phone number of the employee
      */
-    private long getContactNumber() {
+    private long getMobileNumber() {
         String pattern = "^[6-9][0-9]{9}";
-        System.out.print("ContactNumber:");
-        String contactNumber = scanner.nextLine();
-        
-        StringBuilder errorMessage = new StringBuilder("\nInvalid contact");
-        errorMessage.append("Number!!\nShould contain 10 digits");
-        errorMessage.append("\nAnd must start with numbers 6 to 9\n");
-        errorMessage.append("\nPlease reenter Employee Contact Number\n");
-        errorMessage.append("\nContactNumber:");
-        contactNumber = validateInput(contactNumber, 
-                                      pattern, errorMessage); 
+        boolean isMobileNumberDublicate = true;
+        StringBuilder errorMessage = new StringBuilder("\nInvalid mobile")
+            .append("Number!!\nShould contain 10 digits")
+            .append("\nAnd must start with numbers 6 to 9\n")
+            .append("\nPlease reenter Employee mobile Number\n")
+            .append("\nMobile Number:");
+        long mobileNumberAsLong = 0;
+        String mobileNumber = "";
 
-        long contactNumberAsLong 
-                 = employeeController.stringToLong(contactNumber);
-        if (employeeController
-            .checkDuplicateContactNumber(contactNumberAsLong)) {
-            System.out.println("Number already exist! Give a new one");
-            getContactNumber();  
-        }  
-        return (contactNumberAsLong); 
+        while(isMobileNumberDublicate) {
+            System.out.print("Mobile Number:");
+            mobileNumber = scanner.nextLine();
+            mobileNumber = validateInput(mobileNumber, 
+                                         pattern, errorMessage); 
+
+            mobileNumberAsLong = Long.parseLong(mobileNumber);
+        
+            if (employeeController
+                    .checkDuplicateMobileNumber(mobileNumberAsLong)) {
+                System.out.println("Number already exist! Give a new one");
+                isMobileNumberDublicate = true;
+            } else {
+                isMobileNumberDublicate = false;
+            }
+        }
+        return (mobileNumberAsLong); 
     }
 
     /**
-     * This method gets & checks whether the Employee salary is valid or not. 
+     * Gets & checks whether the Employee salary is valid or not. 
      *
      * @return salary-validated salary of the employee
      */
@@ -190,16 +190,16 @@ public class EmployeeView {
         System.out.print("Salary:");
         String salary = scanner.nextLine();
 
-        StringBuilder errorMessage = new StringBuilder("Invalid Input");
-        errorMessage.append("!!\nSalary should not contains 0-4 digits after");
-        errorMessage.append(" decimal\n\nPlease reenter salary\n");
-        errorMessage.append("\nSalary:");
+        StringBuilder errorMessage = new StringBuilder("Invalid Input")
+            .append("!!\nSalary should not contains 0-4 digits after")
+            .append(" decimal\n\nPlease reenter salary\n")
+            .append("\nSalary:");
         salary = validateInput(salary, pattern, errorMessage);
-        return (employeeController.stringToFloat(salary));   
+        return (Float.parseFloat(salary));   
     }
 
     /**
-     * This method gets and checks if the Employee Email Id is valid or not. 
+     * Gets and checks if the Employee Email Id is valid or not. 
      *
      * @return email-validated email Id of the employee
      */
@@ -207,27 +207,30 @@ public class EmployeeView {
         String pattern = "[a-zA-Z][\\w&&[^_]]{2,}" 
                 + "([#$%&*!?\\.\\-_]{1}[\\w&&[^_]]+)*?@[a-zA-Z][a-zA-Z0-9]+" 
                 + "([\\.\\-]{1}[a-zA-Z0-9]+){0,4}.[\\w]{2,5}";
-
+        StringBuilder errorMessage = new StringBuilder("Invalid email Id")
+            .append("\nHint:\nEmail must start with letter\n")
+            .append("Must contain @ and a domain name\n")
+            .append("No special character immediately before @")
+            .append("\n\nPlease reenter Email ID\n")
+            .append("\nEmail ID:");
+        String email = "";
+        boolean isEmailDublicate = true;
+        while(isEmailDublicate) {
         System.out.print("Email ID:");
-        String email = scanner.nextLine();
-        StringBuilder errorMessage = new StringBuilder("Invalid email Id");
-        errorMessage.append("\nHint:\nEmail must start with letter\n");
-        errorMessage.append("Must contain @ and a domain name\n");
-        errorMessage.append("No special character immediately before @");
-        errorMessage.append("\n\nPlease reenter Email ID\n");
-        errorMessage.append("\nEmail ID:");
+        email = scanner.nextLine();
         email = validateInput(email, pattern, errorMessage);
-
         if (employeeController.checkDuplicateEmail(email)) {
                 System.out.println("This EmailID already exist!Give a new one");
-                getEmail(); 
-            }   
-        
+                isEmailDublicate = true;
+            } else {
+                isEmailDublicate = false;  
+            }
+        }
         return email;   
     }
 
     /**
-     * This method gets and checks if Employee Date of birth is valid or not. 
+     * Gets and checks if Employee Date of birth is valid or not. 
      *
      * @return dateOfBirth 	validated date of birth of the employee
      */
@@ -236,8 +239,8 @@ public class EmployeeView {
         String dateAsString = " ";
         LocalDate dateOfBirth = LocalDate.now();
         LocalDate today = LocalDate.now();
-        boolean flag = true;
-        while (flag) {
+        boolean isValid = true;
+        while (isValid) {
             System.out.println(promptStatement);
             try {
                 dateAsString = scanner.nextLine();
@@ -255,7 +258,7 @@ public class EmployeeView {
                             System.out.println("Employee should be 18-60 " 
                                                + "years old");
                         } else {
-                            flag = false;
+                            isValid = false;
                         }
                     }
                 } catch (Exception e) {
@@ -269,20 +272,19 @@ public class EmployeeView {
     }
 
     /**
-     * This method deletes Employees detail by calling appropriate method
+     * Deletes single and all Employees detail according to the user's choice.
      *
      */
     private void deleteDetails() {
-        if (employeeController.checkEmpty()) {
+        if (employeeController.isRecordsEmpty()) {
             System.out.println("Sorry. No records Found.");
         } else {
-            StringBuilder menu = new StringBuilder("\nDELETE MENU\n--------\n");
-            menu.append("1.Delete All Employee details");
-            menu.append("\n2.Delete single Employee Detail");
-            menu.append("\n3.Return to Main menu\n\n");
-            menu.append("Please Select one\n\nYour choice :");
+            StringBuilder menu = new StringBuilder("\nDELETE MENU\n--------\n")
+                .append("1.Delete All Employee details")
+                .append("\n2.Delete single Employee Detail")
+                .append("\n3.Return to Main menu\n\n")
+                .append("Please Select one\n\nYour choice :");
             int choice;
-            int choiceToRepeat = 0;
             do {
                 System.out.print(menu);
                 choice = getChoice(3);
@@ -292,24 +294,23 @@ public class EmployeeView {
                             break;
                     case 2: deleteOneEmployeeDetails();
                             break;
-                    case 3: choiceToRepeat = 1;
-                            break;
+                    case 3: break;
                     default: System.out.println("Please enter valid option");
                              break;
                 }
                 System.out.println("-----------------------");
-            } while (0 == choiceToRepeat);
+            } while (3 != choice);
         }
     }
 
     /**
-     * This method deletes all Employees detail 
+     * Deletes all Employees from the list.
      *
      */
     private void deleteAllEmployeeDetails() {
-        if (!employeeController.checkEmpty()) {
+        if (!employeeController.isRecordsEmpty()) {
             employeeController.deleteAllEmployee();
-            if (employeeController.checkEmpty()) { 
+            if (employeeController.isRecordsEmpty()) { 
                 System.out.println("All Employee details are deleted.");
             }
         } else {
@@ -319,119 +320,122 @@ public class EmployeeView {
     }
 
     /**
-     * This method deletes one Employees detail 
+     * Deletes one Employees using the employee id retrived from the user.
      *
      */
     private void deleteOneEmployeeDetails() {
-        System.out.println("Enter the Employee Id to delete or" 
-                           + "\nEnter -1 to return to Delete Menu");
-        System.out.print("Employee ID : ");
+        StringBuilder errorMessage = new StringBuilder("Please enter ")
+                .append("Employee Id\nor Press -1 to return to main menu");
+        boolean isRecordExist = true;
         String employeeIdAsString = " ";
-        try {
-            employeeIdAsString = scanner.nextLine();
+        while(isRecordExist) { 
+            System.out.println(errorMessage);
+            try {
+                employeeIdAsString = scanner.nextLine();
         
-            if ( -1 == employeeController.stringToInteger(employeeIdAsString)) {
-                return;
-            } else {
-                int idToDelete = getEmployeeId(employeeIdAsString);
-
-                if (employeeController.checkContainskey(idToDelete)) {
-                    employeeController.deleteOneEmployee(idToDelete);
-                    if (!employeeController.checkContainskey(idToDelete)) {
-                        System.out.println("Deleted successfully.");
-                    } else {
-                        System.out.println("Entry Not deleted");
-                    }
+                if ( -1 == Integer.parseInt(employeeIdAsString)) {
+                    return;
                 } else {
-                    System.out.println("No such entry exist ");
-                    deleteOneEmployeeDetails();
+                    int idToDelete = getEmployeeId(employeeIdAsString);
+                    if (employeeController.isEmployeeExist(idToDelete)) {
+                        employeeController.deleteOneEmployee(idToDelete);
+                        if (!employeeController.isEmployeeExist(idToDelete)) {
+                            System.out.println("Deleted successfully.");
+                            isRecordExist = false;
+                        } else {
+                            System.out.println("Entry Not deleted");
+                        }
+                    } else {
+                        System.out.println("No such entry exist ");
+                        isRecordExist = true;
+                    }
                 }
+            } catch (Exception exception) {
+                System.out.println("Employee Id must be an integer");
+                isRecordExist = true;
             }
-        } catch (Exception exception) {
-            System.out.println("Employee Id must be an integer");
-            deleteOneEmployeeDetails();
         }
         System.out.println("-----------------------\n");
     }
 
     /**
-     * This method update Employees detail. 
+     * Updates single or all fields of an Employee according to user's choice.
      *
      */
     private void updateEmployeeDetails() {
-        if (employeeController.checkEmpty()) {
+        if (employeeController.isRecordsEmpty()) {
             System.out.println("No records found!");
         } else {
-            System.out.println("Please enter Employee Id\n" 
-                                + " or Press -1 to return to main menu");
+            StringBuilder errorMessage = new StringBuilder("Please enter ")
+                .append("Employee Id\nor Press -1 to return to main menu");
+            boolean isRecordExist = true;
             String employeeIdAsString = " ";
-            try {
-                employeeIdAsString = scanner.nextLine(); 
-                if ( -1 == employeeController.stringToInteger(
-                        employeeIdAsString)) {
-                    return;
-                } else {
-                    Integer employeeId = getEmployeeId(employeeIdAsString);
-                    if (employeeController.checkContainskey(employeeId)) {
-                        StringBuilder menu = new StringBuilder("\nUPDATE MENU");
-                        menu.append("\n---------\n1.Update All fields of an " );
-                        menu.append("Employee\n2.Update single field of an");
-                        menu.append("Employee \n3.Return to Main menu");
-                        menu.append("\n\nplease Select one\n\nYour choice :");
-                        int choice;
-                        int choiceToRepeat = 0;
-                        do {
-                            System.out.print(menu);
-                            choice = getChoice(3);
-                            switch (choice) {
-                                case 1: updateAllFields(employeeId);
-                                        break;
-                                case 2: updateSingleField(employeeId);
-                                        break;
-                                case 3: choiceToRepeat = 1;
-                                        break;
-                                default: System.out.println("Invalid option");
-                                         break;
-                            }
-                        } while (0 == choiceToRepeat);
+            while(isRecordExist) {
+                System.out.print(errorMessage);
+                try {
+                    employeeIdAsString = scanner.nextLine(); 
+                    if ( -1 == Integer.parseInt(employeeIdAsString)) {
+                        return;
                     } else {
-                        System.out.println("No such record found to update");
-                        updateEmployeeDetails();
+                        Integer employeeId = getEmployeeId(employeeIdAsString);
+                        if (employeeController.isEmployeeExist(employeeId)) {
+                            StringBuilder menu = new StringBuilder("\nUPDATE ")
+                                .append("MENU\n---------\n1.Update All fields ")
+                                .append("of an Employee\n2.Update single field")
+                                .append(" of an Employee \n3.Return to Main ")
+                                .append("menu\n\nplease Select one\n\nchoice:");
+                            int choice;
+                            do {
+                                System.out.print(menu);
+                                choice = getChoice(3);
+                                switch (choice) {
+                                    case 1: updateAllFields(employeeId);
+                                            break;
+                                    case 2: updateSingleField(employeeId);
+                                            break;
+                                    case 3: break;
+                                    default: System.out.println("Wrong option");
+                                             break;
+                                }
+                            } while (3 != choice);
+                            isRecordExist = false;
+                        } else {
+                            System.out.println("No such record found.");
+                        }
                     }
+                } catch (Exception exception) {
+                    System.out.println("Employee Id must be an integer");
                 }
-            } catch (Exception exception) {
-                System.out.println("Employee Id must be an integer");
-                updateEmployeeDetails();
             }
         }
     }
 
     /**
-     * This method update all detail of an Employee at once.
+     * Updates all fields of a single employee at once.
      *
      * @param employeeid-employeeid to update.
      */
     private void updateAllFields(int employeeId) {
-        employeeController.updateAllFields(employeeId, 
+        System.out.println(employeeController.updateAllFields(employeeId, 
                 new EmployeeVO(employeeId, getName(), getEmail(), 
-                               getContactNumber(), getDateOfBirth(),
-                               getSalary()));
+                               getMobileNumber(), getDateOfBirth(),
+                               getSalary())) ? "Employee updated"
+                                   : "Employee not updated");
         System.out.println("-----------------------");
     }
 
     /**
-     * This method update separate fields in Employees details.
+     * Updates separate fields of a single Employee.
      *
      * @param employeeId-employeeId to update the details
      */
     private void updateSingleField(int employeeId) {
-        StringBuilder menu = new StringBuilder("\nUPDATE SINGLE FIELD MENU\n"); 
-        menu.append("----------------------\n1.Update Name\n2.Update Email ID"); 
-        menu.append("\n3.Update Contact number\n4.Update Date of Birth");
-        menu.append("\n5.Update Salary\n6.Return to Update Menu\n\n");
-        menu.append("please Select one\n\nYour choice :");
+        StringBuilder menu = new StringBuilder("\nUPDATE SINGLE FIELD MENU\n") 
+            .append("----------------------\n1.Update Name\n2.Update Email ID") 
+            .append("\n3.Update mobile number\n4.Update Date of Birth")
+            .append("\n5.Update Salary\n6.Return to Update Menu\n\n")
+            .append("please Select one\n\nYour choice :");
         int choice;
-        int choiceToRepeat = 0;
         do {
             System.out.print(menu);
             choice = getChoice(6);
@@ -441,22 +445,21 @@ public class EmployeeView {
                         break;
                 case 2: updateEmail(employeeId);
                         break;
-                case 3: updateContactNumber(employeeId);
+                case 3: updateMobileNumber(employeeId);
                         break;
                 case 4: updateDateOfBirth(employeeId);
                         break;
                 case 5: updateSalary(employeeId);
                         break;
-                case 6: choiceToRepeat = 1;
-                        break;
+                case 6: break;
                 default: System.out.println("Please enter valid option");
                          break;
             }
-        } while (0 == choiceToRepeat);
+        } while (6 != choice);
     }
 
     /**
-     * This method update name of the Employee.
+     * Updates name of a single Employee.
      *
      * @param employeeId-employeeId to update the Employee name.
      */
@@ -466,7 +469,7 @@ public class EmployeeView {
     }
 
     /**
-     * This method update Email ID of the Employee.
+     * Updates Email ID of a single Employee.
      *
      * @param employeeId-employeeId to update the email of given employeeID.
      */
@@ -476,17 +479,17 @@ public class EmployeeView {
     }
 
     /**
-     * This method update contact number of the Employee.
+     * Updates mobile number of a Employee.
      *
-     * @param employeeId-employeeId to update the contactnumber
+     * @param employeeId-employeeId to update the mobileNumber
      */
-    private void updateContactNumber(int employeeId) {
-        employeeController.updateContactNumber(employeeId, getContactNumber());
+    private void updateMobileNumber(int employeeId) {
+        employeeController.updateMobileNumber(employeeId, getMobileNumber());
         System.out.print("-----------------------");
     }
 
     /**
-     * This method update Date Of Birth of the Employee.
+     * Updates Date Of Birth of the Employee.
      *
      * @param employeeId-employeeId to update the Date of birth 
      */
@@ -496,7 +499,7 @@ public class EmployeeView {
     }
 
     /**
-     * This method update Salary of the Employee.
+     * Updates Salary of the Employee.
      *
      * @param employeeId-employeeId to update the salary of given employeeID
      */
@@ -506,20 +509,19 @@ public class EmployeeView {
     }
 
     /**
-     * This method display Employees details by calling appropriate methods.
+     * Displays single or all Employee to the user.
      *
      */
     private void viewDetails() {
-        if (employeeController.checkEmpty()) {
+        if (employeeController.isRecordsEmpty()) {
             System.out.println("Sorry. No records Found.");
         } else {
-            StringBuilder menu = new StringBuilder("\nVIEW MENU\n----------\n");
-            menu.append("1.View All Employee details\n2.View single Employee"); 
-            menu.append("detail\n3.Return to Main menu");
-            menu.append("\n\nplease Select one\n\nYour choice :");
+            StringBuilder menu = new StringBuilder("\nVIEW MENU\n----------\n")
+                .append("1.View All Employee details\n2.View single Employee") 
+                .append("detail\n3.Return to Main menu")
+                .append("\n\nplease Select one\n\nYour choice :");
                        
             int choice;
-            int choiceToRepeat = 0;
             do {
                 System.out.print(menu);
                 choice = getChoice(3);
@@ -528,68 +530,60 @@ public class EmployeeView {
                             break;
                     case 2: viewOneEmployeeDetails();
                             break;
-                    case 3: choiceToRepeat = 1;
-                            break;
+                    case 3: break;
                     default: System.out.println("Please enter valid option");
                              break;
                 }
-            } while (0 == choiceToRepeat);
+            } while (3 != choice);
         }
     }
 
     /**
-     * This method is to view single Employee details
+     * Displays single employee details to the user.
      *
      */
     private void viewOneEmployeeDetails() {
-        System.out.println("Please enter Employee Id\n" 
-                                + " or Press -1 to return to main menu");
+        StringBuilder menu = new StringBuilder("Please enter Employee Id\n")
+                .append("or Press -1 to return to main menu");
         String employeeIdAsString = " ";
-        try {
-            employeeIdAsString = scanner.nextLine(); 
-            if ( -1 == employeeController.stringToInteger(employeeIdAsString)) {
-                return;
-            } else {
-                int employeeId = getEmployeeId(employeeIdAsString);
-                if (employeeController.checkContainskey(employeeId)) {
-                    EmployeeVO value = employeeController
-                                       .viewOneEmployee(employeeId);
-                    System.out.println("Employee ID\t:" + employeeId + "\nName" 
-                            + "\t\t:"+ value.getName() + "\nEmail\t\t:"   
-                            + value.getEmail() + "\nContact number\t:"  
-                            + value.getContactNumber() + "\nDate Of birth\t:"  
-                            + value.getDateOfBirth() + "\nSalary\t\t:" 
-                            + value.getSalary());
-                    System.out.println("-----------------------");
+        boolean isRecordExist = true;
+        while(isRecordExist) {
+            System.out.println(menu);
+            try {
+                employeeIdAsString = scanner.nextLine(); 
+                if ( -1 == Integer.parseInt(employeeIdAsString)) {
+                    return;
                 } else {
-                    System.out.println("\nNo such entry exist ");
-                    viewOneEmployeeDetails();
-                    System.out.println("-----------------------");
+                    int employeeId = getEmployeeId(employeeIdAsString);
+                    if (employeeController.isEmployeeExist(employeeId)) {
+                        System.out.println(employeeController
+                                           .viewOneEmployee(employeeId));
+                        isRecordExist = false;
+                    } else {
+                        System.out.println("\nNo such entry exist ");
+                        isRecordExist = true;
+                    }
                 }
+            } catch (Exception exception) {
+                System.out.println("Employee Id must be an integer");
+                isRecordExist = true;
             }
-        } catch (Exception exception) {
-            System.out.println("Employee Id must be an integer" + exception);
-            viewOneEmployeeDetails();
         }
+        System.out.println("-----------------------");
     }
 
     /**
-     * This method is to view all Employee details
+     * Views all Employees details to the user.
      *
      */
     private void viewAllEmployeeDetails(){
-        if (employeeController.checkEmpty()) {
+        if (employeeController.isRecordsEmpty()) {
             System.out.println("Sorry. No records Found.");
         } else {
             List<EmployeeVO> employeeDetails 
                     = new ArrayList<>(employeeController.viewAllEmployee());
             for (EmployeeVO value:employeeDetails){
-                System.out.println("Employee ID\t:" + value.getEmployeeId()  
-                        + "\nName\t\t:" + value.getName() + "\nEmail\t\t:"  
-                        + value.getEmail()  + "\nContact number\t:"  
-                        + value.getContactNumber() + "\nDate Of birth\t:" 
-                        + value.getDateOfBirth() + "\nSalary\t\t:" 
-                        + value.getSalary() + "\n");
+                System.out.println(value);
             } 
             System.out.println("-----------------------");   
         }
