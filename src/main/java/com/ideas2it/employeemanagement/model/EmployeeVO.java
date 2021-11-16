@@ -6,35 +6,64 @@ package com.ideas2it.employeemanagement.model;
 
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.ideas2it.employeemanagement.model.AddressDTO;
 
 /**
- * Employee is a POJO class with getter & setter methods 
+ * EmployeeVO is a Data Transfer class with getter & setter methods 
  *
  * @author 	Niraimathi S
  * @version 	1.0
  */
-public class Employee {
+public class EmployeeVO {
     private int employeeId;
     private long mobileNumber;
     private float salary;
     private LocalDate dateOfBirth;
     private String name;
     private String email;
+    private List<AddressDTO> addressesDTO;
 
-    public Employee() {
+    /**
+     * Empty Constructor for EmployeeVO
+     */
+    public EmployeeVO() {
     }
 
     /**
      * Constructor for Employee class to initialize values
      */
-    public Employee (int employeeId, String name, String email,  
-                     long mobileNumber, LocalDate dateOfBirth, float salary) {
+    public EmployeeVO (int employeeId, String name, String email,  
+            long mobileNumber, LocalDate dateOfBirth, float salary) {
         this.employeeId = employeeId;
         this.name = name;
         this.email = email;
         this.mobileNumber = mobileNumber;
         this.dateOfBirth = dateOfBirth;
         this.salary = salary;
+    }
+
+    public EmployeeVO (String name, String email,  
+            long mobileNumber, LocalDate dateOfBirth, float salary) {
+        //this.employeeId = employeeId;
+        this.name = name;
+        this.email = email;
+        this.mobileNumber = mobileNumber;
+        this.dateOfBirth = dateOfBirth;
+        this.salary = salary;
+    }
+
+    public EmployeeVO (int employeeId, String name, String email,  
+            long mobileNumber, LocalDate dateOfBirth, float salary, List<AddressDTO> addressesDTO) {
+        this.employeeId = employeeId;
+        this.name = name;
+        this.email = email;
+        this.mobileNumber = mobileNumber;
+        this.dateOfBirth = dateOfBirth;
+        this.salary = salary;
+        this.addressesDTO = addressesDTO;
     }
 
     /**
@@ -92,7 +121,7 @@ public class Employee {
     }
 
     /**
-     * Method to get Employee mobile Number.
+     * Method to get Employee Contact Number
      *
      * @return mobileNumber	Employee Phone number
      */
@@ -101,7 +130,7 @@ public class Employee {
     }
 
     /**
-     * Method to set Employee mobile number.
+     * Method to set Employee contact number
      *
      * @param mobileNumber	Employee Contact Number
      */
@@ -119,7 +148,7 @@ public class Employee {
     }
 
     /**
-     * Method to set Employee date of birth.
+     * Method to set Employee contact number
      *
      * @param contactName	Employee Contact Number
      */
@@ -145,14 +174,25 @@ public class Employee {
         this.salary = salary;
     }
 
+    public List<AddressDTO> getaddressesDTO() {
+        return addressesDTO;
+    }
+
+    public void setaddressesDTO(List<AddressDTO> addressesDTO) {
+        this.addressesDTO = addressesDTO;
+    }
+
     public String toString() {
+        DateTimeFormatter dateFormatter 
+                = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         StringBuilder employeeDetails = new StringBuilder();
-        employeeDetails.append("\nEmployee ID\t:").append(employeeId)
+
+        employeeDetails.append("Employee ID\t:").append(employeeId)
                 .append("\nName\t\t:").append(name).append("\nEmail\t\t:")
                 .append(email).append("\nMobile number\t:").append(mobileNumber)
                 .append("\nSalary\t\t:").append(salary)
                 .append("\nDate Of birth\t:")
-                .append(dateOfBirth);
+                .append(dateFormatter.format(dateOfBirth));
         return employeeDetails.toString();
     }
 }

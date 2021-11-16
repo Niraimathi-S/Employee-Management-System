@@ -8,8 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDate;
 
+import com.ideas2it.employeemanagement.model.AddressDTO;
 import com.ideas2it.employeemanagement.model.EmployeeVO;
 import com.ideas2it.employeemanagement.service.EmployeeService;
+import com.ideas2it.employeemanagement.service.impl.EmployeeServiceImplementation;
 
 /**
  * Controller class is responsible for the flow control logic and
@@ -19,7 +21,7 @@ import com.ideas2it.employeemanagement.service.EmployeeService;
  * @version 1.0 12-11-2021
  */
 public class EmployeeController {
-    private EmployeeService employeeService = new EmployeeService();
+    private EmployeeService employeeService = new EmployeeServiceImplementation();
 
     /**
      * Validates the given input from the user. 
@@ -35,11 +37,11 @@ public class EmployeeController {
     /**
      * Creates a new employee with the data given by the user. 
      *
-     * @param employeeid-employeeid
+     * @param AddressDTO-AddressDTO with employee details and address
      * @param employeeVO-The VO object to store the created employee.
      */
-    public boolean createEmployee(int employeeId, EmployeeVO employeeVO) {
-        return employeeService.createEmployee(employeeId, employeeVO);
+    public EmployeeVO createEmployee(AddressDTO addressDTO) {
+        return employeeService.createEmployee(addressDTO);
     }
 
     /**
@@ -74,8 +76,8 @@ public class EmployeeController {
     /**
      * Deletes all employees. 
      */
-    public void deleteAllEmployee() {
-        employeeService.deleteAllEmployee();
+    public boolean deleteAllEmployee() {
+        return employeeService.deleteAllEmployee();
     }
 
     /**
@@ -92,9 +94,30 @@ public class EmployeeController {
      * Deletes one employee.
      *
      * @param employeeid-The employeeId of the employee to be deleted.
+     * @return boolean-true if given employee deleted, else false.
      */
-    public void deleteOneEmployee(int employeeId) {
-        employeeService.deleteOneEmployee(employeeId);
+    public boolean deleteOneEmployee(int employeeId) {
+        return employeeService.deleteOneEmployee(employeeId);
+    }
+
+    /**
+     * Deletes one address of an employee.
+     *
+     * @param addressId-The addressId of the address to be deleted.
+     * @return boolean-true if given address exist, else false.
+     */
+    public boolean deleteAddress(int addressId) {
+        return employeeService.deleteAddress(addressId);
+    }
+
+    /**
+     * Gets all addresses of an employee.
+     *
+     * @param employeeId-The employeeId to get all address.
+     * @return List<AddressDTO>-List of all addresses of a single employee.
+     */
+    public List<AddressDTO> getAddressById(int employeeId) {
+        return employeeService.getAddressById(employeeId);
     }
 
     /**
@@ -104,58 +127,18 @@ public class EmployeeController {
      * @param employeeVO-employeeVO object containing updated
      *                   values get from user
      */
-    public boolean updateAllFields(int employeeId, EmployeeVO employeeVO) {
-        return employeeService.updateAllFields(employeeId, employeeVO);
+    public boolean updateAllFields(AddressDTO addressDTO) {
+        return employeeService.updateAllFields(addressDTO);
     }
 
     /**
-     * Updates name of a single employee. 
+     * Gets an employee details by Employee id.
      *
-     * @param employeeid-employeeid to update.
-     * @param name-the updated name of the employee.
+     * @param employeeId-The employeeId to get employee details.
+     * @return EmployeeVO-object containing details of a single employee.
      */
-    public void updateName(int employeeId, String name) {
-        employeeService.updateName(employeeId, name);
-    }
-
-    /**
-     * Updates email of a single employee. 
-     *
-     * @param employeeid-employeeid to update.
-     * @param email-the updated email of the employee.
-     */
-    public void updateEmail(int employeeId, String email) {
-        employeeService.updateEmail(employeeId, email);
-    }
-
-    /**
-     * Updates mobile number of a single employee. 
-     *
-     * @param employeeid-employeeid to update.
-     * @param mobileNumber-the updated mobile number of the employee.
-     */
-    public void updateMobileNumber(int employeeId, long mobileNumber) {
-        employeeService.updateMobileNumber(employeeId, mobileNumber);
-    }
-
-    /**
-     * Updates date of birth of a single employee. 
-     *
-     * @param employeeid-employeeid to update.
-     * @param dateOfBirth-the updated date of birth of the employee.
-     */
-    public void updateDateOfBirth(int employeeId, LocalDate dateOfBirth) {
-        employeeService.updateDateOfBirth(employeeId, dateOfBirth);
-    }
-
-    /**
-     * Updates salary of a single employee. 
-     *
-     * @param employeeid-employeeid to update.
-     * @param salary-the updated salary of the employee.
-     */
-    public void updateSalary(int employeeId, float salary) {
-        employeeService.updateSalary(employeeId, salary);
+    public EmployeeVO getEmployeeById(int employeeId) {
+        return employeeService.getEmployeeById(employeeId);
     }
 
     /**
@@ -165,7 +148,7 @@ public class EmployeeController {
      * @return employeeVO-object which contains details of the single employee.
      */
     public EmployeeVO viewOneEmployee(Integer employeeId) {
-        return employeeService.viewOneEmployee(employeeId);
+        return employeeService.getEmployeeById(employeeId);
     }
 
     /**

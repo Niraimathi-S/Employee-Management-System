@@ -6,32 +6,44 @@ package com.ideas2it.employeemanagement.model;
 
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.ideas2it.employeemanagement.model.Address;
 
 /**
- * EmployeeVO is a Data Transfer class with getter & setter methods 
+ * Employee is a POJO class with getter & setter methods 
  *
  * @author 	Niraimathi S
  * @version 	1.0
  */
-public class EmployeeVO {
+public class Employee {
     private int employeeId;
     private long mobileNumber;
     private float salary;
     private LocalDate dateOfBirth;
     private String name;
     private String email;
+    private List<Address> addresses;
 
-    /**
-     * Empty Constructor for EmployeeVO
-     */
-    public EmployeeVO() {
+    public Employee() {
     }
 
     /**
      * Constructor for Employee class to initialize values
      */
-    public EmployeeVO (int employeeId, String name, String email,  
-            long mobileNumber, LocalDate dateOfBirth, float salary) {
+    public Employee (String name, String email,  
+                     long mobileNumber, LocalDate dateOfBirth, float salary) {
+       // this.employeeId = employeeId;
+        this.name = name;
+        this.email = email;
+        this.mobileNumber = mobileNumber;
+        this.dateOfBirth = dateOfBirth;
+        this.salary = salary;
+    }
+
+    public Employee (int employeeId, String name, String email,  
+                     long mobileNumber, LocalDate dateOfBirth, float salary) {
         this.employeeId = employeeId;
         this.name = name;
         this.email = email;
@@ -40,10 +52,21 @@ public class EmployeeVO {
         this.salary = salary;
     }
 
+    public Employee (int employeeId, String name, String email,  
+                     long mobileNumber, LocalDate dateOfBirth, float salary, List<Address> addresses) {
+        this.employeeId = employeeId;
+        this.name = name;
+        this.email = email;
+        this.mobileNumber = mobileNumber;
+        this.dateOfBirth = dateOfBirth;
+        this.salary = salary;
+        this.addresses = addresses;
+    }
+
     /**
      * Method to get Employee id
      *
-     * @return employeeId-Employee id
+     * @return emaployeeId-Employee id
      */
     public int getEmployeeId() {
         return employeeId;
@@ -95,7 +118,7 @@ public class EmployeeVO {
     }
 
     /**
-     * Method to get Employee Contact Number
+     * Method to get Employee mobile Number.
      *
      * @return mobileNumber	Employee Phone number
      */
@@ -104,7 +127,7 @@ public class EmployeeVO {
     }
 
     /**
-     * Method to set Employee contact number
+     * Method to set Employee mobile number.
      *
      * @param mobileNumber	Employee Contact Number
      */
@@ -122,7 +145,7 @@ public class EmployeeVO {
     }
 
     /**
-     * Method to set Employee contact number
+     * Method to set Employee date of birth.
      *
      * @param contactName	Employee Contact Number
      */
@@ -148,17 +171,23 @@ public class EmployeeVO {
         this.salary = salary;
     }
 
-    public String toString() {
-        DateTimeFormatter dateFormatter 
-                = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        StringBuilder employeeDetails = new StringBuilder();
+    public List<Address> getaddresses() {
+        return addresses;
+    }
 
+    public void setaddresses(List<Address> addresses) {
+        this.addresses = addresses;
+    }
+
+    public String toString() {
+        StringBuilder employeeDetails = new StringBuilder();
         employeeDetails.append("\nEmployee ID\t:").append(employeeId)
                 .append("\nName\t\t:").append(name).append("\nEmail\t\t:")
                 .append(email).append("\nMobile number\t:").append(mobileNumber)
                 .append("\nSalary\t\t:").append(salary)
                 .append("\nDate Of birth\t:")
-                .append(dateFormatter.format(dateOfBirth));
+                .append(dateOfBirth)
+                .append("\n");
         return employeeDetails.toString();
     }
 }
