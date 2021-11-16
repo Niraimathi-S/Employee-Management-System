@@ -115,10 +115,7 @@ public class Employee {
      * @return dateOfBirth	Employee's date of Birth
      */
     public LocalDate getDateOfBirth() {
-        DateTimeFormatter dateFormatter 
-                = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        String dateAsString = dateOfBirth.format(dateFormatter);
-        return (LocalDate.parse(dateAsString, dateFormatter));
+        return dateOfBirth;
     }
 
     /**

@@ -118,10 +118,7 @@ public class EmployeeVO {
      * @return dateOfBirth	Employee's date of Birth
      */
     public LocalDate getDateOfBirth() {
-        DateTimeFormatter dateFormatter 
-                = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        String dateAsString = dateOfBirth.format(dateFormatter);
-        return (LocalDate.parse(dateAsString, dateFormatter));
+        return dateOfBirth;
     }
 
     /**
@@ -152,13 +149,16 @@ public class EmployeeVO {
     }
 
     public String toString() {
+        DateTimeFormatter dateFormatter 
+                = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         StringBuilder employeeDetails = new StringBuilder();
+
         employeeDetails.append("\nEmployee ID\t:").append(employeeId)
                 .append("\nName\t\t:").append(name).append("\nEmail\t\t:")
                 .append(email).append("\nMobile number\t:").append(mobileNumber)
                 .append("\nSalary\t\t:").append(salary)
                 .append("\nDate Of birth\t:")
-                .append(dateOfBirth);
+                .append(dateFormatter.format(dateOfBirth));
         return employeeDetails.toString();
     }
 }
