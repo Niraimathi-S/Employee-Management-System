@@ -22,7 +22,7 @@ import com.ideas2it.employeemanagement.util.Mapper;
  * validates user inputs.
  * 
  * @author Niraimathi S
- * @version 1.0 12-11-2021
+ * @version 1.0
  */
 public class EmployeeServiceImplementation implements EmployeeService{
     private EmployeeDAOImplementation dao = new EmployeeDAOImplementation();
@@ -41,14 +41,13 @@ public class EmployeeServiceImplementation implements EmployeeService{
     /**
      * Creates a new employee. 
      *
-     * @param employeeid-employeeid
      * @param employeeVO-The VO object to store the created employee.
      * @return boolean-true if employee created, else false.
      */
-    public EmployeeVO createEmployee(AddressDTO addressDTO) { 
-        Address address = Mapper.AddressDTOToAddress(addressDTO);
-        EmployeeVO employeeVO 
-                = Mapper.EmployeeToEmployeeDTO(dao.createEmployee(address));
+    public EmployeeVO createEmployee(EmployeeVO employeeVO) { 
+        Employee employee = Mapper.EmployeeDTOToEmployee(employeeVO);
+        employeeVO 
+                = Mapper.EmployeeToEmployeeDTO(dao.createEmployee(employee));
         return employeeVO;
     }
 
@@ -103,35 +102,21 @@ public class EmployeeServiceImplementation implements EmployeeService{
     /**
      * Deletes one employee. 
      *
-     * @param employeeid-The employeeId of the employee to be deleted.
+     * @param employeeVO-The VO object to be deleted.
      */
-    public boolean deleteOneEmployee(int employeeId) {
-        return dao.deleteOneEmployee(employeeId);
-    }
-
-    /**
-     * Deletes one address of an employee.
-     *
-     * @param addressId-The addressId of the address to be deleted.
-     * @return boolean-true if given address exist, else false.
-     */
-    public boolean deleteAddress(int addressId) {
-        return dao.deleteAddress(addressId);
+    public boolean deleteOneEmployee(EmployeeVO employeeVO) {
+        return dao.deleteOneEmployee(Mapper.EmployeeDTOToEmployee(employeeVO));
     }
 
     /**
      * Updates all fields of one employee. 
      *
-     * @param employeeid-employeeid to update all fields
-     * @param AddressDTO-AddressDTO object containing updated
-     *                   values get from user
+     * @param employeeVO-The VO object with updates values employee.
      * @return boolean-true if employee updated, else false.
      */
-    public boolean updateAllFields(AddressDTO addressDTO) { 
-        Address address = Mapper.AddressDTOToAddress(addressDTO);
-        EmployeeVO employeeVO 
-                = Mapper.EmployeeToEmployeeDTO(dao.updateEmployee(address));
-        return (null != employeeVO);
+    public boolean updateAllFields(EmployeeVO employeeVO) { 
+        Employee employee = Mapper.EmployeeDTOToEmployee(employeeVO);
+        return (null != Mapper.EmployeeToEmployeeDTO(dao.updateEmployee(employee)));
     }
 
     /**
@@ -143,20 +128,6 @@ public class EmployeeServiceImplementation implements EmployeeService{
     public EmployeeVO getEmployeeById(int employeeId) {
         Employee employee = dao.getEmployeeById(employeeId);
         return (Mapper.EmployeeToEmployeeDTO(employee));
-    }
-
-    /**
-     * Gets all addresses of an employee.
-     *
-     * @param employeeId-The employeeId to get all address.
-     * @return List<AddressDTO>-List of all addresses of a single employee.
-     */
-    public List<AddressDTO> getAddressById(int employeeId) {
-        List<AddressDTO> addressDTO = new ArrayList<>();
-        for (Address address : dao.getAddressById(employeeId)) {
-            addressDTO.add(Mapper.AddressToAddressDTO(address));
-        }
-        return addressDTO;
     }
 
     /**

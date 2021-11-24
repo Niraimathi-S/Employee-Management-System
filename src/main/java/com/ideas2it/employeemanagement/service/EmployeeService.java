@@ -33,10 +33,9 @@ public interface EmployeeService {
     /**
      * Creates a new employee. 
      *
-     * @param employeeid-employeeid
      * @param employeeVO-The VO object to store the created employee.
      */
-    public EmployeeVO createEmployee(AddressDTO addressDTO);
+    public EmployeeVO createEmployee(EmployeeVO employeeVO);
 
     /**
      * Checks if a employeeId exists or not.
@@ -74,33 +73,17 @@ public interface EmployeeService {
     /**
      * Deletes one employee. 
      *
-     * @param employeeid-The employeeId of the employee to be deleted.
+     * @param employeeVO-The VO object of the employee to be deleted.
      */
-    public boolean deleteOneEmployee(int employeeId);
-
-    /**
-     * Deletes one address of an employee.
-     *
-     * @param addressId-The addressId of the address to be deleted.
-     * @return boolean-true if given address exist, else false.
-     */
-    public boolean deleteAddress(int addressId);
-
-    /**
-     * Gets all addresses of an employee.
-     *
-     * @param employeeId-The employeeId to get all address.
-     * @return List<AddressDTO>-List of all addresses of a single employee.
-     */
-    public List<AddressDTO> getAddressById(int employeeId);
+    public boolean deleteOneEmployee(EmployeeVO employeeVO);
 
     /**
      * Updates all fields of one employee. 
      *
-     * @param AddressDTO-AddressDTO object containing updated
+     * @param employeeVO-The VO object containing updated
      *                   values get from user
      */
-    public boolean updateAllFields(AddressDTO addressDTO);
+    public boolean updateAllFields(EmployeeVO employeeVO);
 
     /**
      * Displays all employees to the user.

@@ -4,87 +4,52 @@
 
 package com.ideas2it.employeemanagement.util;
 
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import org.hibernate.HibernateException; 
+import org.hibernate.Session; 
+import org.hibernate.Transaction;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
 
 /**
  * Establish database connection. 
  * 
  * @author Niraimathi S
- * @version 1.0 12-11-2021
+ * @version 1.0
  */
 public class DatabaseConnection {
     private static DatabaseConnection databaseConnection;
     private DatabaseConnection() { }
-    /*public static DatabaseConnection getInstance() {
-        if ((null != databaseConnection) || connection.isClosed()) {
-            databaseConnection = new  DatabaseConnection();
-        }
-        return databaseConnection;
-    }*/
-    private static Connection connection = null;
+    private static SessionFactory factory;
 
-    /*
-     * Gets connection.
-     */
-    public static Connection getConnection() {
+    public static SessionFactory getSessionFactory() {
         try {
-            if ((null == connection) || connection.isClosed()) {
-                connection = DriverManager
-                    .getConnection("jdbc:mysql://localhost:3306/ems",
-                    "root", "Test123@");
-            }
-        } catch (SQLException e) {
-            System.out.println("Connection not established!");
-        }
-        return connection;
-    }
-
-    /*
-     * Closes the connection.
-     *
-     * @param connection, connection which is to be closed.
-     */    
-    public static void close(Connection connection) {
-        try {
-            if (null != connection) {
-                connection.close();
-            }
-        } catch (SQLException exception) {
+            if (null == factory || factory.isClosed()) {
+               factory = new Configuration().configure().buildSessionFactory(); 
+            } 
+        } catch (Exception exception) {
             exception.printStackTrace();
         }
+        return factory;
     }
 
     /*
-     * Closes the prepared statement.
-     *
-     * @param preparedStatement, Prepared statement which is to be closed.
+     * Gets session.
      */
-    public static void close(PreparedStatement preparedStatement) {
-        try {
-            if (null != preparedStatement) {
-                preparedStatement.close();
-            }
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
+    public static Session getSession() {
+        return getSessionFactory().openSession();
     }
-    
+
     /*
-     * Closes the result set.
+     * Closes the session.
      *
-     * @param resultSet, Result set which is to be closed.
+     * @param session, session which is to be closed.
      */    
-    public static void close(ResultSet resultSet) {
+    public static void close(Session session) {
         try {
-            if (null != resultSet) {
-                resultSet.close();
+            if (null != session) {
+                session.close();
             }
-        } catch (SQLException exception) {
+        } catch (Throwable exception) {
             exception.printStackTrace();
         }
     }

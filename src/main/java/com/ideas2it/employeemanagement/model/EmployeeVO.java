@@ -47,7 +47,6 @@ public class EmployeeVO {
 
     public EmployeeVO (String name, String email,  
             long mobileNumber, LocalDate dateOfBirth, float salary) {
-        //this.employeeId = employeeId;
         this.name = name;
         this.email = email;
         this.mobileNumber = mobileNumber;
@@ -56,7 +55,8 @@ public class EmployeeVO {
     }
 
     public EmployeeVO (int employeeId, String name, String email,  
-            long mobileNumber, LocalDate dateOfBirth, float salary, List<AddressDTO> addressesDTO) {
+            long mobileNumber, LocalDate dateOfBirth, float salary,
+            List<AddressDTO> addressesDTO) {
         this.employeeId = employeeId;
         this.name = name;
         this.email = email;

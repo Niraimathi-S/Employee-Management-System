@@ -54,19 +54,24 @@ public class EmployeeView {
     }
 
     /**
-     * Creates a new employee with the validated inputs.
+     * Creates a new employee and its address with the validated inputs.
      * 
      */
     private void createNewEmployee() {
         System.out.println("\nplease enter Employee Details ");
         EmployeeVO returnedEmployeeVO;
+        List<AddressDTO> addresses = new ArrayList<AddressDTO>();
         EmployeeVO employeeVO = new EmployeeVO(getName(), getEmail(), 
                 getMobileNumber(), getDateOfBirth(), getSalary());
+
         System.out.println("\nplease enter Employee Address details");
+        AddressDTO addressDTO = new AddressDTO(getDoorNumber(),
+                  getStreet(), getCity(), getState(),getCountry(),getPinCode());
+ 
+        addresses.add(addressDTO);
+        employeeVO.setaddressesDTO(addresses);
         returnedEmployeeVO = employeeController
-                  .createEmployee(new AddressDTO(getDoorNumber(),
-                  getStreet(), getCity(), getState(),getCountry(),getPinCode(),
-                  employeeVO)); 
+                  .createEmployee(employeeVO); 
         if (null != returnedEmployeeVO) {
             System.out.println("Employee Created\nEmployee Id:"
                                +returnedEmployeeVO.getEmployeeId());
@@ -298,7 +303,7 @@ public class EmployeeView {
      * @return street-validated street name and number of the address.
      */
     private String getStreet() {
-        String pattern = "([\\w&&[^_]]+([\\s\\.,-]{1}[0-9a-zA-Z]+)*){0,10}";
+        String pattern = "([\\w&&[^_]]+([\\s\\.,-]{1}[0-9a-zA-Z]+)*){1,100}";
         StringBuilder errorMessage = new StringBuilder("Invalid street name!\n")
             .append("Should only contain alphabets, numbers,single")
             .append(",\nspace and some special character(.,-)\nPlease")
@@ -316,7 +321,7 @@ public class EmployeeView {
      * @return city-validated city name of the address.
      */
     private String getCity() {
-        String pattern = "([a-zA-Z]{3,}([\\s,]{1}[a-zA-Z]+)*){0,100}";
+        String pattern = "([a-zA-Z]{3,}([\\s,]{1}[a-zA-Z]+)*){1,100}";
         StringBuilder errorMessage = new StringBuilder("Invalid input\n")
             .append("Should only contain alphabets,single")
             .append(",\nspace and \",\" \nPlease")
@@ -334,7 +339,7 @@ public class EmployeeView {
      * @return state-validated state name of the address.
      */
     private String getState() {
-        String pattern = "([a-zA-Z]{3,}([\\s]{1}[a-zA-Z]+)*){0,100}";
+        String pattern = "([a-zA-Z]{3,}([\\s]{1}[a-zA-Z]+)*){1,100}";
         StringBuilder errorMessage = new StringBuilder("Invalid state name\n")
             .append("Should only contain alphabets and single space")
             .append("\nPlease reenter state\nState:");
@@ -351,7 +356,7 @@ public class EmployeeView {
      * @return country-validated country name of the address.
      */
     private String getCountry() {
-        String pattern = "([a-zA-Z]{3,}([\\s]{1}[a-zA-Z]+)*){0,100}";
+        String pattern = "([a-zA-Z]{3,}([\\s]{1}[a-zA-Z]+)*){1,100}";
         StringBuilder errorMessage = new StringBuilder("Invalid Country name!")
             .append("\nShould only contain alphabets and single space")
             .append("\nPlease reenter country\nCountry:");
@@ -432,9 +437,9 @@ public class EmployeeView {
      * Deletes one Employees and address using the 
      * employee id retrived from the user.
      *
-     * @param employeeId-employee id to delete employee details.
+     * @param employeeVO-employeeVO to delete employee details.
      */
-    private void deleteOneEmployeeDetails(int employeeId) {
+    private void deleteOneEmployeeDetails(EmployeeVO employeeVO) {
         StringBuilder menu = new StringBuilder("Delete Single Employee ")
                 .append("Menu\n1.Delete Employee\n2.Delete Address")
                 .append("\n3.Return to Delete menu");
@@ -444,11 +449,13 @@ public class EmployeeView {
             choice = getChoice(3);
             switch (choice) {
                 case 1: System.out.println(employeeController
-                            .deleteOneEmployee(employeeId) 
+                            .deleteOneEmployee(employeeVO) 
                                 ? "Employee Deleted"
                                 : " Employee Not Deleted"); 
+                        choice = 3;
                         break;
-                case 2: deleteAddress(employeeId);
+                case 2: deleteAddress(employeeVO.getEmployeeId());
+                        choice = 3;
                         break;
                 case 3: break;
                 default: System.out.println("Please enter valid option");
@@ -475,8 +482,10 @@ public class EmployeeView {
                     return;
                 } else {
                     int idToDelete = getEmployeeId(employeeIdAsString);
-                    if (employeeController.isEmployeeExist(idToDelete)) {
-                       deleteOneEmployeeDetails(idToDelete);
+                    EmployeeVO employeeVO = employeeController
+                                           .getEmployeeById(idToDelete);
+                    if (null != employeeVO ) {
+                       deleteOneEmployeeDetails(employeeVO);
                        isRecordDeleted = false;
                     } else {
                        System.out.println("No such entry exist");
@@ -497,8 +506,9 @@ public class EmployeeView {
      * @param employeeId-employee id to delete employee address.
      */
     private void deleteAddress(int employeeId) {
+        EmployeeVO employeeVO = employeeController.getEmployeeById(employeeId);
         List<AddressDTO> addresses 
-            = new ArrayList<>(employeeController.getAddressById(employeeId));
+            = employeeVO.getaddressesDTO();
         int addressId = 1;
         int idToDelete;
         if (!addresses.isEmpty()) {
@@ -509,9 +519,12 @@ public class EmployeeView {
             System.out.println("Enter address id to delete.\nAddress Id:");
             addressId = Integer.parseInt(scanner.nextLine());
             if ((addressId-1) < addresses.size()) {
-                idToDelete = (addresses.get(addressId-1)).getAddressId();
-                System.out.println(employeeController.deleteAddress(idToDelete)
-                               ? "Address deleted" : "Address not deleted");
+                addresses.remove(addressId-1);
+            System.out.println("address"+addresses);
+                employeeVO.setaddressesDTO(addresses);
+                System.out.println(employeeController
+                        .updateAllFields(employeeVO)
+                        ? "Address deleted" : "Address not deleted");
             }
          } else {
             System.out.println("No address to delete");
@@ -519,7 +532,8 @@ public class EmployeeView {
     }
 
     /**
-     * Updates single or all fields of an Employee according to user's choice.
+     * Adds address, Updates single or all fields of an Employee 
+     * according to user's choice.
      *
      */
     private void updateEmployeeDetails() {
@@ -578,17 +592,14 @@ public class EmployeeView {
      */
     private void updateAllFields(int employeeId) {
         EmployeeVO employeeVO = employeeController.getEmployeeById(employeeId);
-        AddressDTO addressDTO = new AddressDTO();
-
         employeeVO.setEmployeeId(employeeId);
         employeeVO.setName(getName());
         employeeVO.setEmail(getEmail());
         employeeVO.setMobileNumber(getMobileNumber());
         employeeVO.setDateOfBirth(getDateOfBirth());
         employeeVO.setSalary(getSalary()); 
-
         System.out.println(employeeController
-                .updateAllFields(new AddressDTO(employeeId,employeeVO))
+                .updateAllFields(employeeVO)
                 ? "Employee updated" : "Employee not updated");
     }
 
@@ -605,6 +616,7 @@ public class EmployeeView {
             .append("\n5.Update Salary\n6.Return to Update Menu\n\n")
             .append("please Select one\n\nYour choice :");
         int choice;
+        AddressDTO addressDTO = new AddressDTO();
         do {
             System.out.print(menu);
             choice = getChoice(6);
@@ -626,22 +638,25 @@ public class EmployeeView {
             }
         } while (6 != choice);
         System.out.println(employeeController
-                .updateAllFields(new AddressDTO(employeeId,employeeVO))
+                .updateAllFields(employeeVO)
                 ? "Employee updated" : "Employee not updated");
     }
 
     /**
-     * Add a new address to the 
+     * Add a new address to the Employee.
      *
      * @param employeeId-employeeId to add new address to the employee.
      */
     private void addAddress(int employeeId) {
         EmployeeVO employeeVO = employeeController.getEmployeeById(employeeId);
-
-        System.out.println(employeeController.updateAllFields(new AddressDTO(
+        AddressDTO addressDTO = new AddressDTO(
             getDoorNumber(), getStreet(), getCity(), getState(),getCountry(),
-            getPinCode(), employeeVO)) ? "Address Added" 
-                                       : "Address not added");
+            getPinCode());
+        List<AddressDTO> addresses = employeeVO.getaddressesDTO();
+        addresses.add(addressDTO);
+        employeeVO.setaddressesDTO(addresses);
+        System.out.println(employeeController.updateAllFields(employeeVO) 
+                           ? "Address Added" : "Address not added");
     }
 
     /**
@@ -649,7 +664,10 @@ public class EmployeeView {
      *
      */
     private void viewDetails() {
-        if (employeeController.isRecordsEmpty()) {
+        List<EmployeeVO> employeeDetails 
+                    = new ArrayList<>(employeeController.viewAllEmployee());
+        System.out.println("view flow"+employeeDetails);
+        if (employeeDetails.isEmpty()) {
             System.out.println("Sorry. No records Found.");
         } else {
             StringBuilder menu = new StringBuilder("\nVIEW MENU\n----------\n")
@@ -662,7 +680,7 @@ public class EmployeeView {
                 System.out.print(menu);
                 choice = getChoice(3);
                 switch (choice) {
-                    case 1: viewAllEmployeeDetails();
+                    case 1: viewAllEmployeeDetails(employeeDetails);
                             break;
                     case 2: viewOneEmployeeDetails();
                             break;
@@ -693,12 +711,13 @@ public class EmployeeView {
                     return;
                 } else {
                     int employeeId = getEmployeeId(employeeIdAsString);
-                    if (employeeController.isEmployeeExist(employeeId)) {
-                        employeeVO = employeeController.viewOneEmployee(employeeId);
+                    employeeVO = employeeController.viewOneEmployee(employeeId);
+                    if (null != employeeVO) {
                         System.out.println("Employee Details\n--------------\n" 
                                            + employeeVO);
-                        System.out.println("Employee Address\n--------------\n");
-                        addresses = new ArrayList<>(employeeVO.getaddressesDTO());
+                        System.out.println("\nEmployee Address\n-------------");
+                        addresses 
+                                = new ArrayList<>(employeeVO.getaddressesDTO());
                         for (AddressDTO address:addresses){
                             System.out.println(address);
                         }
@@ -709,7 +728,7 @@ public class EmployeeView {
                     }
                 }
             } catch (Exception exception) {
-                System.out.println("Employee Id must be an integer");
+                System.out.println("Employee Id must be an integer"+exception);
                 isRecordExist = true;
             }
         }
@@ -720,12 +739,10 @@ public class EmployeeView {
      * Views all Employees details to the user.
      *
      */
-    private void viewAllEmployeeDetails(){
-        if (employeeController.isRecordsEmpty()) {
+    private void viewAllEmployeeDetails(List<EmployeeVO> employeeDetails) {
+        if (employeeDetails.isEmpty()) {
             System.out.println("Sorry. No records Found.");
         } else {
-            List<EmployeeVO> employeeDetails 
-                    = new ArrayList<>(employeeController.viewAllEmployee());
             List<AddressDTO> addresses;
             for (EmployeeVO value:employeeDetails){
                 System.out.println(value);
@@ -733,6 +750,7 @@ public class EmployeeView {
                         for (AddressDTO address:addresses){
                             System.out.println(address);
                         }
+                System.out.println("-----------------------");   
             } 
             System.out.println("-----------------------");   
         }

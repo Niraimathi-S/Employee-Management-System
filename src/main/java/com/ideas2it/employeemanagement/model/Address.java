@@ -21,8 +21,6 @@ public class Address {
     private String country;
     private int pinCode;
     private Employee employee;
-    private int employeeId;
-
 
     public Address() {
     }
@@ -31,7 +29,8 @@ public class Address {
      * Constructor for Address class to initialize values.
      */
     public Address(String doorNumber, String street, String city, 
-                      String state,String country,int pinCode,Employee employee) {
+                   String state, String country, int pinCode,
+                   Employee employee) {
         this.doorNumber = doorNumber;
         this.street = street;
         this.city = city;
@@ -39,35 +38,17 @@ public class Address {
         this.country = country;
         this.pinCode = pinCode;
         this.employee = employee;
-    }
-
-    public Address(String doorNumber, String street, String city, 
-                      String state,String country,int pinCode,int employeeId) {
-        this.employeeId = employeeId;
-        this.doorNumber = doorNumber;
-        this.street = street;
-        this.city = city;
-        this.state = state;
-        this.country = country;
-        this.pinCode = pinCode;
     }
 
     public Address(int addressId, String doorNumber, String street, String city, 
-                      String state,String country,int pinCode,int employeeId) {
+                      String state, String country, int pinCode) {
         this.addressId = addressId;
-        this.employeeId = employeeId;
         this.doorNumber = doorNumber;
         this.street = street;
         this.city = city;
         this.state = state;
         this.country = country;
         this.pinCode = pinCode;
-        this.employeeId = employeeId;
-    }
-
-    public Address(int employeeId, Employee employee) {
-        this.employee = employee;
-        this.employeeId = employeeId;
     }
 
     /**
@@ -214,24 +195,6 @@ public class Address {
         this.employee = employee;
     }
 
-    /**
-     * Method to get Employee id
-     *
-     * @return emaployeeId-Employee id
-     */
-    public int getEmployeeId() {
-        return employeeId;
-    }
-
-    /**
-     * Method to set Employee Name
-     *
-     * @param name	Employee name
-     */
-    public void setEmployeeId(int employeeId) {
-        this.employeeId = employeeId;
-    }
-
     public String toString() {
         StringBuilder address = new StringBuilder();
         address.append("\nDoor Number\t:").append(doorNumber)
@@ -239,8 +202,7 @@ public class Address {
                 .append("\nCity/District\t:").append(city)
                 .append("\nState\t\t:").append(state)
                 .append("\nCountry\t\t:").append(country)
-                .append("\nPincode\t\t:").append(pinCode)
-                .append("\n");
+                .append("\nPincode\t\t:").append(pinCode);
         return address.toString();
     }
 }

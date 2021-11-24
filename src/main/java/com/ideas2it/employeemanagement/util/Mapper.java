@@ -17,7 +17,7 @@ import com.ideas2it.employeemanagement.model.EmployeeVO;
  * Contains methods to convert View object to POJO and viceversa.
  * 
  * @author Niraimathi S
- * @version 1.0 12-11-2021
+ * @version 1.0
  */
 public class Mapper{
 
@@ -36,8 +36,8 @@ public class Mapper{
         employeeVO.setDateOfBirth(employee.getDateOfBirth());
         employeeVO.setSalary(employee.getSalary());
         List<AddressDTO> addressesDTO = new ArrayList<AddressDTO>();
-        if (null != employee.getaddresses()) {
-            for(Address address:employee.getaddresses()) {
+        if (null != employee.getAddresses()) {
+            for(Address address:employee.getAddresses()) {
                 addressesDTO.add(AddressToAddressDTO(address));
             }
         }
@@ -66,7 +66,7 @@ public class Mapper{
                 addresses.add(AddressDTOToAddress(addressDTO));
             }
         }
-        employee.setaddresses(addresses);
+        employee.setAddresses(addresses);
         return employee;
     }
 
@@ -78,7 +78,7 @@ public class Mapper{
      */
     public static Address AddressDTOToAddress(AddressDTO addressDTO) {
         Address address = new Address();
-        EmployeeVO employeeVO;
+        EmployeeVO employeeVO = new EmployeeVO();
         address.setAddressId(addressDTO.getAddressId());
         address.setDoorNumber(addressDTO.getDoorNumber());
         address.setStreet(addressDTO.getStreet());
@@ -87,9 +87,16 @@ public class Mapper{
         address.setCountry(addressDTO.getCountry());
         address.setPinCode(addressDTO.getPinCode());
         employeeVO = addressDTO.getEmployeeVO();
-        address.setEmployeeId(addressDTO.getEmployeeId());
+
         if (null != employeeVO) {
-            address.setEmployee(EmployeeDTOToEmployee(employeeVO));
+            Employee employee = new Employee();
+            employee.setEmployeeId(employeeVO.getEmployeeId()); 
+            employee.setName(employeeVO.getName());
+            employee.setEmail(employeeVO.getEmail());
+            employee.setMobileNumber(employeeVO.getMobileNumber());
+            employee.setDateOfBirth(employeeVO.getDateOfBirth());
+            employee.setSalary(employeeVO.getSalary());
+            address.setEmployee(employee);
         }
         return address;
     }
@@ -110,11 +117,18 @@ public class Mapper{
         addressDTO.setCountry(address.getCountry());
         addressDTO.setPinCode(address.getPinCode());
         Employee employee = address.getEmployee();
-        addressDTO.setEmployeeId(address.getEmployeeId());
-        if (null != employee) {
-            addressDTO.setEmployeeVO(EmployeeToEmployeeDTO(employee));
-        }
 
+        if (null != employee) {
+            EmployeeVO employeeVO = new EmployeeVO();
+            employeeVO.setEmployeeId(employee.getEmployeeId());
+            employeeVO.setName(employee.getName());
+            employeeVO.setEmail(employee.getEmail());
+            employeeVO.setMobileNumber(employee.getMobileNumber());
+            employeeVO.setDateOfBirth(employee.getDateOfBirth());
+            employeeVO.setSalary(employee.getSalary());
+            addressDTO.setEmployeeVO(employeeVO);
+
+        }
         return addressDTO;
     }
 }

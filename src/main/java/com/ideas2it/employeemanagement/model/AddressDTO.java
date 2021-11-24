@@ -30,7 +30,8 @@ public class AddressDTO {
      * Constructor for AddressDTO class to initialize values.
      */
     public AddressDTO(String doorNumber, String street, String city, 
-                      String state,String country,int pinCode, int employeeId ) {
+                      String state, String country, int pinCode, 
+                      int employeeId ) {
         this.employeeId = employeeId;
         this.doorNumber = doorNumber;
         this.street = street;
@@ -38,11 +39,21 @@ public class AddressDTO {
         this.state = state;
         this.country = country;
         this.pinCode = pinCode;
-        this.employeeVO = employeeVO;
     }
 
     public AddressDTO(String doorNumber, String street, String city, 
-                      String state,String country,int pinCode,EmployeeVO employeeVO) {
+                      String state, String country, int pinCode) {
+        this.doorNumber = doorNumber;
+        this.street = street;
+        this.city = city;
+        this.state = state;
+        this.country = country;
+        this.pinCode = pinCode;
+    }
+
+    public AddressDTO(String doorNumber, String street, String city, 
+                      String state,String country,int pinCode,
+                     EmployeeVO employeeVO) {
         this.addressId = addressId;
         this.doorNumber = doorNumber;
         this.street = street;
@@ -51,25 +62,6 @@ public class AddressDTO {
         this.country = country;
         this.pinCode = pinCode;
         this.employeeVO = employeeVO;
-    }
-
-    public AddressDTO(int addressId, String doorNumber, String street, String city, 
-                      String state,String country,int pinCode,int employeeId) {
-        this.addressId = addressId;
-        this.employeeId = employeeId;
-        this.doorNumber = doorNumber;
-        this.street = street;
-        this.city = city;
-        this.state = state;
-        this.country = country;
-        this.pinCode = pinCode;
-        this.employeeId = employeeId;
-    }
-
-
-    public AddressDTO(int employeeId, EmployeeVO employeeVO) {
-        this.employeeVO = employeeVO;
-        this.employeeId = employeeId;
     }
 
     /**
@@ -216,24 +208,6 @@ public class AddressDTO {
         this.employeeVO = employeeVO;
     }
 
-    /**
-     * Method to get Employee id
-     *
-     * @return emaployeeId-Employee id
-     */
-    public int getEmployeeId() {
-        return employeeId;
-    }
-
-    /**
-     * Method to set Employee Name
-     *
-     * @param name	Employee name
-     */
-    public void setEmployeeId(int employeeId) {
-        this.employeeId = employeeId;
-    }
-
     public String toString() {
         StringBuilder address = new StringBuilder();
         address.append("\nDoor Number\t:").append(doorNumber)
@@ -241,8 +215,7 @@ public class AddressDTO {
                 .append("\nCity/District\t:").append(city)
                 .append("\nState\t\t:").append(state)
                 .append("\nCountry\t\t:").append(country)
-                .append("\nPincode\t\t:").append(pinCode)
-                .append("\n");
+                .append("\nPincode\t\t:").append(pinCode);
         return address.toString();
     }
 }

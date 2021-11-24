@@ -4,21 +4,19 @@
 
 package com.ideas2it.employeemanagement.dao;
 
+import java.util.List;
+import java.util.ArrayList;
+
 import com.ideas2it.employeemanagement.model.Address;
 import com.ideas2it.employeemanagement.model.Employee;
 import com.ideas2it.employeemanagement.util.DatabaseConnection;
-import java.sql.Date;
-import java.sql.ResultSet;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.util.List;
-import java.util.ArrayList;
+
 
 /**
  * Interacts with database and does appropriate actions based on users wish.
  * 
  * @author Niraimathi S
- * @version 1.0 12-11-2021
+ * @version 1.0
  */
 
 public interface EmployeeDAO {
@@ -28,15 +26,14 @@ public interface EmployeeDAO {
      * @param employee-Employee object to insert into database.
      * @return employee-inserted object if true or else null.
      */
-    public Employee createEmployee(Address address);
+    public Employee createEmployee(Employee employee);
 
     /**
      * update employee details into the database
      *
      * @param employee-Employee object to update into database.
-     * @return employee-updated object if true or else null.
      */
-    public Employee updateEmployee(Address address);
+    public Employee updateEmployee(Employee employee);
 
     /**
      * Deletes employee details from the database
@@ -48,7 +45,7 @@ public interface EmployeeDAO {
     /**
      * Gets single employee's details from the database using Employee Id.
      *
-     * @param employee-Employee id.
+     * @param employeeid-Employee id.
      * @return employee-employee details of a single employee.
      */
     public Employee getEmployeeById(int employeeId);
@@ -56,7 +53,7 @@ public interface EmployeeDAO {
     /**
      * Gets single employee's details from the database using email.
      *
-     * @param employee-Employee email id.
+     * @param email-Employee email id.
      * @return employee-employee details of a single employee.
      */
     public Employee getEmployeeByEmail(String email);
@@ -64,7 +61,7 @@ public interface EmployeeDAO {
     /**
      * Gets single employee's details from the database using mobile number.
      *
-     * @param employee-Employee mobile number.
+     * @param mobileNumber-Employee mobile number.
      * @return employee-employee details of a single employee.
      */
     public Employee getEmployeeByMobileNumber(long mobileNumber);
@@ -72,16 +69,10 @@ public interface EmployeeDAO {
     /**
      * Deletes all employees details from the database
      *
-     * @return true-if all employees are deleted or else false.
+     * @param employee-The employee object to be deleted.
+     * @return true-if employee is deleted or else false.
      */
-    public boolean deleteOneEmployee(int employeeId);
-
-    /**
-     * Deletes one employee's address from the database
-     *
-     * @return true-if deleted or else false.
-     */
-    public boolean deleteAddress(int addressId);
+    public boolean deleteOneEmployee(Employee employee);
 
     /**
      * Gets all employee's details from the database.

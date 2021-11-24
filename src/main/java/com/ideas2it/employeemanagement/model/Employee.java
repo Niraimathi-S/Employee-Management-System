@@ -6,6 +6,7 @@ package com.ideas2it.employeemanagement.model;
 
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +35,6 @@ public class Employee {
      */
     public Employee (String name, String email,  
                      long mobileNumber, LocalDate dateOfBirth, float salary) {
-       // this.employeeId = employeeId;
         this.name = name;
         this.email = email;
         this.mobileNumber = mobileNumber;
@@ -53,7 +53,8 @@ public class Employee {
     }
 
     public Employee (int employeeId, String name, String email,  
-                     long mobileNumber, LocalDate dateOfBirth, float salary, List<Address> addresses) {
+                     long mobileNumber, LocalDate dateOfBirth, float salary,
+                     List<Address> addresses) {
         this.employeeId = employeeId;
         this.name = name;
         this.email = email;
@@ -171,11 +172,11 @@ public class Employee {
         this.salary = salary;
     }
 
-    public List<Address> getaddresses() {
+    public List<Address> getAddresses() {
         return addresses;
     }
 
-    public void setaddresses(List<Address> addresses) {
+    public void setAddresses(List<Address> addresses) {
         this.addresses = addresses;
     }
 

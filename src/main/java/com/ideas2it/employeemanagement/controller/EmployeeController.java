@@ -18,10 +18,11 @@ import com.ideas2it.employeemanagement.service.impl.EmployeeServiceImplementatio
  * acts as intermediate between view and service classes.
  * 
  * @author Niraimathi S
- * @version 1.0 12-11-2021
+ * @version 1.0
  */
 public class EmployeeController {
-    private EmployeeService employeeService = new EmployeeServiceImplementation();
+    private EmployeeService employeeService 
+            = new EmployeeServiceImplementation();
 
     /**
      * Validates the given input from the user. 
@@ -37,11 +38,11 @@ public class EmployeeController {
     /**
      * Creates a new employee with the data given by the user. 
      *
-     * @param AddressDTO-AddressDTO with employee details and address
+     * @param employeeVO-The VO object with employee details and address
      * @param employeeVO-The VO object to store the created employee.
      */
-    public EmployeeVO createEmployee(AddressDTO addressDTO) {
-        return employeeService.createEmployee(addressDTO);
+    public EmployeeVO createEmployee(EmployeeVO employeeVO) {
+        return employeeService.createEmployee(employeeVO);
     }
 
     /**
@@ -93,42 +94,21 @@ public class EmployeeController {
     /**
      * Deletes one employee.
      *
-     * @param employeeid-The employeeId of the employee to be deleted.
+     * @param employeeVO-The VO object of the employee to be deleted.
      * @return boolean-true if given employee deleted, else false.
      */
-    public boolean deleteOneEmployee(int employeeId) {
-        return employeeService.deleteOneEmployee(employeeId);
-    }
-
-    /**
-     * Deletes one address of an employee.
-     *
-     * @param addressId-The addressId of the address to be deleted.
-     * @return boolean-true if given address exist, else false.
-     */
-    public boolean deleteAddress(int addressId) {
-        return employeeService.deleteAddress(addressId);
-    }
-
-    /**
-     * Gets all addresses of an employee.
-     *
-     * @param employeeId-The employeeId to get all address.
-     * @return List<AddressDTO>-List of all addresses of a single employee.
-     */
-    public List<AddressDTO> getAddressById(int employeeId) {
-        return employeeService.getAddressById(employeeId);
+    public boolean deleteOneEmployee(EmployeeVO employeeVO) {
+        return employeeService.deleteOneEmployee(employeeVO);
     }
 
     /**
      * Updates all fields of one employee. 
      *
-     * @param employeeid-employeeid to update all fields
      * @param employeeVO-employeeVO object containing updated
      *                   values get from user
      */
-    public boolean updateAllFields(AddressDTO addressDTO) {
-        return employeeService.updateAllFields(addressDTO);
+    public boolean updateAllFields(EmployeeVO employeeVO) {
+        return employeeService.updateAllFields(employeeVO);
     }
 
     /**
@@ -147,7 +127,7 @@ public class EmployeeController {
      * @param employeeid-employeeid to view.
      * @return employeeVO-object which contains details of the single employee.
      */
-    public EmployeeVO viewOneEmployee(Integer employeeId) {
+    public EmployeeVO viewOneEmployee(int employeeId) {
         return employeeService.getEmployeeById(employeeId);
     }
 

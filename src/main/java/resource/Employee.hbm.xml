@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name = "com.ideas2it.employeemanagement.model.Employee" 
+           table = "employee">
+
+        <id name = "employeeId" column = "id" type = "int">
+            <generator class="native"/>
+        </id>
+ 
+        <property name = "name" column = "name" type = "string"/>
+        <property name = "mobileNumber" column = "mobile_number" type = "long"/>
+        <property name = "email" column = "email" type = "string"/>
+        <property name = "salary" column = "salary" type = "float"/>
+        <property name = "dateOfBirth" type = "LocalDate" 
+                  column = "date_of_birth"/>
+
+        <bag name="addresses" lazy = "true" cascade="all-delete-orphan">
+            <key column = "employee_id"></key>
+            <one-to-many class="com.ideas2it.employeemanagement.model.Address"/>  
+        </bag>  
+    </class>
+</hibernate-mapping>
