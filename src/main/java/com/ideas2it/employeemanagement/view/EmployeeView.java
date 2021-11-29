@@ -8,11 +8,14 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Scanner;
 
 import com.ideas2it.employeemanagement.controller.EmployeeController;
 import com.ideas2it.employeemanagement.model.AddressDTO;
 import com.ideas2it.employeemanagement.model.EmployeeVO;
+import com.ideas2it.employeemanagement.model.ProjectDTO;
 
 /**
  * Deals with user interaction and is responsible for
@@ -32,7 +35,8 @@ public class EmployeeView {
         int choice = 0;
         StringBuilder menu = new StringBuilder("EMPLOYEE MANAGEMENT SYSTEM\n")
             .append("--------------------------\n1.Create\n2.Update\n3.View\n") 
-            .append("4.Delete\n5.Exit\n\nPlease choose an option\nYour choice");
+            .append("4.Delete\n5.Assign/Unassign Project\n6.Exit\n\nPlease ")
+            .append("choose an option\nYour choice");
         do {
             System.out.print(menu);
             choice = getChoice(5);
@@ -45,12 +49,19 @@ public class EmployeeView {
                         break;
                 case 4: deleteDetails();
                         break;
-                case 5: break;
+                case 5: if (employeeController.isRecordsEmpty()) {
+                            System.out.println("Sorry. No records Found.");
+                            break;
+                        } else {
+                            assignOrUnassignProject();
+                            break;
+                        }
+                case 6: break;
                 default: System.out.println("Please enter valid option");
                          break;
             }
             System.out.println("-----------------------");   
-        } while (5 != choice);
+        } while (6 != choice);
     }
 
     /**
@@ -60,7 +71,7 @@ public class EmployeeView {
     private void createNewEmployee() {
         System.out.println("\nplease enter Employee Details ");
         EmployeeVO returnedEmployeeVO;
-        List<AddressDTO> addresses = new ArrayList<AddressDTO>();
+        Set<AddressDTO> addresses = new HashSet<AddressDTO>();
         EmployeeVO employeeVO = new EmployeeVO(getName(), getEmail(), 
                 getMobileNumber(), getDateOfBirth(), getSalary());
 
@@ -482,14 +493,14 @@ public class EmployeeView {
                     return;
                 } else {
                     int idToDelete = getEmployeeId(employeeIdAsString);
-                    EmployeeVO employeeVO = employeeController
+                    if (employeeController.isEmployeeExist(idToDelete) ) {
+                        EmployeeVO employeeVO = employeeController
                                            .getEmployeeById(idToDelete);
-                    if (null != employeeVO ) {
-                       deleteOneEmployeeDetails(employeeVO);
-                       isRecordDeleted = false;
+                        deleteOneEmployeeDetails(employeeVO);
+                        isRecordDeleted = false;
                     } else {
-                       System.out.println("No such entry exist");
-                       isRecordDeleted = true;
+                        System.out.println("No such entry exist");
+                        isRecordDeleted = true;
                     }
                 }
             } catch (Exception exception) {
@@ -507,7 +518,7 @@ public class EmployeeView {
      */
     private void deleteAddress(int employeeId) {
         EmployeeVO employeeVO = employeeController.getEmployeeById(employeeId);
-        List<AddressDTO> addresses 
+        Set<AddressDTO> addresses 
             = employeeVO.getaddressesDTO();
         int addressId = 1;
         int idToDelete;
@@ -652,7 +663,7 @@ public class EmployeeView {
         AddressDTO addressDTO = new AddressDTO(
             getDoorNumber(), getStreet(), getCity(), getState(),getCountry(),
             getPinCode());
-        List<AddressDTO> addresses = employeeVO.getaddressesDTO();
+        Set<AddressDTO> addresses = employeeVO.getaddressesDTO();
         addresses.add(addressDTO);
         employeeVO.setaddressesDTO(addresses);
         System.out.println(employeeController.updateAllFields(employeeVO) 
@@ -666,7 +677,6 @@ public class EmployeeView {
     private void viewDetails() {
         List<EmployeeVO> employeeDetails 
                     = new ArrayList<>(employeeController.viewAllEmployee());
-        System.out.println("view flow"+employeeDetails);
         if (employeeDetails.isEmpty()) {
             System.out.println("Sorry. No records Found.");
         } else {
@@ -701,7 +711,8 @@ public class EmployeeView {
                 .append("or Press -1 to return to main menu");
         String employeeIdAsString = " ";
         EmployeeVO employeeVO;
-        List<AddressDTO> addresses;
+        Set<AddressDTO> addresses;
+        Set<ProjectDTO> projects;
         boolean isRecordExist = true;
         while (isRecordExist) {
             System.out.println(menu);
@@ -711,15 +722,19 @@ public class EmployeeView {
                     return;
                 } else {
                     int employeeId = getEmployeeId(employeeIdAsString);
-                    employeeVO = employeeController.viewOneEmployee(employeeId);
-                    if (null != employeeVO) {
+                    if (employeeController.isEmployeeExist(employeeId)) {
+                        employeeVO = employeeController.viewOneEmployee(employeeId);
                         System.out.println("Employee Details\n--------------\n" 
                                            + employeeVO);
                         System.out.println("\nEmployee Address\n-------------");
                         addresses 
-                                = new ArrayList<>(employeeVO.getaddressesDTO());
+                                = new HashSet<>(employeeVO.getaddressesDTO());
                         for (AddressDTO address:addresses){
                             System.out.println(address);
+                        }
+                        projects = employeeVO.getProjectsDTO();
+                        for(ProjectDTO project:projects){
+                            System.out.println(project);
                         }
                         isRecordExist = false;
                     } else {
@@ -743,16 +758,157 @@ public class EmployeeView {
         if (employeeDetails.isEmpty()) {
             System.out.println("Sorry. No records Found.");
         } else {
-            List<AddressDTO> addresses;
+            Set<AddressDTO> addresses = new HashSet<AddressDTO>();
+            Set<ProjectDTO> projects = new HashSet<ProjectDTO>();
             for (EmployeeVO value:employeeDetails){
                 System.out.println(value);
-                addresses = new ArrayList<>(value.getaddressesDTO());
-                        for (AddressDTO address:addresses){
-                            System.out.println(address);
-                        }
+                addresses = value.getaddressesDTO();
+                for (AddressDTO address:addresses){
+                    System.out.println(address);
+                }
+                projects = value.getProjectsDTO();
+                for(ProjectDTO project:projects){
+                    System.out.println(project);
+                }
                 System.out.println("-----------------------");   
             } 
             System.out.println("-----------------------");   
         }
     }
+
+    private void assignOrUnassignProject() {
+        StringBuilder menu = new StringBuilder("\nASSIGN AND UNASSIGN MENU")
+                .append("\n----------\n1.Assign project\n2.Unassign project") 
+                .append("\n3.Exit\n\nplease Select one\n\nYour choice :");
+        StringBuilder inputMenu = new StringBuilder("Please enter Employee Id\n")
+                .append("or Press -1 to return to main menu");
+        int choice;
+        int employeeId;
+        EmployeeVO employeeVO;
+        boolean isRecordExist;
+        List<EmployeeVO> EmployeeVO 
+                = new ArrayList<>(employeeController.viewAllEmployee());
+        for (EmployeeVO value:EmployeeVO){
+            System.out.println("\nEmployee Id:\t" + value.getEmployeeId()
+                               + "\nEmployee Name:\t" + value.getName());
+        }
+        do {
+            System.out.println(inputMenu);
+            employeeId = getEmployeeId(scanner.nextLine());
+            if (employeeController.isEmployeeExist(employeeId)) {
+                employeeVO = employeeController.viewOneEmployee(employeeId);
+                System.out.println("Project Details\n--------------\n" 
+                                    + employeeVO);
+                isRecordExist = false;
+                do {
+                    System.out.print(menu);
+                    choice = getChoice(3);
+                    switch (choice) {
+                        case 1: assignProject(employeeId);
+                                break;
+                        case 2: unAssignProject(employeeId);
+                                break;
+                        case 3: break;
+                        default: System.out.println("Please enter valid option");
+                                 break;
+                    }
+                } while (3 != choice);
+            } else {
+                System.out.println("\nNo such entry exist");
+                isRecordExist = true;
+            }
+        } while (isRecordExist);
+
+    }
+
+    private int[] getProjectIds() {
+        String pattern = "([1-9][0-9]*)([,]?[1-9][0-9]*)*";
+        StringBuilder errorMessage = new StringBuilder("Invalid Input!\nEmployee ")
+                .append("Id should be separated with only commas(,)\nPlease")
+                .append(" reenter employee IDs\n Employee IDS:");
+        System.out.println("Please enter Project Ids to assign/unassign"
+                           + "\n Project IDS:");
+        String idsAsString;
+        int i = 0;
+        //boolean isInputValid = true;
+        //do {
+            idsAsString = validateInput(scanner.nextLine(), pattern, errorMessage);
+            int projectIds[] = new int[idsAsString.length()];
+            String[] idStringArray = idsAsString.split(",");
+            try {
+               for (i = 0; i < idsAsString.length(); i++) {
+                   projectIds[i] = Integer.parseInt(idStringArray[i]);
+                   //isInputValid = true;
+               }
+            } catch (NumberFormatException exception) {
+               System.out.println("Invalid input! Error occured while Parsing");
+                   //isInputValid = false;
+            } finally {
+               return projectIds;
+            }
+        
+       // } while ((i == idsAsString.length()) && (isInputValid = true));
+        //return projectIds;
+    }
+
+
+    private void assignProject(int employeeId) {
+        EmployeeVO employeeVO = employeeController.getEmployeeById(employeeId);
+        Set<ProjectDTO> assignedProjects = employeeVO.getProjectsDTO();
+        List<ProjectDTO> projectsToAssign;
+        int noOfAssignedProjects = assignedProjects.size();
+
+        if (assignedProjects.isEmpty() || (null == assignedProjects)) {
+            System.out.println("No Projects assigned to this Employee");
+            assignedProjects = new HashSet<ProjectDTO>();
+        } else { 
+            System.out.println("Projects assigned to this Employee are:\n");
+            for (ProjectDTO project:assignedProjects){
+                System.out.println(project);
+            }
+        }
+        int projectIds[] = getProjectIds();
+        if((null != projectIds)){
+            projectsToAssign = employeeController.getProjectDTOs(projectIds);
+            projectsToAssign.removeAll(assignedProjects);
+            for (ProjectDTO project:projectsToAssign){
+                assignedProjects.add(project);
+            }
+            if (assignedProjects.size() != noOfAssignedProjects) {
+                employeeVO.setProjectsDTO(assignedProjects);
+                System.out.println(employeeController.updateAllFields(employeeVO) 
+                       ? "Projects Assigned" : "Projects Not Assigned"
+                       + "Trying to assign to non-existent Project!");
+            }
+        }
+    }
+
+    private void unAssignProject(int employeeId) {
+        EmployeeVO employeeVO = employeeController.getEmployeeById(employeeId);
+        List<ProjectDTO> projectsToUnAssign = new ArrayList<ProjectDTO>();
+        Set<ProjectDTO> assignedProjects = employeeVO.getProjectsDTO();
+        int noOfAssignedProjects = assignedProjects.size();
+
+        if (assignedProjects.isEmpty() || (null == assignedProjects)) {
+            System.out.println("No Projects assigned to this Employee");
+            assignedProjects = new HashSet<ProjectDTO>();
+        } else { 
+            System.out.println("Projects assigned to this Employee are:\n");
+            for (ProjectDTO project:assignedProjects){
+                System.out.println(project);
+            }
+        }
+        int projectIds[] = getProjectIds();
+        if((null != projectIds)){
+            projectsToUnAssign = employeeController.getProjectDTOs(projectIds);
+            assignedProjects.removeAll(projectsToUnAssign);
+            if (assignedProjects.size() != noOfAssignedProjects) {
+                employeeVO.setProjectsDTO(assignedProjects);
+                System.out.println(employeeController.updateAllFields(employeeVO) 
+                        ? "Projects UnAssigned" : "Projects Not UnAssigned"
+                        + "Trying to assign to non-existent Project!");
+            } 
+        }
+    }
+    
 }

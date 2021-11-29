@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name = "com.ideas2it.employeemanagement.model.Project" 
+           table = "project">
+
+        <id name = "projectId" column = "id">
+            <generator class="native"/>
+        </id>
+ 
+        <property name = "name" column = "name" type = "string"/>
+        <property name = "domainName" column = "domain_name" type = "string"/>
+        <property name = "manager" column = "manager" type = "string"/>
+        <property name = "startDate" type = "LocalDate" 
+                  column = "start_date"/>
+
+        <set name="employees" table = "employee_project">
+            <key column = "project_id"></key>
+            <many-to-many column = "employee_id" class="com.ideas2it.employeemanagement.model.Employee"/>  
+        </set>  
+    </class>
+</hibernate-mapping>

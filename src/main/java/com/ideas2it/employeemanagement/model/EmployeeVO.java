@@ -8,8 +8,11 @@ import java.time.format.DateTimeFormatter;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
 
 import com.ideas2it.employeemanagement.model.AddressDTO;
+import com.ideas2it.employeemanagement.model.ProjectDTO;
 
 /**
  * EmployeeVO is a Data Transfer class with getter & setter methods 
@@ -24,7 +27,8 @@ public class EmployeeVO {
     private LocalDate dateOfBirth;
     private String name;
     private String email;
-    private List<AddressDTO> addressesDTO;
+    private Set<AddressDTO> addressesDTO = new HashSet<AddressDTO>();
+    private Set<ProjectDTO> projectsDTO = new HashSet<ProjectDTO>();
 
     /**
      * Empty Constructor for EmployeeVO
@@ -56,7 +60,7 @@ public class EmployeeVO {
 
     public EmployeeVO (int employeeId, String name, String email,  
             long mobileNumber, LocalDate dateOfBirth, float salary,
-            List<AddressDTO> addressesDTO) {
+            Set<AddressDTO> addressesDTO) {
         this.employeeId = employeeId;
         this.name = name;
         this.email = email;
@@ -64,6 +68,19 @@ public class EmployeeVO {
         this.dateOfBirth = dateOfBirth;
         this.salary = salary;
         this.addressesDTO = addressesDTO;
+    }
+
+    public EmployeeVO (int employeeId, String name, String email,  
+            long mobileNumber, LocalDate dateOfBirth, float salary,
+            Set<AddressDTO> addressesDTO, Set<ProjectDTO> projectsDTO) {
+        this.employeeId = employeeId;
+        this.name = name;
+        this.email = email;
+        this.mobileNumber = mobileNumber;
+        this.dateOfBirth = dateOfBirth;
+        this.salary = salary;
+        this.addressesDTO = addressesDTO;
+        this.projectsDTO = projectsDTO;
     }
 
     /**
@@ -174,12 +191,31 @@ public class EmployeeVO {
         this.salary = salary;
     }
 
-    public List<AddressDTO> getaddressesDTO() {
+    public Set<AddressDTO> getaddressesDTO() {
         return addressesDTO;
     }
 
-    public void setaddressesDTO(List<AddressDTO> addressesDTO) {
+    public void setaddressesDTO(Set<AddressDTO> addressesDTO) {
         this.addressesDTO = addressesDTO;
+    }
+
+    public Set<ProjectDTO> getProjectsDTO() {
+        return projectsDTO;
+    }
+
+    public void setProjectsDTO(Set<ProjectDTO> projectsDTO) {
+        this.projectsDTO = projectsDTO;
+    }
+
+    public int hashCode() {
+        return employeeId;
+    }
+
+    public boolean equals(Object object) {
+        if (object instanceof EmployeeVO) {
+            return this.employeeId == ((EmployeeVO) object).employeeId;
+        }
+        return false;
     }
 
     public String toString() {

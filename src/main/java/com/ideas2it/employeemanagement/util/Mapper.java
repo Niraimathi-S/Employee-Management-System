@@ -6,11 +6,15 @@ package com.ideas2it.employeemanagement.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
 
 import com.ideas2it.employeemanagement.model.Address;
 import com.ideas2it.employeemanagement.model.AddressDTO;
 import com.ideas2it.employeemanagement.model.Employee;
 import com.ideas2it.employeemanagement.model.EmployeeVO;
+import com.ideas2it.employeemanagement.model.Project;
+import com.ideas2it.employeemanagement.model.ProjectDTO;
 
 
 /**
@@ -35,13 +39,25 @@ public class Mapper{
         employeeVO.setMobileNumber(employee.getMobileNumber());
         employeeVO.setDateOfBirth(employee.getDateOfBirth());
         employeeVO.setSalary(employee.getSalary());
-        List<AddressDTO> addressesDTO = new ArrayList<AddressDTO>();
-        if (null != employee.getAddresses()) {
+        Set<AddressDTO> addressesDTO = new HashSet<AddressDTO>();
+        Set<ProjectDTO> projectsDTO = new HashSet<ProjectDTO>();
+        if ((null != employee.getAddresses())
+                && (!employee.getAddresses().isEmpty())) {
             for(Address address:employee.getAddresses()) {
                 addressesDTO.add(AddressToAddressDTO(address));
             }
+            employeeVO.setaddressesDTO(addressesDTO);
         }
-        employeeVO.setaddressesDTO(addressesDTO);
+
+        if ((null != employee.getProjects())
+                && (!employee.getProjects().isEmpty())) {
+            for(Project project:employee.getProjects()) {
+                projectsDTO.add(ProjectToProjectDTO(project));
+            }
+            employeeVO.setProjectsDTO(projectsDTO);
+        }
+
+
         return employeeVO;
     }
 
@@ -59,14 +75,26 @@ public class Mapper{
         employee.setMobileNumber(employeeVO.getMobileNumber());
         employee.setDateOfBirth(employeeVO.getDateOfBirth());
         employee.setSalary(employeeVO.getSalary());
-        List<Address> addresses = new ArrayList<Address>();
+        Set<Address> addresses = new HashSet<Address>();
+        Set<Project> projects = new HashSet<Project>();
 
-        if (null != employeeVO.getaddressesDTO()) {
+        if ((null != employeeVO.getaddressesDTO()) 
+                && (!employeeVO.getaddressesDTO().isEmpty()))  {
             for(AddressDTO addressDTO:employeeVO.getaddressesDTO()) {
                 addresses.add(AddressDTOToAddress(addressDTO));
             }
+            employee.setAddresses(addresses);
         }
-        employee.setAddresses(addresses);
+
+        if ((null != employeeVO.getProjectsDTO()) 
+                && (!employeeVO.getProjectsDTO().isEmpty())){
+            for(ProjectDTO projectDTO:employeeVO.getProjectsDTO()) {
+                projects.add(ProjectDTOToProject(projectDTO));
+            }
+            employee.setProjects(projects);
+        }
+
+
         return employee;
     }
 
@@ -130,5 +158,37 @@ public class Mapper{
 
         }
         return addressDTO;
+    }
+
+    /**
+     * Converts Project to ProjectDTO.
+     * 
+     * @param project-project object which is to be converted into DTO.
+     * @return projectDTO-converted projectDTO object.
+     */
+    public static ProjectDTO ProjectToProjectDTO(Project project) {
+        ProjectDTO projectDTO = new ProjectDTO();
+        projectDTO.setProjectId(project.getProjectId());
+        projectDTO.setName(project.getName());
+        projectDTO.setDomainName(project.getDomainName());
+        projectDTO.setStartDate(project.getStartDate());
+        projectDTO.setManager(project.getManager());
+        return projectDTO;
+    }
+
+    /**
+     * Converts ProjectDTO to Project.
+     *
+     * @param projectDTO-projectDTO object to convert into POJO object.
+     * @return project-converted project object.
+     */
+    public static Project ProjectDTOToProject(ProjectDTO projectDTO) {
+        Project project = new Project();
+        project.setProjectId(projectDTO.getProjectId());
+        project.setName(projectDTO.getName());
+        project.setDomainName(projectDTO.getDomainName());
+        project.setStartDate(projectDTO.getStartDate());
+        project.setManager(projectDTO.getManager()); 
+        return project;
     }
 }

@@ -67,7 +67,7 @@ public class EmployeeDAOImplementation implements EmployeeDAO {
         boolean isAddressadded = false;
         try {
             transaction = session.beginTransaction();
-            session.merge(employee);
+            employee = (Employee) session.merge(employee);
             transaction.commit();
         } catch (Exception exception) {
             exception.printStackTrace();
@@ -115,8 +115,11 @@ public class EmployeeDAOImplementation implements EmployeeDAO {
     public Employee getEmployeeById(int employeeId) {
         Session session = DatabaseConnection.getSession();
         Transaction transaction = null;
-        query = "SELECT e FROM Employee e LEFT JOIN FETCH "
-                + "e.addresses where e.id=:id";
+        //query = "SELECT e FROM Employee e LEFT JOIN FETCH "
+          //      + "e.addresses a LEFT JOIN FETCH e.projects where e.id=:id";
+        query = "select e from Employee e left join fetch "
+                + "e.addresses a left join fetch e.projects p "
+                + "WHERE e.id = :id";
         Employee employee = null;
         try {
             transaction = session.beginTransaction();
@@ -144,12 +147,14 @@ public class EmployeeDAOImplementation implements EmployeeDAO {
     public Employee getEmployeeByEmail(String email) {
         Session session = DatabaseConnection.getSession();
         Transaction transaction = null;
+        query = "SELECT distinct distinct e FROM Employee e LEFT JOIN FETCH "
+                + "e.addresses a LEFT JOIN FETCH e.projects where e.email=:email";
         Employee employee = null;
         try {
             transaction = session.beginTransaction();
-            Criteria criteria = session.createCriteria(Employee.class);
-            criteria.add(Restrictions.eq("email", email));
-            employee = (Employee) criteria.uniqueResult();
+            Query hqlQuery = session.createQuery(query);
+            hqlQuery.setParameter("email", email);
+            employee = (Employee) hqlQuery.uniqueResult();
             transaction.commit();
         } catch (Exception exception) {
             exception.printStackTrace();
@@ -171,12 +176,14 @@ public class EmployeeDAOImplementation implements EmployeeDAO {
     public Employee getEmployeeByMobileNumber(long mobileNumber) {
         Session session = DatabaseConnection.getSession();
         Transaction transaction = null;
+        query = "SELECT distinct e FROM Employee e LEFT JOIN FETCH "
+                + "e.addresses a LEFT JOIN FETCH e.projects where e.mobile_number=:mobileNumber";
         Employee employee = null;
         try {
             transaction = session.beginTransaction();
-            Criteria criteria = session.createCriteria(Employee.class);
-            criteria.add(Restrictions.eq("mobileNumber", mobileNumber));
-            employee = (Employee) criteria.uniqueResult();
+            Query hqlQuery = session.createQuery(query);
+            hqlQuery.setParameter("mobileNumber", mobileNumber);
+            employee = (Employee) hqlQuery.uniqueResult();
             transaction.commit();
         } catch (Exception exception) {
             exception.printStackTrace();
@@ -222,7 +229,7 @@ public class EmployeeDAOImplementation implements EmployeeDAO {
     public List<Employee> getAllEmployees() {
         Session session = DatabaseConnection.getSession();
         Transaction transaction = null;
-        query = "SELECT distinct e FROM Employee e LEFT JOIN FETCH e.addresses";
+        query = "SELECT distinct e FROM Employee e LEFT JOIN FETCH e.addresses a LEFT JOIN FETCH e.projects";
         List<Employee> employees = null;
         try {
             transaction = session.beginTransaction();

@@ -9,8 +9,11 @@ import java.time.LocalDate;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
 
 import com.ideas2it.employeemanagement.model.Address;
+import com.ideas2it.employeemanagement.model.Project;
 
 /**
  * Employee is a POJO class with getter & setter methods 
@@ -25,7 +28,8 @@ public class Employee {
     private LocalDate dateOfBirth;
     private String name;
     private String email;
-    private List<Address> addresses;
+    private Set<Address> addresses = new HashSet<Address>();
+    private Set<Project> projects = new HashSet<Project>();
 
     public Employee() {
     }
@@ -54,7 +58,7 @@ public class Employee {
 
     public Employee (int employeeId, String name, String email,  
                      long mobileNumber, LocalDate dateOfBirth, float salary,
-                     List<Address> addresses) {
+                     Set<Address> addresses) {
         this.employeeId = employeeId;
         this.name = name;
         this.email = email;
@@ -62,6 +66,19 @@ public class Employee {
         this.dateOfBirth = dateOfBirth;
         this.salary = salary;
         this.addresses = addresses;
+    }
+
+    public Employee (int employeeId, String name, String email,  
+                     long mobileNumber, LocalDate dateOfBirth, float salary,
+                     Set<Address> addresses, Set<Project> projects) {
+        this.employeeId = employeeId;
+        this.name = name;
+        this.email = email;
+        this.mobileNumber = mobileNumber;
+        this.dateOfBirth = dateOfBirth;
+        this.salary = salary;
+        this.addresses = addresses;
+        this.projects = projects;
     }
 
     /**
@@ -172,13 +189,33 @@ public class Employee {
         this.salary = salary;
     }
 
-    public List<Address> getAddresses() {
+    public Set<Address> getAddresses() {
         return addresses;
     }
 
-    public void setAddresses(List<Address> addresses) {
+    public void setAddresses(Set<Address> addresses) {
         this.addresses = addresses;
     }
+
+    public Set<Project> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(Set<Project> projects) {
+        this.projects = projects;
+    }
+
+    public int hashCode() {
+        return employeeId;
+    }
+
+    public boolean equals(Object object) {
+        if (object instanceof Employee) {
+            return this.employeeId == ((Employee) object).employeeId;
+        }
+        return false;
+    }
+
 
     public String toString() {
         StringBuilder employeeDetails = new StringBuilder();

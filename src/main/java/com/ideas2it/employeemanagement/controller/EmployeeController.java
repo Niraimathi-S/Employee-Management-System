@@ -10,6 +10,7 @@ import java.time.LocalDate;
 
 import com.ideas2it.employeemanagement.model.AddressDTO;
 import com.ideas2it.employeemanagement.model.EmployeeVO;
+import com.ideas2it.employeemanagement.model.ProjectDTO;
 import com.ideas2it.employeemanagement.service.EmployeeService;
 import com.ideas2it.employeemanagement.service.impl.EmployeeServiceImplementation;
 
@@ -138,6 +139,10 @@ public class EmployeeController {
      */
     public List<EmployeeVO> viewAllEmployee() {
         return employeeService.viewAllEmployee();
+    }
+
+    public List<ProjectDTO> getProjectDTOs(int[] projectIds) {
+        return employeeService.getProjectDTOs(projectIds);
     }
 }
 

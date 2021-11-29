@@ -13,7 +13,11 @@ import com.ideas2it.employeemanagement.model.Address;
 import com.ideas2it.employeemanagement.model.AddressDTO;
 import com.ideas2it.employeemanagement.model.Employee;
 import com.ideas2it.employeemanagement.model.EmployeeVO;
+import com.ideas2it.employeemanagement.model.ProjectDTO;
+import com.ideas2it.employeemanagement.model.Project;
 import com.ideas2it.employeemanagement.service.EmployeeService;
+import com.ideas2it.employeemanagement.service.ProjectService;
+import com.ideas2it.employeemanagement.service.impl.ProjectServiceImplementation;
 import com.ideas2it.employeemanagement.util.Mapper;
 
 /**
@@ -26,6 +30,7 @@ import com.ideas2it.employeemanagement.util.Mapper;
  */
 public class EmployeeServiceImplementation implements EmployeeService{
     private EmployeeDAOImplementation dao = new EmployeeDAOImplementation();
+    private ProjectService projectService = null;
 
     /**
      * Validates the given input from the user. 
@@ -127,7 +132,12 @@ public class EmployeeServiceImplementation implements EmployeeService{
      */
     public EmployeeVO getEmployeeById(int employeeId) {
         Employee employee = dao.getEmployeeById(employeeId);
-        return (Mapper.EmployeeToEmployeeDTO(employee));
+        EmployeeVO employeeVO = null;
+        if (null != employee) {
+            employeeVO = Mapper.EmployeeToEmployeeDTO(employee);
+        }
+
+        return employeeVO;
     }
 
     /**
@@ -142,5 +152,40 @@ public class EmployeeServiceImplementation implements EmployeeService{
             employeeDetails.add(Mapper.EmployeeToEmployeeDTO(employee));
         }
         return employeeDetails;
+    }
+
+    /**
+     * Gets projects by Id to the user.
+     *
+     * @param projectIds[]-list of project id.
+     * @return List<ProjectDTO>- view object list containing all projects.
+     */
+    public List<ProjectDTO> getProjectDTOs(int[] projectIds) {
+        /*List<ProjectDTO> projects = new ArrayList<ProjectDTO>();
+        ProjectDTO projectDTO;
+        for (int i : projectIds) {
+            if ( null != projectService.getProjectById(i)) {
+                projectDTO = projectService.getProjectById(i);
+                projects.add(projectDTO);
+            }
+        }
+        return projects;*/
+        if (null == projectService) {
+            projectService = new ProjectServiceImplementation();
+        }
+        return projectService.getProjectDTOs(projectIds);        
+    }
+
+    public List<EmployeeVO> getEmployeeDTOs(int[] employeeIds) {
+        List<EmployeeVO> employees = new ArrayList<EmployeeVO>();
+        EmployeeVO employeeVO;
+        for (int i : employeeIds) {
+            //employeeVO = employeeService.getEmployeeById(i);
+            if ( null != getEmployeeById(i)) {
+                employeeVO = getEmployeeById(i);
+                employees.add(employeeVO);
+            }
+        } 
+        return employees;
     }
 }

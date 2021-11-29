@@ -10,17 +10,18 @@ import java.util.Scanner;
 
 import com.ideas2it.employeemanagement.model.AddressDTO;
 import com.ideas2it.employeemanagement.model.EmployeeVO;
+import com.ideas2it.employeemanagement.model.Project;
 import com.ideas2it.employeemanagement.model.ProjectDTO;
 import com.ideas2it.employeemanagement.util.Mapper;
 
 /**
  * Performs logical operations and data manupulation.
- * Interacts with Employee POJO, and EmployeeVO and validates user inputs.
+ * Interacts with Project POJO, and ProjectDTO and validates user inputs.
  * 
  * @author Niraimathi S
  * @version 1.0
  */
-public interface EmployeeService {
+public interface ProjectService {
 
     /**
      * Validates the given input from the user. 
@@ -31,21 +32,21 @@ public interface EmployeeService {
     public boolean validateInput(String input, String patternToValidate);
 
     /**
-     * Creates a new employee. 
+     * Creates a new project. 
      *
-     * @param employeeVO-The VO object to store the created employee.
+     * @param projectDTO-The VO object to store the created project.
      */
-    public EmployeeVO createEmployee(EmployeeVO employeeVO);
+    public ProjectDTO createProject(ProjectDTO projectDTO);
 
     /**
-     * Checks if a employeeId exists or not.
+     * Checks if a projectId exists or not.
      *
-     * @param employeeid-employeeid to check if a record already exist.
+     * @param projectid-projectid to check if a record already exist.
      */
-    public boolean isEmployeeExist(int employeeId);
+    public boolean isProjectExist(int projectId);
 
     /**
-     * Checks if employees is empty.
+     * Checks if projects is empty.
      *
      */
     public boolean isRecordsEmpty();
@@ -54,49 +55,49 @@ public interface EmployeeService {
      * Checks if a mobileNumber already exists or not.
      *
      * @param mobileNumber-the number to be checked for duplicate.
-     */
-    public boolean checkDuplicateMobileNumber(long mobileNumber);
+     
+    public boolean checkDuplicateMobileNumber(long mobileNumber);*/
 
     /**
      * Checks if a email already exists or not.
      *
      * @param email- email to be checked for duplicate.
-     */
-    public boolean checkDuplicateEmail(String email);
+     
+    public boolean checkDuplicateEmail(String email);*/
 
     /**
-     * Deletes all employees. 
+     * Deletes all projects. 
      *
      */
-    public boolean deleteAllEmployee();
+    public boolean deleteAllProject();
 
     /**
-     * Deletes one employee. 
+     * Deletes one project. 
      *
-     * @param employeeVO-The VO object of the employee to be deleted.
+     * @param projectDTO-The VO object of the project to be deleted.
      */
-    public boolean deleteOneEmployee(EmployeeVO employeeVO);
+    public boolean deleteOneProject(ProjectDTO projectDTO);
 
     /**
-     * Updates all fields of one employee. 
+     * Updates all fields of one project. 
      *
-     * @param employeeVO-The VO object containing updated
+     * @param projectDTO-The VO object containing updated
      *                   values get from user
      */
-    public boolean updateAllFields(EmployeeVO employeeVO);
+    public boolean updateAllFields(ProjectDTO projectDTO);
 
     /**
-     * Displays all employees to the user.
+     * Displays all projects to the user.
      *
      */
-    public List<EmployeeVO> viewAllEmployee();
+    public List<ProjectDTO> viewAllProject();
 
     /**
-     * Gets one employee by Id to the user.
+     * Gets one project by Id to the user.
      *
-     * @param employeeid-employeeid to view.
+     * @param projectid-projectid to view.
      */
-    public EmployeeVO getEmployeeById(int employeeId);
+    public ProjectDTO getProjectById(int projectId);
 
     public List<EmployeeVO> getEmployeeDTOs(int[] employeeIds);
 
