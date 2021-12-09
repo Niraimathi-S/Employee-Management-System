@@ -16,9 +16,11 @@ import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 
 import com.ideas2it.employeemanagement.dao.ProjectDAO;
+import com.ideas2it.employeemanagement.exception.EmployeeManagementException;
 import com.ideas2it.employeemanagement.model.Address;
 import com.ideas2it.employeemanagement.model.Project;
 import com.ideas2it.employeemanagement.util.DatabaseConnection;
+import com.ideas2it.employeemanagement.util.ConstantErrors;
 
 /**
  * Interacts with database and does appropriate actions based on users wish.
@@ -28,6 +30,7 @@ import com.ideas2it.employeemanagement.util.DatabaseConnection;
  */
 public class ProjectDAOImplementation implements ProjectDAO {
     private String query;
+    private String errorMessage;
 
     /**
      * Insert project details into the database
@@ -35,9 +38,10 @@ public class ProjectDAOImplementation implements ProjectDAO {
      * @param project-Project object to insert into database.
      * @return project-inserted object if value inserted true or else null.
      */
-    public Project createProject(Project project) {
+    public Project createProject(Project project) throws EmployeeManagementException {
         Session session = DatabaseConnection.getSession();
         Transaction transaction = null;
+        errorMessage = "Exception in Project Creation.";
         int projectId = 0;
         try {
             transaction = session.beginTransaction();
@@ -45,10 +49,10 @@ public class ProjectDAOImplementation implements ProjectDAO {
             project.setProjectId(projectId);
             transaction.commit();
         } catch (Exception exception) {
-            exception.printStackTrace();
             if (0 == projectId) {
                 transaction.rollback();
             }
+            throw new EmployeeManagementException(ConstantErrors.ERROR_CODE_09);
         } finally {
               DatabaseConnection.close(session);
         }
@@ -61,19 +65,20 @@ public class ProjectDAOImplementation implements ProjectDAO {
      * @param project-Project object to update into database.
      * @return project-updated object if true or else null.
      */
-    public Project updateProject(Project project) {
+    public Project updateProject(Project project) throws EmployeeManagementException {
         Session session = DatabaseConnection.getSession();
         Transaction transaction = null;
+        errorMessage = "Exception in Project updation.";
         boolean isAddressadded = false;
         try {
             transaction = session.beginTransaction();
             project = (Project) session.merge(project);
             transaction.commit();
         } catch (Exception exception) {
-            exception.printStackTrace();
             if (null == project) {
                 transaction.rollback();
             }
+            throw new EmployeeManagementException(ConstantErrors.ERROR_CODE_10);
         } finally {
             DatabaseConnection.close(session);
         }
@@ -85,10 +90,11 @@ public class ProjectDAOImplementation implements ProjectDAO {
      *
      * @return true-if project deleted or else false.
      */
-    public boolean deleteAllProject() {
+    public boolean deleteAllProject() throws EmployeeManagementException {
         Session session = DatabaseConnection.getSession();
         Transaction transaction = null;
         query = "delete from Project";
+        errorMessage = "Exception in All Project Deletion";
         int rowsAffected = 0;
         try {
             transaction = session.beginTransaction();
@@ -96,10 +102,10 @@ public class ProjectDAOImplementation implements ProjectDAO {
             rowsAffected = hqlQuery.executeUpdate();
             transaction.commit();
         } catch (Exception exception) {
-            exception.printStackTrace();
             if (1 != rowsAffected) {
                 transaction.rollback();
             }
+            throw new EmployeeManagementException(ConstantErrors.ERROR_CODE_14);
         } finally {
             DatabaseConnection.close(session);
         }
@@ -112,11 +118,12 @@ public class ProjectDAOImplementation implements ProjectDAO {
      * @param projectid-Project id.
      * @return project-project details of a single project.
      */
-    public Project getProjectById(int projectId) {
+    public Project getProjectById(int projectId) throws EmployeeManagementException {
         Session session = DatabaseConnection.getSession();
         Transaction transaction = null;
-        query = "select distinct p from Project p left join fetch p.employees e "
-                + "where p.id = :id";
+        query = "select p from Project p left join fetch p.employees e"
+                + " where p.id = :id";
+        errorMessage = "Exception in Single Project fetching";
         Project project = null;
         try {
             transaction = session.beginTransaction();
@@ -125,10 +132,10 @@ public class ProjectDAOImplementation implements ProjectDAO {
             project = (Project) hqlQuery.uniqueResult();
             transaction.commit();
         } catch (Exception exception) {
-            exception.printStackTrace();
             if (null == project) {
                 transaction.rollback();
             }
+            throw new EmployeeManagementException(ConstantErrors.ERROR_CODE_11);
         } finally {
             DatabaseConnection.close(session);
         }
@@ -140,9 +147,10 @@ public class ProjectDAOImplementation implements ProjectDAO {
      *
      * @return true-if one projects is deleted or else false.
      */
-    public boolean deleteOneProject(Project project) {
+    public boolean deleteOneProject(Project project) throws EmployeeManagementException {
         Session session = DatabaseConnection.getSession();
         Transaction transaction = null;
+        errorMessage = "Exception in Single Project Deletion";
         int rowsAffected = 0;
         try {
             transaction = session.beginTransaction();
@@ -150,10 +158,10 @@ public class ProjectDAOImplementation implements ProjectDAO {
             rowsAffected = 1;
             transaction.commit();
         } catch (Exception exception) {
-            exception.printStackTrace();
             if (1 != rowsAffected) {
                 transaction.rollback();
             }
+            throw new EmployeeManagementException(ConstantErrors.ERROR_CODE_13);
         } finally {
             DatabaseConnection.close(session);
         }
@@ -165,10 +173,11 @@ public class ProjectDAOImplementation implements ProjectDAO {
      *
      * @return projects-list contains all project details.
      */
-    public List<Project> getAllProjects() {
+    public List<Project> getAllProjects() throws EmployeeManagementException {
         Session session = DatabaseConnection.getSession();
         Transaction transaction = null;
         query = "SELECT distinct p FROM Project p LEFT JOIN FETCH p.employees";
+        errorMessage = "Exception in all Project fetching";
         List<Project> projects = null;
         try {
             transaction = session.beginTransaction();
@@ -176,10 +185,10 @@ public class ProjectDAOImplementation implements ProjectDAO {
             transaction.commit();
 
         } catch (Exception exception) {
-            exception.printStackTrace();
             if (projects.isEmpty()) {
                 transaction.rollback();
             }
+            throw new EmployeeManagementException(ConstantErrors.ERROR_CODE_12);
         } finally {
             DatabaseConnection.close(session);
         }

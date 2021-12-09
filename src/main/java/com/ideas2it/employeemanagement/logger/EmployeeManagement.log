@@ -1,0 +1,183 @@
+Date - 2021-12-03 19:00:39
+Priority level - [ERROR]
+Logger name - com.ideas2it.employeemanagement.logger.EmployeeManagementLogger
+File name  - ProjectController.java
+Class name - com.ideas2it.employeemanagement.controller.ProjectController
+Method name - isProjectExist
+Exception - com.ideas2it.employeemanagement.exception.EmployeeManagementException: Exception in Single Project fetching
+Date - 2021-12-03 19:00:39
+Priority level - [ERROR]
+Logger name - com.ideas2it.employeemanagement.logger.EmployeeManagementLogger
+File name  - ProjectController.java
+Class name - com.ideas2it.employeemanagement.controller.ProjectController
+Method name - viewOneProject
+Exception - com.ideas2it.employeemanagement.exception.EmployeeManagementException: Exception in Single Project fetching
+Date - 2021-12-03 19:03:09
+Priority level - [ERROR]
+Logger name - com.ideas2it.employeemanagement.logger.EmployeeManagementLogger
+File name  - ProjectController.java
+Class name - com.ideas2it.employeemanagement.controller.ProjectController
+Method name - isProjectExist
+Exception - com.ideas2it.employeemanagement.exception.EmployeeManagementException: Exception in Single Project fetching
+Date - 2021-12-03 19:03:09
+Priority level - [ERROR]
+Logger name - com.ideas2it.employeemanagement.logger.EmployeeManagementLogger
+File name  - ProjectController.java
+Class name - com.ideas2it.employeemanagement.controller.ProjectController
+Method name - viewOneProject
+Exception - com.ideas2it.employeemanagement.exception.EmployeeManagementException: Exception in Single Project fetching
+Date - 2021-12-03 19:09:57
+Priority level - [ERROR]
+Logger name - com.ideas2it.employeemanagement.logger.EmployeeManagementLogger
+File name  - ProjectController.java
+Class name - com.ideas2it.employeemanagement.controller.ProjectController
+Method name - isProjectExist
+Exception - com.ideas2it.employeemanagement.exception.EmployeeManagementException: Exception in Single Project fetching
+Date - 2021-12-03 19:10:10
+Priority level - [ERROR]
+Logger name - com.ideas2it.employeemanagement.logger.EmployeeManagementLogger
+File name  - ProjectController.java
+Class name - com.ideas2it.employeemanagement.controller.ProjectController
+Method name - isProjectExist
+Exception - com.ideas2it.employeemanagement.exception.EmployeeManagementException: Exception in Single Project fetching
+Date - 2021-12-03 19:10:12
+Priority level - [ERROR]
+Logger name - com.ideas2it.employeemanagement.logger.EmployeeManagementLogger
+File name  - ProjectController.java
+Class name - com.ideas2it.employeemanagement.controller.ProjectController
+Method name - isProjectExist
+Exception - com.ideas2it.employeemanagement.exception.EmployeeManagementException: Exception in Single Project fetching
+Date - 2021-12-06 11:56:33
+Priority level - [ERROR]
+Logger name - org.hibernate.hql.internal.ast.ErrorTracker
+File name  - ErrorTracker.java
+Class name - org.hibernate.hql.internal.ast.ErrorTracker
+Method name - reportError
+Exception - line 1:17: unexpected token: distinct
+Date - 2021-12-06 11:56:33
+Priority level - [ERROR]
+Logger name - org.hibernate.hql.internal.ast.ErrorTracker
+File name  - ErrorTracker.java
+Class name - org.hibernate.hql.internal.ast.ErrorTracker
+Method name - reportError
+Exception - line 1:17: unexpected token: distinct
+antlr.NoViableAltException: unexpected token: distinct
+	at org.hibernate.hql.internal.antlr.HqlBaseParser.selectClause(HqlBaseParser.java:1435) ~[hibernate-core-5.6.0.Final.jar:5.6.0.Final]
+	at org.hibernate.hql.internal.antlr.HqlBaseParser.selectFrom(HqlBaseParser.java:1142) ~[hibernate-core-5.6.0.Final.jar:5.6.0.Final]
+	at org.hibernate.hql.internal.antlr.HqlBaseParser.queryRule(HqlBaseParser.java:825) ~[hibernate-core-5.6.0.Final.jar:5.6.0.Final]
+	at org.hibernate.hql.internal.antlr.HqlBaseParser.selectStatement(HqlBaseParser.java:336) ~[hibernate-core-5.6.0.Final.jar:5.6.0.Final]
+	at org.hibernate.hql.internal.antlr.HqlBaseParser.statement(HqlBaseParser.java:200) ~[hibernate-core-5.6.0.Final.jar:5.6.0.Final]
+	at org.hibernate.hql.internal.ast.QueryTranslatorImpl.parse(QueryTranslatorImpl.java:294) ~[hibernate-core-5.6.0.Final.jar:5.6.0.Final]
+	at org.hibernate.hql.internal.ast.QueryTranslatorImpl.doCompile(QueryTranslatorImpl.java:189) ~[hibernate-core-5.6.0.Final.jar:5.6.0.Final]
+	at org.hibernate.hql.internal.ast.QueryTranslatorImpl.compile(QueryTranslatorImpl.java:144) ~[hibernate-core-5.6.0.Final.jar:5.6.0.Final]
+	at org.hibernate.engine.query.spi.HQLQueryPlan.<init>(HQLQueryPlan.java:113) ~[hibernate-core-5.6.0.Final.jar:5.6.0.Final]
+	at org.hibernate.engine.query.spi.HQLQueryPlan.<init>(HQLQueryPlan.java:73) ~[hibernate-core-5.6.0.Final.jar:5.6.0.Final]
+	at org.hibernate.engine.query.spi.QueryPlanCache.getHQLQueryPlan(QueryPlanCache.java:162) [hibernate-core-5.6.0.Final.jar:5.6.0.Final]
+	at org.hibernate.internal.AbstractSharedSessionContract.getQueryPlan(AbstractSharedSessionContract.java:622) [hibernate-core-5.6.0.Final.jar:5.6.0.Final]
+	at org.hibernate.internal.AbstractSharedSessionContract.createQuery(AbstractSharedSessionContract.java:734) [hibernate-core-5.6.0.Final.jar:5.6.0.Final]
+	at org.hibernate.internal.AbstractSharedSessionContract.createQuery(AbstractSharedSessionContract.java:114) [hibernate-core-5.6.0.Final.jar:5.6.0.Final]
+	at com.ideas2it.employeemanagement.dao.daoimpl.EmployeeDAOImplementation.getEmployeeByEmail(EmployeeDAOImplementation.java:167) [java/:?]
+	at com.ideas2it.employeemanagement.service.impl.EmployeeServiceImplementation.checkDuplicateEmail(EmployeeServiceImplementation.java:102) [java/:?]
+	at com.ideas2it.employeemanagement.controller.EmployeeController.checkDuplicateEmail(EmployeeController.java:104) [java/:?]
+	at com.ideas2it.employeemanagement.view.EmployeeView.getEmail(EmployeeView.java:243) [java/:?]
+	at com.ideas2it.employeemanagement.view.EmployeeView.createNewEmployee(EmployeeView.java:77) [java/:?]
+	at com.ideas2it.employeemanagement.view.EmployeeView.showMainMenu(EmployeeView.java:46) [java/:?]
+	at EmployeeManagementSystem.main(EmployeeManagementSystem.java:31) [java/:?]
+Date - 2021-12-06 11:56:33
+Priority level - [ERROR]
+Logger name - com.ideas2it.employeemanagement.logger.EmployeeManagementLogger
+File name  - EmployeeController.java
+Class name - com.ideas2it.employeemanagement.controller.EmployeeController
+Method name - checkDuplicateEmail
+Exception - com.ideas2it.employeemanagement.exception.EmployeeManagementException: Exception occured while getting an employee by email
+Date - 2021-12-06 12:00:21
+Priority level - [ERROR]
+Logger name - com.ideas2it.employeemanagement.logger.EmployeeManagementLogger
+File name  - EmployeeController.java
+Class name - com.ideas2it.employeemanagement.controller.EmployeeController
+Method name - checkDuplicateMobileNumber
+Exception - com.ideas2it.employeemanagement.exception.EmployeeManagementException: Exception occured while getting an employee by mobile number
+Date - 2021-12-06 12:03:15
+Priority level - [ERROR]
+Logger name - com.ideas2it.employeemanagement.logger.EmployeeManagementLogger
+File name  - EmployeeController.java
+Class name - com.ideas2it.employeemanagement.controller.EmployeeController
+Method name - checkDuplicateMobileNumber
+Exception - com.ideas2it.employeemanagement.exception.EmployeeManagementException: Exception occured while getting an employee by mobile number
+Date - 2021-12-06 12:03:33
+Priority level - [ERROR]
+Logger name - org.hibernate.engine.jdbc.spi.SqlExceptionHelper
+File name  - SqlExceptionHelper.java
+Class name - org.hibernate.engine.jdbc.spi.SqlExceptionHelper
+Method name - logExceptions
+Exception - Cannot delete or update a parent row: a foreign key constraint fails (`ems`.`address`, CONSTRAINT `FKq4m60pqp7shng4u5n9h2346mp` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`id`))
+Date - 2021-12-06 12:03:33
+Priority level - [ERROR]
+Logger name - com.ideas2it.employeemanagement.logger.EmployeeManagementLogger
+File name  - EmployeeController.java
+Class name - com.ideas2it.employeemanagement.controller.EmployeeController
+Method name - deleteAllEmployee
+Exception - com.ideas2it.employeemanagement.exception.EmployeeManagementException: Exception in Employee Delete all operation
+Date - 2021-12-06 12:20:45
+Priority level - [ERROR]
+Logger name - com.ideas2it.employeemanagement.logger.EmployeeManagementLogger
+File name  - EmployeeController.java
+Class name - com.ideas2it.employeemanagement.controller.EmployeeController
+Method name - checkDuplicateMobileNumber
+Exception - com.ideas2it.employeemanagement.exception.EmployeeManagementException: Exception occured while getting an employee by mobile number
+Date - 2021-12-06 12:22:07
+Priority level - [ERROR]
+Logger name - com.ideas2it.employeemanagement.logger.EmployeeManagementLogger
+File name  - EmployeeController.java
+Class name - com.ideas2it.employeemanagement.controller.EmployeeController
+Method name - getProjectDTOs
+Exception - com.ideas2it.employeemanagement.exception.EmployeeManagementException: Exception in Single Project fetching
+Date - 2021-12-06 12:23:14
+Priority level - [ERROR]
+Logger name - com.ideas2it.employeemanagement.logger.EmployeeManagementLogger
+File name  - EmployeeController.java
+Class name - com.ideas2it.employeemanagement.controller.EmployeeController
+Method name - getProjectDTOs
+Exception - com.ideas2it.employeemanagement.exception.EmployeeManagementException: Exception in Single Project fetching
+Date - 2021-12-06 12:23:23
+Priority level - [ERROR]
+Logger name - com.ideas2it.employeemanagement.logger.EmployeeManagementLogger
+File name  - EmployeeController.java
+Class name - com.ideas2it.employeemanagement.controller.EmployeeController
+Method name - getProjectDTOs
+Exception - com.ideas2it.employeemanagement.exception.EmployeeManagementException: Exception in Single Project fetching
+Date - 2021-12-06 12:28:39
+Priority level - [ERROR]
+Logger name - com.ideas2it.employeemanagement.logger.EmployeeManagementLogger
+File name  - EmployeeController.java
+Class name - com.ideas2it.employeemanagement.controller.EmployeeController
+Method name - getProjectDTOs
+Exception - com.ideas2it.employeemanagement.exception.EmployeeManagementException: Exception in Single Project fetching
+Date - 2021-12-06 12:36:15
+Priority level - [ERROR]
+Logger name - org.hibernate.engine.jdbc.spi.SqlExceptionHelper
+File name  - SqlExceptionHelper.java
+Class name - org.hibernate.engine.jdbc.spi.SqlExceptionHelper
+Method name - logExceptions
+Exception - Cannot delete or update a parent row: a foreign key constraint fails (`ems`.`address`, CONSTRAINT `FKq4m60pqp7shng4u5n9h2346mp` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`id`))
+Date - 2021-12-06 12:36:15
+Priority level - [ERROR]
+Logger name - com.ideas2it.employeemanagement.logger.EmployeeManagementLogger
+File name  - EmployeeController.java
+Class name - com.ideas2it.employeemanagement.controller.EmployeeController
+Method name - deleteAllEmployee
+Exception - com.ideas2it.employeemanagement.exception.EmployeeManagementException: Exception in Employee Delete all operation
+Date - 2021-12-06 12:43:36
+Priority level - [ERROR]
+Logger name - org.hibernate.engine.jdbc.spi.SqlExceptionHelper
+File name  - SqlExceptionHelper.java
+Class name - org.hibernate.engine.jdbc.spi.SqlExceptionHelper
+Method name - logExceptions
+Exception - Cannot delete or update a parent row: a foreign key constraint fails (`ems`.`address`, CONSTRAINT `FKq4m60pqp7shng4u5n9h2346mp` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`id`))
+Date - 2021-12-06 12:43:36
+Priority level - [ERROR]
+Logger name - com.ideas2it.employeemanagement.logger.EmployeeManagementLogger
+File name  - EmployeeController.java
+Class name - com.ideas2it.employeemanagement.controller.EmployeeController
+Method name - deleteAllEmployee
+Exception - com.ideas2it.employeemanagement.exception.EmployeeManagementException: Exception in Employee Delete all operation

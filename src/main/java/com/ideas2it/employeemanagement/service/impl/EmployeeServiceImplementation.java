@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.ideas2it.employeemanagement.dao.daoimpl.EmployeeDAOImplementation;
+import com.ideas2it.employeemanagement.exception.EmployeeManagementException;
 import com.ideas2it.employeemanagement.model.Address;
 import com.ideas2it.employeemanagement.model.AddressDTO;
 import com.ideas2it.employeemanagement.model.Employee;
@@ -49,7 +50,8 @@ public class EmployeeServiceImplementation implements EmployeeService{
      * @param employeeVO-The VO object to store the created employee.
      * @return boolean-true if employee created, else false.
      */
-    public EmployeeVO createEmployee(EmployeeVO employeeVO) { 
+    public EmployeeVO createEmployee(EmployeeVO employeeVO)
+            throws EmployeeManagementException { 
         Employee employee = Mapper.EmployeeDTOToEmployee(employeeVO);
         employeeVO 
                 = Mapper.EmployeeToEmployeeDTO(dao.createEmployee(employee));
@@ -62,7 +64,8 @@ public class EmployeeServiceImplementation implements EmployeeService{
      * @param employeeid-employeeid to check if a record already exist.
      * @return boolean-true if given employeeId exist, else false.
      */
-    public boolean isEmployeeExist(int employeeId) {
+    public boolean isEmployeeExist(int employeeId)
+            throws EmployeeManagementException {
         return(null != dao.getEmployeeById(employeeId));
     }
 
@@ -71,7 +74,8 @@ public class EmployeeServiceImplementation implements EmployeeService{
      *
      * @return boolean-true if empty, else false.
      */
-    public boolean isRecordsEmpty() {
+    public boolean isRecordsEmpty()
+            throws EmployeeManagementException {
         List<Employee> employees = dao.getAllEmployees();
         return employees.isEmpty();
     }
@@ -82,7 +86,8 @@ public class EmployeeServiceImplementation implements EmployeeService{
      * @param mobileNumber-the number to be checked for duplicate.
      * @return boolean-true if given mobileNumber exist, else false.
      */
-    public boolean checkDuplicateMobileNumber(long mobileNumber) {
+    public boolean checkDuplicateMobileNumber(long mobileNumber)
+            throws EmployeeManagementException {
         return (null != dao.getEmployeeByMobileNumber(mobileNumber));
     }
 
@@ -92,7 +97,8 @@ public class EmployeeServiceImplementation implements EmployeeService{
      * @param email- email to be checked for duplicate.
      * @return boolean-true if given email exist, else false.
      */
-    public boolean checkDuplicateEmail(String email) {
+    public boolean checkDuplicateEmail(String email)
+            throws EmployeeManagementException {
         return (null != dao.getEmployeeByEmail(email));
     }
 
@@ -100,7 +106,8 @@ public class EmployeeServiceImplementation implements EmployeeService{
      * Deletes all employees. 
      *
      */
-    public boolean deleteAllEmployee() {
+    public boolean deleteAllEmployee()
+            throws EmployeeManagementException {
         return dao.deleteAllEmployee();
     }
 
@@ -109,7 +116,8 @@ public class EmployeeServiceImplementation implements EmployeeService{
      *
      * @param employeeVO-The VO object to be deleted.
      */
-    public boolean deleteOneEmployee(EmployeeVO employeeVO) {
+    public boolean deleteOneEmployee(EmployeeVO employeeVO)
+            throws EmployeeManagementException {
         return dao.deleteOneEmployee(Mapper.EmployeeDTOToEmployee(employeeVO));
     }
 
@@ -119,7 +127,8 @@ public class EmployeeServiceImplementation implements EmployeeService{
      * @param employeeVO-The VO object with updates values employee.
      * @return boolean-true if employee updated, else false.
      */
-    public boolean updateAllFields(EmployeeVO employeeVO) { 
+    public boolean updateAllFields(EmployeeVO employeeVO)
+            throws EmployeeManagementException { 
         Employee employee = Mapper.EmployeeDTOToEmployee(employeeVO);
         return (null != Mapper.EmployeeToEmployeeDTO(dao.updateEmployee(employee)));
     }
@@ -130,7 +139,8 @@ public class EmployeeServiceImplementation implements EmployeeService{
      * @param employeeid-employeeid to view.
      * @return employeeVO-employee get by Id.
      */
-    public EmployeeVO getEmployeeById(int employeeId) {
+    public EmployeeVO getEmployeeById(int employeeId)
+            throws EmployeeManagementException {
         Employee employee = dao.getEmployeeById(employeeId);
         EmployeeVO employeeVO = null;
         if (null != employee) {
@@ -145,7 +155,8 @@ public class EmployeeServiceImplementation implements EmployeeService{
      *
      * @return List<employeeVO>- view object list containing all employees.
      */
-    public List<EmployeeVO> viewAllEmployee() {
+    public List<EmployeeVO> viewAllEmployee()
+            throws EmployeeManagementException {
         List<Employee> employees = dao.getAllEmployees();
         List<EmployeeVO> employeeDetails = new ArrayList<>();
         for (Employee employee : employees) {
@@ -160,23 +171,16 @@ public class EmployeeServiceImplementation implements EmployeeService{
      * @param projectIds[]-list of project id.
      * @return List<ProjectDTO>- view object list containing all projects.
      */
-    public List<ProjectDTO> getProjectDTOs(int[] projectIds) {
-        /*List<ProjectDTO> projects = new ArrayList<ProjectDTO>();
-        ProjectDTO projectDTO;
-        for (int i : projectIds) {
-            if ( null != projectService.getProjectById(i)) {
-                projectDTO = projectService.getProjectById(i);
-                projects.add(projectDTO);
-            }
-        }
-        return projects;*/
+    public List<ProjectDTO> getProjectDTOs(int[] projectIds)
+            throws EmployeeManagementException {
         if (null == projectService) {
             projectService = new ProjectServiceImplementation();
         }
         return projectService.getProjectDTOs(projectIds);        
     }
 
-    public List<EmployeeVO> getEmployeeDTOs(int[] employeeIds) {
+    public List<EmployeeVO> getEmployeeDTOs(int[] employeeIds)
+            throws EmployeeManagementException {
         List<EmployeeVO> employees = new ArrayList<EmployeeVO>();
         EmployeeVO employeeVO;
         for (int i : employeeIds) {

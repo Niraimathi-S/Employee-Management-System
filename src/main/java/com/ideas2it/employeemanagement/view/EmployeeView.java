@@ -4,6 +4,8 @@
 
 package com.ideas2it.employeemanagement.view;
 
+import java.lang.ArrayIndexOutOfBoundsException;
+import java.time.format.DateTimeParseException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -104,7 +106,7 @@ public class EmployeeView {
             try {
                 choice = Integer.parseInt(scanner.nextLine());
                 isChoiceValid = false;
-            } catch (Exception exception) {
+            } catch (NumberFormatException exception) {
                 System.out.println("choice must be an integer\n"
                         + "Please Reenter the choice: ");
                 isChoiceValid = true;
@@ -280,10 +282,10 @@ public class EmployeeView {
                             isValid = false;
                         }
                     }
-                } catch (Exception e) {
+                } catch (DateTimeParseException exception) {
                     System.out.println("\n*not a valid date*\n");
                 }
-            } catch (ArrayIndexOutOfBoundsException e) {
+            } catch (ArrayIndexOutOfBoundsException exception) {
                 System.out.println("\n*not a valid date*\n");
             }
         }
@@ -490,7 +492,7 @@ public class EmployeeView {
             try {
                 employeeIdAsString = scanner.nextLine();
                 if ( -1 == Integer.parseInt(employeeIdAsString)) {
-                    return;
+                    isRecordDeleted = false;
                 } else {
                     int idToDelete = getEmployeeId(employeeIdAsString);
                     if (employeeController.isEmployeeExist(idToDelete) ) {
@@ -503,7 +505,7 @@ public class EmployeeView {
                         isRecordDeleted = true;
                     }
                 }
-            } catch (Exception exception) {
+            } catch (NumberFormatException exception) {
                 System.out.println("Employee Id must be an integer"+exception);
                 isRecordDeleted = true;
             }
@@ -564,7 +566,7 @@ public class EmployeeView {
                 try {
                     employeeIdAsString = scanner.nextLine(); 
                     if ( -1 == Integer.parseInt(employeeIdAsString)) {
-                        return;
+                        isRecordExist = false;
                     } else {
                         Integer employeeId = getEmployeeId(employeeIdAsString);
                         if (employeeController.isEmployeeExist(employeeId)) {
@@ -589,7 +591,7 @@ public class EmployeeView {
                             System.out.println("No such record found.");
                         }
                     }
-                } catch (Exception exception) {
+                } catch (NumberFormatException exception) {
                     exception.printStackTrace();
                 }
             }
@@ -719,7 +721,7 @@ public class EmployeeView {
             try {
                 employeeIdAsString = scanner.nextLine(); 
                 if ( -1 == Integer.parseInt(employeeIdAsString)) {
-                    return;
+                    isRecordExist = false;
                 } else {
                     int employeeId = getEmployeeId(employeeIdAsString);
                     if (employeeController.isEmployeeExist(employeeId)) {
@@ -742,7 +744,7 @@ public class EmployeeView {
                         isRecordExist = true;
                     }
                 }
-            } catch (Exception exception) {
+            } catch (NumberFormatException exception) {
                 System.out.println("Employee Id must be an integer"+exception);
                 isRecordExist = true;
             }

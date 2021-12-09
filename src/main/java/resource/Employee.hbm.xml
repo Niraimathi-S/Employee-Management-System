@@ -19,7 +19,7 @@
                   column = "date_of_birth"/>
 
         <set name="addresses" cascade="all-delete-orphan">
-            <key column = "employee_id"></key>
+            <key column = "employee_id" on-delete= "cascade"></key>
             <one-to-many class="com.ideas2it.employeemanagement.model.Address"/>  
         </set>  
 

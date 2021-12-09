@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import com.ideas2it.employeemanagement.model.Address;
 import com.ideas2it.employeemanagement.model.Employee;
+import com.ideas2it.employeemanagement.exception.EmployeeManagementException;
 import com.ideas2it.employeemanagement.util.DatabaseConnection;
 
 
@@ -26,21 +27,23 @@ public interface EmployeeDAO {
      * @param employee-Employee object to insert into database.
      * @return employee-inserted object if true or else null.
      */
-    public Employee createEmployee(Employee employee);
+    public Employee createEmployee(Employee employee) 
+            throws EmployeeManagementException;
 
     /**
      * update employee details into the database
      *
      * @param employee-Employee object to update into database.
      */
-    public Employee updateEmployee(Employee employee);
+    public Employee updateEmployee(Employee employee) 
+            throws EmployeeManagementException;
 
     /**
      * Deletes employee details from the database
      *
      * @return true-if employee deleted or else false.
      */
-    public boolean deleteAllEmployee();
+    public boolean deleteAllEmployee() throws EmployeeManagementException;
 
     /**
      * Gets single employee's details from the database using Employee Id.
@@ -48,7 +51,8 @@ public interface EmployeeDAO {
      * @param employeeid-Employee id.
      * @return employee-employee details of a single employee.
      */
-    public Employee getEmployeeById(int employeeId);
+    public Employee getEmployeeById(int employeeId) 
+            throws EmployeeManagementException;
 
     /**
      * Gets single employee's details from the database using email.
@@ -56,7 +60,8 @@ public interface EmployeeDAO {
      * @param email-Employee email id.
      * @return employee-employee details of a single employee.
      */
-    public Employee getEmployeeByEmail(String email);
+    public Employee getEmployeeByEmail(String email)
+           throws EmployeeManagementException;
 
     /**
      * Gets single employee's details from the database using mobile number.
@@ -64,7 +69,8 @@ public interface EmployeeDAO {
      * @param mobileNumber-Employee mobile number.
      * @return employee-employee details of a single employee.
      */
-    public Employee getEmployeeByMobileNumber(long mobileNumber);
+    public Employee getEmployeeByMobileNumber(long mobileNumber) 
+            throws EmployeeManagementException;
 
     /**
      * Deletes all employees details from the database
@@ -72,12 +78,13 @@ public interface EmployeeDAO {
      * @param employee-The employee object to be deleted.
      * @return true-if employee is deleted or else false.
      */
-    public boolean deleteOneEmployee(Employee employee);
+    public boolean deleteOneEmployee(Employee employee)
+            throws EmployeeManagementException;
 
     /**
      * Gets all employee's details from the database.
      *
      * @return employees-list contains all employee details.
      */
-    public List<Employee> getAllEmployees();
+    public List<Employee> getAllEmployees() throws EmployeeManagementException;
 }

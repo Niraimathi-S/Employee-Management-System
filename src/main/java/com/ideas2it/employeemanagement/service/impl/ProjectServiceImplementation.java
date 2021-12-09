@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.ideas2it.employeemanagement.dao.daoimpl.ProjectDAOImplementation;
+import com.ideas2it.employeemanagement.exception.EmployeeManagementException;
 import com.ideas2it.employeemanagement.model.Address;
 import com.ideas2it.employeemanagement.model.AddressDTO;
 import com.ideas2it.employeemanagement.model.EmployeeVO;
@@ -48,7 +49,8 @@ public class ProjectServiceImplementation implements ProjectService{
      * @param projectDTO-The VO object to store the created project.
      * @return boolean-true if project created, else false.
      */
-    public ProjectDTO createProject(ProjectDTO projectDTO) { 
+    public ProjectDTO createProject(ProjectDTO projectDTO)
+            throws EmployeeManagementException { 
         Project project = ProjectMapper.ProjectDTOToProject(projectDTO);
         projectDTO 
                 = ProjectMapper.ProjectToProjectDTO(dao.createProject(project));
@@ -61,7 +63,8 @@ public class ProjectServiceImplementation implements ProjectService{
      * @param projectid-projectid to check if a record already exist.
      * @return boolean-true if given projectId exist, else false.
      */
-    public boolean isProjectExist(int projectId) {
+    public boolean isProjectExist(int projectId)
+            throws EmployeeManagementException {
         return(null != dao.getProjectById(projectId));
     }
 
@@ -70,7 +73,8 @@ public class ProjectServiceImplementation implements ProjectService{
      *
      * @return boolean-true if empty, else false.
      */
-    public boolean isRecordsEmpty() {
+    public boolean isRecordsEmpty()
+            throws EmployeeManagementException {
         List<Project> projects = dao.getAllProjects();
         return projects.isEmpty();
     }
@@ -79,7 +83,7 @@ public class ProjectServiceImplementation implements ProjectService{
      * Deletes all projects. 
      *
      */
-    public boolean deleteAllProject() {
+    public boolean deleteAllProject() throws EmployeeManagementException {
         return dao.deleteAllProject();
     }
 
@@ -88,7 +92,8 @@ public class ProjectServiceImplementation implements ProjectService{
      *
      * @param projectDTO-The VO object to be deleted.
      */
-    public boolean deleteOneProject(ProjectDTO projectDTO) {
+    public boolean deleteOneProject(ProjectDTO projectDTO)
+            throws EmployeeManagementException {
         return dao.deleteOneProject(ProjectMapper.ProjectDTOToProject(projectDTO));
     }
 
@@ -98,7 +103,8 @@ public class ProjectServiceImplementation implements ProjectService{
      * @param projectDTO-The VO object with updates values project.
      * @return boolean-true if project updated, else false.
      */
-    public boolean updateAllFields(ProjectDTO projectDTO) { 
+    public boolean updateAllFields(ProjectDTO projectDTO)
+            throws EmployeeManagementException { 
         Project project = ProjectMapper.ProjectDTOToProject(projectDTO);
         return (null != ProjectMapper.ProjectToProjectDTO(dao.updateProject(project)));
     }
@@ -109,7 +115,8 @@ public class ProjectServiceImplementation implements ProjectService{
      * @param projectid-projectid to view.
      * @return projectDTO-project get by Id.
      */
-    public ProjectDTO getProjectById(int projectId) {
+    public ProjectDTO getProjectById(int projectId)
+            throws EmployeeManagementException {
         Project project = dao.getProjectById(projectId);
         ProjectDTO projectDTO = null;
         if (null != project) {
@@ -123,7 +130,8 @@ public class ProjectServiceImplementation implements ProjectService{
      *
      * @return List<projectDTO>- view object list containing all projects.
      */
-    public List<ProjectDTO> viewAllProject() {
+    public List<ProjectDTO> viewAllProject()
+            throws EmployeeManagementException {
         List<Project> projects = dao.getAllProjects();
         List<ProjectDTO> projectDetails = new ArrayList<>();
         for (Project project : projects) {
@@ -138,7 +146,8 @@ public class ProjectServiceImplementation implements ProjectService{
      * @param projectIds[]-list of project id.
      * @return List<ProjectDTO>- view object list containing all projects.
      */
-    public List<ProjectDTO> getProjectDTOs(int[] projectIds) {
+    public List<ProjectDTO> getProjectDTOs(int[] projectIds)
+            throws EmployeeManagementException {
         List<ProjectDTO> projects = new ArrayList<ProjectDTO>();
         ProjectDTO projectDTO;
         for (int i : projectIds) {
@@ -155,7 +164,8 @@ public class ProjectServiceImplementation implements ProjectService{
         return projectService.getProjectDTOs();  */      
     }
 
-    public List<EmployeeVO> getEmployeeDTOs(int[] employeeIds) {
+    public List<EmployeeVO> getEmployeeDTOs(int[] employeeIds)
+            throws EmployeeManagementException {
         /*List<EmployeeVO> employees = new ArrayList<EmployeeVO>();
         EmployeeVO employeeVO;
         for (int i : employeeIds) {

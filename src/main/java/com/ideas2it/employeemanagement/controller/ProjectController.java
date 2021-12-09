@@ -8,17 +8,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDate;
 
+import com.ideas2it.employeemanagement.exception.EmployeeManagementException;
 import com.ideas2it.employeemanagement.model.EmployeeVO;
 import com.ideas2it.employeemanagement.model.ProjectDTO;
 import com.ideas2it.employeemanagement.service.ProjectService;
 import com.ideas2it.employeemanagement.service.impl.ProjectServiceImplementation;
+import com.ideas2it.employeemanagement.logger.EmployeeManagementLogger;
 
 /**
  * Controller class is responsible for the flow control logic and
  * acts as intermediate between view and service classes.
  * 
  * @author Niraimathi S
- * @version 1.0 12-11-2021
+ * @version 1.0
  */
 public class ProjectController {
     private ProjectService projectService = new ProjectServiceImplementation();
@@ -41,7 +43,14 @@ public class ProjectController {
      * @param projectDTO-The VO object to store the created project.
      */
     public ProjectDTO createProject(ProjectDTO projectDTO) {
-        return projectService.createProject(projectDTO);
+        ProjectDTO returnedProjectDTO = null;
+        try {
+            returnedProjectDTO = projectService.createProject(projectDTO);
+        } catch (EmployeeManagementException exception) {
+            System.out.print(exception.getMessage());
+            EmployeeManagementLogger.logger.error(exception);
+        }
+        return returnedProjectDTO;
     }
 
     /**
@@ -50,34 +59,28 @@ public class ProjectController {
      * @return boolean-true if Empty, else false
      */
     public boolean isRecordsEmpty() {
-        return projectService.isRecordsEmpty();
+        boolean isEmpty = false;
+        try {
+            isEmpty = projectService.isRecordsEmpty();
+        } catch (EmployeeManagementException exception) {
+            System.out.print(exception.getMessage());
+            EmployeeManagementLogger.logger.error(exception);
+        }
+        return isEmpty;
     }
-
-    /**
-     * Checks if a mobileNumber already exists or not.
-     *
-     * @param mobileNumber-the number to be checked for duplicate.
-     * @return boolean-true if duplicate, else false.
-     
-    public boolean checkDuplicateMobileNumber(long mobileNumber) {
-        return projectService.checkDuplicateMobileNumber(mobileNumber);
-    } */
-
-    /**
-     * Checks if a email already exists or not.
-     *
-     * @param email- email to be checked for duplicate.
-     * @return boolean-true if duplicate, else false.
-    
-    public boolean checkDuplicateEmail(String email) {
-        return projectService.checkDuplicateEmail(email);
-    } */
 
     /**
      * Deletes all projects. 
      */
     public boolean deleteAllProject() {
-        return projectService.deleteAllProject();
+        boolean isDeleted = false;
+        try {
+            isDeleted = projectService.deleteAllProject();
+        } catch (EmployeeManagementException exception) {
+            System.out.print(exception.getMessage());
+            EmployeeManagementLogger.logger.error(exception);
+        }
+        return isDeleted;
     }
 
     /**
@@ -87,7 +90,14 @@ public class ProjectController {
      * @return boolean-true if given projectId exist, else false.
      */
     public boolean isProjectExist(int projectId) {
-        return (projectService.isProjectExist(projectId));
+        boolean isExist = false;
+        try {
+            isExist = projectService.isProjectExist(projectId);
+        } catch (EmployeeManagementException exception) {
+            System.out.print(exception.getMessage());
+            EmployeeManagementLogger.logger.error(exception);
+        }
+        return isExist;
     }
     
     /**
@@ -97,7 +107,14 @@ public class ProjectController {
      * @return boolean-true if given project deleted, else false.
      */
     public boolean deleteOneProject(ProjectDTO projectDTO) {
-        return projectService.deleteOneProject(projectDTO);
+        boolean isDeleted = true;
+        try {
+            isDeleted = projectService.deleteOneProject(projectDTO);
+        } catch (EmployeeManagementException exception) {
+            System.out.print(exception.getMessage());
+            EmployeeManagementLogger.logger.error(exception);
+        }
+        return isDeleted;
     }
 
     /**
@@ -107,7 +124,14 @@ public class ProjectController {
      *                   values get from user
      */
     public boolean updateAllFields(ProjectDTO projectDTO) {
-        return projectService.updateAllFields(projectDTO);
+        boolean isUpdated = false;
+        try {
+            isUpdated = projectService.updateAllFields(projectDTO);
+        } catch (EmployeeManagementException exception) {
+            System.out.print(exception.getMessage());
+            EmployeeManagementLogger.logger.error(exception);
+        }
+        return isUpdated;
     }
 
     /**
@@ -117,7 +141,14 @@ public class ProjectController {
      * @return ProjectDTO-object containing details of a single project.
      */
     public ProjectDTO getProjectById(int projectId) {
-        return projectService.getProjectById(projectId);
+        ProjectDTO returnedProjectDTO = null;
+        try {
+            returnedProjectDTO = projectService.getProjectById(projectId);
+        } catch (EmployeeManagementException exception) {
+            System.out.print(exception.getMessage());
+            EmployeeManagementLogger.logger.error(exception);
+        }
+        return returnedProjectDTO;
     }
 
     /**
@@ -127,7 +158,14 @@ public class ProjectController {
      * @return projectDTO-object which contains details of the single project.
      */
     public ProjectDTO viewOneProject(Integer projectId) {
-        return projectService.getProjectById(projectId);
+        ProjectDTO returnedProjectDTO = null;
+        try {
+            returnedProjectDTO = projectService.getProjectById(projectId);
+        } catch (EmployeeManagementException exception) {
+            System.out.print(exception.getMessage());
+            EmployeeManagementLogger.logger.error(exception);
+        }
+        return returnedProjectDTO;
     }
 
     /**
@@ -136,11 +174,25 @@ public class ProjectController {
      * @return List of all projects
      */
     public List<ProjectDTO> viewAllProject() {
-        return projectService.viewAllProject();
+        List<ProjectDTO> projects = new ArrayList<ProjectDTO>();
+        try {
+            projects = projectService.viewAllProject();
+        } catch (EmployeeManagementException exception) {
+            System.out.print(exception.getMessage());
+            EmployeeManagementLogger.logger.error(exception);
+        }
+        return projects;
     }
 
     public List<EmployeeVO> getEmployeeDTOs(int[] employeeIds) {
-        return projectService.getEmployeeDTOs(employeeIds);
+        List<EmployeeVO> employees = new ArrayList<EmployeeVO>();
+        try {
+            employees = projectService.getEmployeeDTOs(employeeIds);
+        } catch (EmployeeManagementException exception) {
+            System.out.print(exception.getMessage());
+            EmployeeManagementLogger.logger.error(exception);
+        }
+        return employees;
     }
 }
 

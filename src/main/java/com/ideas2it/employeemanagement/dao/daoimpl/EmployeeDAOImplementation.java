@@ -16,9 +16,11 @@ import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 
 import com.ideas2it.employeemanagement.dao.EmployeeDAO;
+import com.ideas2it.employeemanagement.exception.EmployeeManagementException;
 import com.ideas2it.employeemanagement.model.Address;
 import com.ideas2it.employeemanagement.model.Employee;
 import com.ideas2it.employeemanagement.util.DatabaseConnection;
+import com.ideas2it.employeemanagement.util.ConstantErrors;
 
 /**
  * Interacts with database and does appropriate actions based on users wish.
@@ -28,6 +30,7 @@ import com.ideas2it.employeemanagement.util.DatabaseConnection;
  */
 public class EmployeeDAOImplementation implements EmployeeDAO {
     private String query;
+    private String errorMessage;
 
     /**
      * Insert employee details into the database
@@ -35,8 +38,9 @@ public class EmployeeDAOImplementation implements EmployeeDAO {
      * @param employee-Employee object to insert into database.
      * @return employee-inserted object if value inserted true or else null.
      */
-    public Employee createEmployee(Employee employee) {
+    public Employee createEmployee(Employee employee) throws EmployeeManagementException {
         Session session = DatabaseConnection.getSession();
+        errorMessage = "Exception in Employee Creation";
         Transaction transaction = null;
         int employeeId = 0;
         try {
@@ -45,10 +49,10 @@ public class EmployeeDAOImplementation implements EmployeeDAO {
             employee.setEmployeeId(employeeId);
             transaction.commit();
         } catch (Exception exception) {
-            exception.printStackTrace();
             if (0 == employeeId) {
                 transaction.rollback();
             }
+            throw new EmployeeManagementException(ConstantErrors.ERROR_CODE_01);
         } finally {
               DatabaseConnection.close(session);
         }
@@ -61,8 +65,10 @@ public class EmployeeDAOImplementation implements EmployeeDAO {
      * @param employee-Employee object to update into database.
      * @return employee-updated object if true or else null.
      */
-    public Employee updateEmployee(Employee employee) {
+    public Employee updateEmployee(Employee employee) 
+            throws EmployeeManagementException  {
         Session session = DatabaseConnection.getSession();
+        errorMessage = "Exception in Employee Updation";     
         Transaction transaction = null;
         boolean isAddressadded = false;
         try {
@@ -70,10 +76,10 @@ public class EmployeeDAOImplementation implements EmployeeDAO {
             employee = (Employee) session.merge(employee);
             transaction.commit();
         } catch (Exception exception) {
-            exception.printStackTrace();
             if (null == employee) {
                 transaction.rollback();
             }
+            throw new EmployeeManagementException(ConstantErrors.ERROR_CODE_02);
         } finally {
             DatabaseConnection.close(session);
         }
@@ -85,9 +91,10 @@ public class EmployeeDAOImplementation implements EmployeeDAO {
      *
      * @return true-if employee deleted or else false.
      */
-    public boolean deleteAllEmployee() {
+    public boolean deleteAllEmployee() throws EmployeeManagementException {
         Session session = DatabaseConnection.getSession();
         Transaction transaction = null;
+        errorMessage = "Exception in Employee Delete all operation";
         query = "delete from Employee";
         int rowsAffected = 0;
         try {
@@ -96,10 +103,10 @@ public class EmployeeDAOImplementation implements EmployeeDAO {
             rowsAffected = hqlQuery.executeUpdate();
             transaction.commit();
         } catch (Exception exception) {
-            exception.printStackTrace();
             if (1 != rowsAffected) {
                 transaction.rollback();
             }
+            throw new EmployeeManagementException(ConstantErrors.ERROR_CODE_07);
         } finally {
             DatabaseConnection.close(session);
         }
@@ -112,14 +119,17 @@ public class EmployeeDAOImplementation implements EmployeeDAO {
      * @param employeeid-Employee id.
      * @return employee-employee details of a single employee.
      */
-    public Employee getEmployeeById(int employeeId) {
+    public Employee getEmployeeById(int employeeId)
+            throws EmployeeManagementException {
         Session session = DatabaseConnection.getSession();
+
         Transaction transaction = null;
         //query = "SELECT e FROM Employee e LEFT JOIN FETCH "
           //      + "e.addresses a LEFT JOIN FETCH e.projects where e.id=:id";
         query = "select e from Employee e left join fetch "
                 + "e.addresses a left join fetch e.projects p "
                 + "WHERE e.id = :id";
+        errorMessage = "Exception occured while fetching single employee.";
         Employee employee = null;
         try {
             transaction = session.beginTransaction();
@@ -128,10 +138,10 @@ public class EmployeeDAOImplementation implements EmployeeDAO {
             employee = (Employee) hqlQuery.uniqueResult();
             transaction.commit();
         } catch (Exception exception) {
-            exception.printStackTrace();
             if (null == employee) {
                 transaction.rollback();
             }
+            throw new EmployeeManagementException(ConstantErrors.ERROR_CODE_03);
         } finally {
             DatabaseConnection.close(session);
         }
@@ -144,11 +154,13 @@ public class EmployeeDAOImplementation implements EmployeeDAO {
      * @param employee-Employee email id.
      * @return employee-employee details of a single employee.
      */
-    public Employee getEmployeeByEmail(String email) {
+    public Employee getEmployeeByEmail(String email)
+            throws EmployeeManagementException {
         Session session = DatabaseConnection.getSession();
         Transaction transaction = null;
-        query = "SELECT distinct distinct e FROM Employee e LEFT JOIN FETCH "
-                + "e.addresses a LEFT JOIN FETCH e.projects where e.email=:email";
+        query = "SELECT e FROM Employee e LEFT JOIN FETCH "
+            + "e.addresses a LEFT JOIN FETCH e.projects where e.email=:email";
+        errorMessage = "Exception occured while getting an employee by email";
         Employee employee = null;
         try {
             transaction = session.beginTransaction();
@@ -157,10 +169,10 @@ public class EmployeeDAOImplementation implements EmployeeDAO {
             employee = (Employee) hqlQuery.uniqueResult();
             transaction.commit();
         } catch (Exception exception) {
-            exception.printStackTrace();
             if (null == employee) {
                 transaction.rollback();
             }
+            throw new EmployeeManagementException(ConstantErrors.ERROR_CODE_04);
         } finally {
             DatabaseConnection.close(session);
         }
@@ -173,11 +185,13 @@ public class EmployeeDAOImplementation implements EmployeeDAO {
      * @param employee-Employee mobile number.
      * @return employee-employee details of a single employee.
      */
-    public Employee getEmployeeByMobileNumber(long mobileNumber) {
+    public Employee getEmployeeByMobileNumber(long mobileNumber)
+            throws EmployeeManagementException {
         Session session = DatabaseConnection.getSession();
         Transaction transaction = null;
-        query = "SELECT distinct e FROM Employee e LEFT JOIN FETCH "
-                + "e.addresses a LEFT JOIN FETCH e.projects where e.mobile_number=:mobileNumber";
+        query = "SELECT e FROM Employee e LEFT JOIN FETCH "
+            + "e.addresses a LEFT JOIN FETCH e.projects where e.mobileNumber=:mobileNumber";
+        errorMessage = "Exception while getting an employee by mobile number";
         Employee employee = null;
         try {
             transaction = session.beginTransaction();
@@ -186,10 +200,10 @@ public class EmployeeDAOImplementation implements EmployeeDAO {
             employee = (Employee) hqlQuery.uniqueResult();
             transaction.commit();
         } catch (Exception exception) {
-            exception.printStackTrace();
             if (null == employee) {
                 transaction.rollback();
             }
+            throw new EmployeeManagementException(ConstantErrors.ERROR_CODE_05);
         } finally {
             DatabaseConnection.close(session);
         }
@@ -201,9 +215,11 @@ public class EmployeeDAOImplementation implements EmployeeDAO {
      *
      * @return true-if one employees is deleted or else false.
      */
-    public boolean deleteOneEmployee(Employee employee) {
+    public boolean deleteOneEmployee(Employee employee)
+            throws EmployeeManagementException {
         Session session = DatabaseConnection.getSession();
         Transaction transaction = null;
+        errorMessage = "Exception occured during deletion of single employee";
         int rowsAffected = 0;
         try {
             transaction = session.beginTransaction();
@@ -211,10 +227,10 @@ public class EmployeeDAOImplementation implements EmployeeDAO {
             rowsAffected = 1;
             transaction.commit();
         } catch (Exception exception) {
-            exception.printStackTrace();
             if (1 != rowsAffected) {
                 transaction.rollback();
             }
+            throw new EmployeeManagementException(ConstantErrors.ERROR_CODE_08);
         } finally {
             DatabaseConnection.close(session);
         }
@@ -226,10 +242,12 @@ public class EmployeeDAOImplementation implements EmployeeDAO {
      *
      * @return employees-list contains all employee details.
      */
-    public List<Employee> getAllEmployees() {
+    public List<Employee> getAllEmployees() throws EmployeeManagementException {
         Session session = DatabaseConnection.getSession();
         Transaction transaction = null;
-        query = "SELECT distinct e FROM Employee e LEFT JOIN FETCH e.addresses a LEFT JOIN FETCH e.projects";
+        query = "SELECT distinct e FROM Employee e LEFT JOIN FETCH "
+                + "e.addresses a LEFT JOIN FETCH e.projects";
+        errorMessage = "Exception occured during fetching all employee";
         List<Employee> employees = null;
         try {
             transaction = session.beginTransaction();
@@ -237,10 +255,10 @@ public class EmployeeDAOImplementation implements EmployeeDAO {
             transaction.commit();
 
         } catch (Exception exception) {
-            exception.printStackTrace();
             if (employees.isEmpty()) {
                 transaction.rollback();
             }
+            throw new EmployeeManagementException(ConstantErrors.ERROR_CODE_06);
         } finally {
             DatabaseConnection.close(session);
         }

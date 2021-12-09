@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDate;
 
+import com.ideas2it.employeemanagement.exception.EmployeeManagementException;
+import com.ideas2it.employeemanagement.logger.EmployeeManagementLogger;
 import com.ideas2it.employeemanagement.model.AddressDTO;
 import com.ideas2it.employeemanagement.model.EmployeeVO;
 import com.ideas2it.employeemanagement.model.ProjectDTO;
@@ -43,7 +45,15 @@ public class EmployeeController {
      * @param employeeVO-The VO object to store the created employee.
      */
     public EmployeeVO createEmployee(EmployeeVO employeeVO) {
-        return employeeService.createEmployee(employeeVO);
+        EmployeeVO returnedEmployeeVO = null;
+        try {
+            returnedEmployeeVO = employeeService.createEmployee(employeeVO);
+        } catch (EmployeeManagementException exception) {
+            System.out.print(exception.getMessage());
+            EmployeeManagementLogger.logger.error(exception);
+        }
+        //return employeeService.createEmployee(employeeVO);
+        return returnedEmployeeVO;
     }
 
     /**
@@ -52,7 +62,14 @@ public class EmployeeController {
      * @return boolean-true if Empty, else false
      */
     public boolean isRecordsEmpty() {
-        return employeeService.isRecordsEmpty();
+        boolean isEmpty = false;
+        try {
+            isEmpty = employeeService.isRecordsEmpty();
+        } catch (EmployeeManagementException exception) {
+            System.out.print(exception.getMessage());
+            EmployeeManagementLogger.logger.error(exception);
+        }
+        return isEmpty;
     }
 
     /**
@@ -62,7 +79,15 @@ public class EmployeeController {
      * @return boolean-true if duplicate, else false.
      */
     public boolean checkDuplicateMobileNumber(long mobileNumber) {
-        return employeeService.checkDuplicateMobileNumber(mobileNumber);
+        boolean isDublicate = false;
+        try {
+            isDublicate 
+                    = employeeService.checkDuplicateMobileNumber(mobileNumber);
+        } catch (EmployeeManagementException exception) {
+            System.out.print(exception.getMessage());
+            EmployeeManagementLogger.logger.error(exception);
+        }
+        return isDublicate;
     }
 
     /**
@@ -72,14 +97,29 @@ public class EmployeeController {
      * @return boolean-true if duplicate, else false.
      */
     public boolean checkDuplicateEmail(String email) {
-        return employeeService.checkDuplicateEmail(email);
+        boolean isDublicate = false;
+        try {
+            isDublicate 
+                    = employeeService.checkDuplicateEmail(email);
+        } catch (EmployeeManagementException exception) {
+            System.out.print(exception.getMessage());
+            EmployeeManagementLogger.logger.error(exception);
+        }
+        return isDublicate;
     }
 
     /**
      * Deletes all employees. 
      */
     public boolean deleteAllEmployee() {
-        return employeeService.deleteAllEmployee();
+        boolean isDeleted = false;
+        try {
+            isDeleted = employeeService.deleteAllEmployee();
+        } catch (EmployeeManagementException exception) {
+            System.out.print(exception.getMessage());
+            EmployeeManagementLogger.logger.error(exception);
+        }
+        return isDeleted;
     }
 
     /**
@@ -89,7 +129,14 @@ public class EmployeeController {
      * @return boolean-true if given employeeId exist, else false.
      */
     public boolean isEmployeeExist(int employeeId) {
-        return (employeeService.isEmployeeExist(employeeId));
+        boolean isExist = false;
+        try {
+            isExist = employeeService.isEmployeeExist(employeeId);
+        } catch (EmployeeManagementException exception) {
+            System.out.print(exception.getMessage());
+            EmployeeManagementLogger.logger.error(exception);
+        }
+        return isExist;
     }
     
     /**
@@ -99,7 +146,14 @@ public class EmployeeController {
      * @return boolean-true if given employee deleted, else false.
      */
     public boolean deleteOneEmployee(EmployeeVO employeeVO) {
-        return employeeService.deleteOneEmployee(employeeVO);
+        boolean isDeleted = false;
+        try {
+            isDeleted = employeeService.deleteOneEmployee(employeeVO);
+        } catch (EmployeeManagementException exception) {
+            System.out.print(exception.getMessage());
+            EmployeeManagementLogger.logger.error(exception);
+        }
+        return isDeleted;
     }
 
     /**
@@ -109,7 +163,14 @@ public class EmployeeController {
      *                   values get from user
      */
     public boolean updateAllFields(EmployeeVO employeeVO) {
-        return employeeService.updateAllFields(employeeVO);
+        boolean isUpdated = false;
+        try {
+            isUpdated = employeeService.updateAllFields(employeeVO);
+        } catch (EmployeeManagementException exception) {
+            System.out.print(exception.getMessage());
+            EmployeeManagementLogger.logger.error(exception);
+        }
+        return isUpdated;
     }
 
     /**
@@ -119,7 +180,14 @@ public class EmployeeController {
      * @return EmployeeVO-object containing details of a single employee.
      */
     public EmployeeVO getEmployeeById(int employeeId) {
-        return employeeService.getEmployeeById(employeeId);
+        EmployeeVO returnedEmployeeVO = null;
+        try {
+            returnedEmployeeVO = employeeService.getEmployeeById(employeeId);
+        } catch (EmployeeManagementException exception) {
+            System.out.print(exception.getMessage());
+            EmployeeManagementLogger.logger.error(exception);
+        }
+        return returnedEmployeeVO;
     }
 
     /**
@@ -129,7 +197,14 @@ public class EmployeeController {
      * @return employeeVO-object which contains details of the single employee.
      */
     public EmployeeVO viewOneEmployee(int employeeId) {
-        return employeeService.getEmployeeById(employeeId);
+        EmployeeVO returnedEmployeeVO = null;
+        try {
+            returnedEmployeeVO = employeeService.getEmployeeById(employeeId);
+        } catch (EmployeeManagementException exception) {
+            System.out.print(exception.getMessage());
+            EmployeeManagementLogger.logger.error(exception);
+        }
+        return returnedEmployeeVO;
     }
 
     /**
@@ -138,11 +213,25 @@ public class EmployeeController {
      * @return List of all employees
      */
     public List<EmployeeVO> viewAllEmployee() {
-        return employeeService.viewAllEmployee();
+        List<EmployeeVO> employees = new ArrayList<EmployeeVO>();
+        try {
+            employees = employeeService.viewAllEmployee();
+        } catch (EmployeeManagementException exception) {
+            System.out.print(exception.getMessage());
+            EmployeeManagementLogger.logger.error(exception);
+        }
+        return employees;
     }
 
     public List<ProjectDTO> getProjectDTOs(int[] projectIds) {
-        return employeeService.getProjectDTOs(projectIds);
+        List<ProjectDTO> projects = new ArrayList<ProjectDTO>();
+        try {
+            projects = employeeService.getProjectDTOs(projectIds);
+        } catch (EmployeeManagementException exception) {
+            System.out.print(exception.getMessage());
+            EmployeeManagementLogger.logger.error(exception);
+        }
+        return projects;
     }
 }
 

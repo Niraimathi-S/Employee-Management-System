@@ -7,6 +7,7 @@ package com.ideas2it.employeemanagement.model;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -21,7 +22,7 @@ public class ProjectDTO {
     private String name;
     private String manager;
     private String domainName;
-    private Set<EmployeeVO> employeesVO;
+    private Set<EmployeeVO> employeesVO = new HashSet<EmployeeVO>();
 
     public ProjectDTO() {
     }

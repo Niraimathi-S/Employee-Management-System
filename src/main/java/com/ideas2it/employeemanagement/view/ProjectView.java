@@ -4,6 +4,7 @@
 
 package com.ideas2it.employeemanagement.view;
 
+import java.time.format.DateTimeParseException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.ListIterator;
 import java.util.Scanner;
+
 
 import com.ideas2it.employeemanagement.controller.ProjectController;
 import com.ideas2it.employeemanagement.model.EmployeeVO;
@@ -102,7 +104,7 @@ public class ProjectView {
             try {
                 choice = Integer.parseInt(scanner.nextLine());
                 isChoiceValid = false;
-            } catch (Exception exception) {
+            } catch (NumberFormatException exception) {
                 System.out.println("choice must be an integer\n"
                         + "Please Reenter the choice: ");
                 isChoiceValid = true;
@@ -144,7 +146,7 @@ public class ProjectView {
         projectIdAsString = validateInput(projectIdAsString, pattern, errorMessage);
         try {
             projectId = Integer.parseInt(projectIdAsString);
-        } catch (Exception exception) {
+        } catch (NumberFormatException exception) {
             System.out.println("Project Id must be an integer");
         }
         return projectId;   
@@ -225,7 +227,7 @@ public class ProjectView {
                     } else {
                         isValid = false;
                     }
-                } catch (Exception e) {
+                } catch (DateTimeParseException e) {
                     System.out.println("\n*not a valid date*\n");
                 }
             } catch (ArrayIndexOutOfBoundsException e) {
@@ -336,8 +338,8 @@ public class ProjectView {
                        isRecordDeleted = true;
                     }
                 }
-            } catch (Exception exception) {
-                System.out.println("Project Id must be an integer"+exception);
+            } catch (NumberFormatException exception) {
+                System.out.println("Project Id must be an integer");
                 isRecordDeleted = true;
             }
         }
@@ -368,7 +370,7 @@ public class ProjectView {
                 //return;
                 isRecordExist = false;
                     } else {
-                        Integer projectId = getProjectId(projectIdAsString);
+                        projectId = getProjectId(projectIdAsString);
                         if (projectController.isProjectExist(projectId)) {
                             int choice;
                             do {
@@ -389,7 +391,7 @@ public class ProjectView {
                             System.out.println("No such record found.");
                         }
                     }
-                } catch (Exception exception) {
+                } catch (NumberFormatException exception) {
                     exception.printStackTrace();
                 }
             }
@@ -490,7 +492,7 @@ public class ProjectView {
         StringBuilder menu = new StringBuilder("Please enter Project Id\n")
                 .append("or Press -1 to return to main menu");
         ProjectDTO projectDTO;
-        List<EmployeeVO> employees;
+        Set<EmployeeVO> employees = new HashSet<EmployeeVO>();
         boolean isRecordExist = true;
         int projectId = 0;
         while (isRecordExist) {
@@ -505,9 +507,11 @@ public class ProjectView {
                     projectDTO = projectController.viewOneProject(projectId);
                     System.out.println("Project Details\n--------------\n" 
                                         + projectDTO);
-                    employees = new ArrayList<>(projectDTO.getEmployeesVO());
+                    if ((!projectDTO.getEmployeesVO().isEmpty()) || (null != projectDTO)) {
+                    employees = projectDTO.getEmployeesVO();
                     for (EmployeeVO employee:employees){
                         System.out.println(employee);
+                    }
                     }
                     isRecordExist = false;
                 } else {
@@ -589,7 +593,7 @@ public class ProjectView {
     }
 
     private int[] getEmployeeIds() {
-        String pattern = "([1-9][0-9]+)([,]?[1-9][0-9]+)*";
+        String pattern = "([1-9][0-9]*)([,]?[1-9][0-9]*)*";
         StringBuilder errorMessage = new StringBuilder("Invalid Input!\nEmployee ")
                 .append("Id should be separated with only commas(,)\nPlease")
                 .append(" reenter employee IDs\n Employee IDS:");
@@ -638,8 +642,6 @@ public class ProjectView {
         if((null != employeeIds)){
             employeesToAssign = projectController.getEmployeeDTOs(employeeIds);
             employeesToAssign.removeAll(assignedEmployees);
-            System.out.println("employeesToAssign"+employeesToAssign);
-            System.out.println("assignedEmployees"+assignedEmployees);
             for (EmployeeVO employeeVO:employeesToAssign){
                 assignedEmployees.add(employeeVO);
             }
