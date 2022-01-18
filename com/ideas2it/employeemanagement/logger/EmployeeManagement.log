@@ -1,0 +1,14 @@
+Date - 2022-01-12 12:32:43
+Priority level - [ERROR]
+Logger name - com.ideas2it.employeemanagement.logger.EmployeeManagementLogger
+File name  - EmployeeServlet.java
+Class name - com.ideas2it.employeemanagement.controller.EmployeeServlet
+Method name - viewSingleEmployee
+Exception - com.ideas2it.employeemanagement.exception.EmployeeManagementException: Exception occured while fetching single employee.
+Date - 2022-01-12 12:38:42
+Priority level - [ERROR]
+Logger name - com.ideas2it.employeemanagement.logger.EmployeeManagementLogger
+File name  - EmployeeServlet.java
+Class name - com.ideas2it.employeemanagement.controller.EmployeeServlet
+Method name - viewSingleEmployee
+Exception - com.ideas2it.employeemanagement.exception.EmployeeManagementException: Exception occured while fetching single employee.

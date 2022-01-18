@@ -1,0 +1,137 @@
+body{
+	background-color:white;
+	font-size:30px;
+	
+}
+
+*{
+	font-size:100%;
+	color:black;
+}
+
+h1{
+	color: rgb(40, 60, 159);	
+	font-size:50px;
+}
+
+.header1{
+	
+    border-radius: 20px;
+    background-color:#08b4ed;
+    height: 88px;
+    display: flex;
+    align-items: center;
+}
+
+a:link{
+        text-decoration:none;
+}
+
+#index-nav a{
+	color:rgb(182, 234, 246);
+	font-size:35px;
+}
+
+.button{
+	border-radius: 20px;
+    width: 400px;
+    height: 50px;
+    font-size:30px;
+    background-color:rgb(182, 234, 246);
+    
+}
+.logo{
+	position:absolute;
+}
+ 
+ .row{
+        display: flex;
+        align-items: center; 
+        text-align:center; 
+        color:white;
+}
+
+ .logo h1{
+     margin-left:600px;
+     font-weight: bold;
+         text-align:center;
+     
+ }
+
+ ul{
+ top:50px;
+ display: table;
+ margin: 100px auto ;
+ }
+ 
+ h2{
+ 	font-size:40px;
+ 	text-decoration:underline;
+    text-align:center;
+    color:rgb(40, 60, 159);
+ }
+ 
+ .form{
+     margin:0 auto;
+     text-align:left;
+     font-size:25px;
+     
+ }
+ 
+ .main-nav li
+{
+  position: relative;
+  display:inline-block;
+  padding: 5px 30px;
+    font-size:25px;
+  font-weight: bold;
+  }
+  
+  .main-nav{
+  margin-left:43cm;
+  }
+  
+  .main-nav a{
+    font-size:25px;
+    color: #000208;
+  
+  }
+  
+  .main-nav li:hover
+{
+    background-color: #025a96;
+  border-radius: 50px;
+  color: white;
+  font-size: 11px;
+}
+
+.view-button{
+	border-radius: 20px;
+    width: 300px;
+    height: 40px;
+    font-size:20px;
+    background-color:rgb(182, 234, 246);
+}
+.ack {
+		margin:0 auto;
+      align-items: center; 
+        text-align:center; 
+        color:white;
+}
+.view{
+	font-size:10px;
+}
+
+div{
+	display:flex;
+	    align-items: center;  
+	    text-align:center;
+	    color:white;
+}
+.display-single-div{
+		font-size:25px;
+		display:block;
+	    align-items: center;  
+	    text-align:center; 
+	    color:black;
+}
