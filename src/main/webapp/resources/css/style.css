@@ -1,5 +1,5 @@
 body{
-	background-color:white;
+	background-color:azure;
 	font-size:30px;
 	
 }
@@ -40,6 +40,10 @@ a:link{
     background-color:rgb(182, 234, 246);
     
 }
+
+.button:hover{
+	background-color:rgb(4,172,243);
+}
 .logo{
 	position:absolute;
 }
@@ -74,8 +78,7 @@ a:link{
  .form{
      margin:0 auto;
      text-align:left;
-     font-size:25px;
-     
+     font-size:25px;   
  }
  
  .main-nav li
@@ -83,7 +86,7 @@ a:link{
   position: relative;
   display:inline-block;
   padding: 5px 30px;
-    font-size:25px;
+  font-size:25px;
   font-weight: bold;
   }
   
@@ -134,4 +137,7 @@ div{
 	    align-items: center;  
 	    text-align:center; 
 	    color:black;
+}
+table{
+	border-collapse:collapse;
 }

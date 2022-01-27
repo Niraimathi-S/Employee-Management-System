@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context	http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/mvc	http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/aop	http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+		http://www.springframework.org/schema/tx	http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+		  <context:component-scan
+		base-package="com.ideas2it.employeemanagement.controller" />
+	<mvc:annotation-driven />
+<bean id="viewResolver"  class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+<property name="prefix" value="/"></property>  
+<property name="suffix" value=".jsp"></property>
+</bean>
+<bean id="employeeServlet" class="com.ideas2it.employeemanagement.controller.EmployeeServlet">
+<property name="employeeService" ref="employeeServiceImplementation"/>
+</bean>
+<bean id="employeeServiceImplementation" class="com.ideas2it.employeemanagement.service.impl.EmployeeServiceImplementation">
+<property name="projectService" ref="projectServiceImplementation"/>
+<property name="employeeDAO" ref="employeeDAOImplementation"/>
+</bean>
+<bean id="projectServiceImplementation" class="com.ideas2it.employeemanagement.service.impl.ProjectServiceImplementation">
+<property name="employeeService" ref="employeeServiceImplementation"/>
+<property name="projectDAO" ref="projectDAOImplementation"/>
+</bean>
+<bean id="employeeDAOImplementation" class = "com.ideas2it.employeemanagement.dao.daoimpl.EmployeeDAOImplementation">
+</bean>
+<bean id="projectDAOImplementation" class = "com.ideas2it.employeemanagement.dao.daoimpl.ProjectDAOImplementation">
+</bean>
+<bean id="projectServlet" class="com.ideas2it.employeemanagement.controller.ProjectServlet">
+<property name="projectService" ref="projectServiceImplementation"/>
+</bean>
+<mvc:resources mapping="/resources/**" location="/resources/" />
+</beans>

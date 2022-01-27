@@ -5,14 +5,19 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="resources/css/style.css">
 <title>Assign and unassign display</title>
 </head>
+<style>
+.button{
+	width:250px;
+}
+</style>
 <body>
     <header class="header1">
     <div class="row">
     <div class="logo" style = "float: left;" >
-    <img alt="Logo" src="logo.png">
+    <img alt="Logo" src="resources/css/logo.png">
     <h1>Employee Management System</h1>
     </div>
         <ul class="main-nav">
@@ -21,13 +26,16 @@
         </ul>
         </div>
     </header>
-    <div style=" display:block; font-size:25px">
+    <h2>UnAssign Project</h2>
+    <div style=" display:block; font-size:25px;color:black">
     <%Set<ProjectDTO> projects = (HashSet<ProjectDTO>)request.getAttribute("projects");
     if((!projects.isEmpty()) && (null != projects)) {%>
     
     Projects:
-        <table border="1" style="margin: 0px auto;">
+        <form action = "unAssign" method = "get">
+        <table border="1" style="margin: 0px auto;background-color:white;">
             <tr>
+              <th>  </th>
               <th>Project Id</th>
               <th>Project Name</th>
               <th>Manager</th>
@@ -37,27 +45,31 @@
         <%
         for(ProjectDTO project:projects){%>
             <tr>
+              <td><input type="checkbox" value="<%=project.getProjectId()%>" name="projectIds"></td>
               <td><%=project.getProjectId() %></td>
               <td><%=project.getName() %></td>
               <td><%=project.getManager() %></td>
               <td><%=project.getStartDate() %></td>
               <td><%=project.getDomainName() %></td>
               <td>
-                <form action = "EmployeeServlet" method = "get">
-                <input type="hidden" name="type" value="unassign">
-                <input type = "hidden" name = "employeeId" value=<%=request.getParameter("employeeId")%> pattern = "[1-9][0-9]{0,4}"/><br />
-                <input type = "hidden" name = "projectId" value="<%=project.getProjectId()%>" pattern = "[1-9][0-9]{0,4}"/><br />
-                <input type = "submit" value = "UnAssign"/><br />
-                </form>
               </td>
             </tr>
         <%} %>
     </table>
+    <input type = "hidden" name = "employeeId" value=<%=request.getParameter("employeeId")%> pattern = "[1-9][0-9]{0,4}"/><br />
+    <input class="button" type = "submit" value = "UnAssign"/><br />
+    <input class="button" type="submit" formaction="viewSingle" value="Back">
+</form>
+    <a href="EmployeeMenu.jsp"><button class="button">Employee menu</button></a> 
+
      <%} else {%>
-     <%="No Employees to UnAssign!!"%>
+     <%="No Projects to UnAssign!!"%>
+     <form action = "viewSingle" method = "get">
+    <input type = "hidden" name = "employeeId" value=<%=request.getParameter("employeeId")%> pattern = "[1-9][0-9]{0,4}"/><br />
+    <input class="button" type="submit" formaction="viewSingle" value="Back">
+    </form>
      <%} %>
-         <input type ="button" value = "Back" onclick="history.back()"/>
-         <button><a href="EmployeeMenu.jsp">Employee Main menu</a></button>  
+       
      </div>
 </body>
 </html>

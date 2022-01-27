@@ -1,5 +1,6 @@
 /*
  * Copyrights (C) Ideas2IT
+
  */
 
 package com.ideas2it.employeemanagement.controller;
@@ -16,6 +17,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.ideas2it.employeemanagement.exception.EmployeeManagementException;
 import com.ideas2it.employeemanagement.logger.EmployeeManagementLogger;
 import com.ideas2it.employeemanagement.model.EmployeeVO;
@@ -26,280 +33,259 @@ import com.ideas2it.employeemanagement.service.impl.EmployeeServiceImplementatio
 import com.ideas2it.employeemanagement.service.impl.ProjectServiceImplementation;
 
 /**
- * ProjectServlet performs project management system function. 
- * It gets inputs from the corresponding JSP pages through HttpServlet
- *  and performs appropriate functions.
+ * ProjectServlet performs project management system function. It gets inputs
+ * from the corresponding JSP pages through HttpServlet and performs appropriate
+ * functions.
+ * 
+ * @author Niraimathi S
+ * @version 1.2
+ * 
  */
+@Controller
 public class ProjectServlet extends HttpServlet {
 
-
-	private static final long serialVersionUID = 1L;
-
-	/**
-	 * This method handles the Http GET requests. It gets the request from the 
-	 * user and Forward it the appropriate methods.  
-	 *  
-	 * @param request- Http servlet request containing request information
-	 * @param response-Http servlet response containing response information
-	 */
-	protected void doGet(HttpServletRequest request, 
-			HttpServletResponse response) throws ServletException, IOException {
-		String types = request.getParameter("type");  
-
-		switch (types) {
-		case "assign&unassign":
-			assignAndUnassign(request, response);
-			break;
-		case "assign":
-			assignEmployee(request, response);
-			break;
-		case "unassign":
-			unAssignEmployee(request, response);
-			break;
-		}
+    private static final long serialVersionUID = 1L;
+    ProjectService projectService; 
+    
+	public void setProjectService(ProjectService projectService) {
+		this.projectService = projectService;
 	}
-	
-	/**
-	 * This method handles the Http POST methods. It gets the request from the 
-	 * user and Forward it the appropriate methods.
-	 * 
-	 * @param request- Http servlet request containing request information
-	 * @param response-Http servlet response containing response information
-	 */
-	protected void doPost(HttpServletRequest request, 
-			HttpServletResponse response) throws ServletException, IOException {
-		String types = request.getParameter("type");  
 
-		switch (types) {
-		case "create" :
-			createProject(request,response);
-			break;
-		case "view" :
-			viewSingleProject(request,response);
-			break;
-		case "viewAll" :
-			viewAllProjects(request,response);
-			break;
-		case "delete" :
-			deleteProject(request,response);
-			break;
-		case "AddAddress" :
-			//addAddress(request,response);
-			break;
-		case "update" :
-			updateProject(request,response);
-			break;
-		}		
+	/**
+	 * Create a new ProjectDTO object and forward it to create a new Project.
+	 * 
+	 * @param model
+	 * @return CreateProject create page.
+	 */
+	@RequestMapping("/createNewProject")
+    public String createNewProject(Model model){
+		model.addAttribute("projectDTO",new ProjectDTO());
+		System.out.println("createnew project");
+		return "CreateProject";
 	}
 	
 	/**
 	 * Creates a new project using the data retrieved from the user.
 	 * 
-	 * @param request- Http servlet request containing request information
-	 * @param response-Http servlet response containing response information
+	 * @param projectDTO object with user entered values.
+	 * @param model
+	 * @return CreateProject - create project page.
+	 * @throws ServletException
+	 * @throws IOException
 	 */
-	public void createProject(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-        ProjectDTO returnedProjectDTO = null;
-        ProjectService projectService = new ProjectServiceImplementation();
-        ProjectDTO projectDTO = new ProjectDTO(request.getParameter("name"), 
-        		request.getParameter("domain"), 
-        		LocalDate.parse(request.getParameter("start_date")), 
-        		request.getParameter("manager"));
-        try {
-        	returnedProjectDTO = projectService.createProject(projectDTO);
-        	request.setAttribute("returnedProjectDTO", returnedProjectDTO);
-        	request.getRequestDispatcher("CreateProject.jsp")
-        	    .forward(request, response);
-        } catch (EmployeeManagementException exception) {
+	@RequestMapping("/createProject") 
+	public String createProject(@ModelAttribute("projectDTO") 
+			ProjectDTO projectDTO, Model model) 
+			throws ServletException, IOException { 
+		try {
+			projectDTO = projectService.createProject(projectDTO);
+			model.addAttribute("projectDTO", projectDTO);
+		}  catch (EmployeeManagementException exception) {
             EmployeeManagementLogger.logger.error(exception);
         }
+		model.addAttribute("returnedProject", projectDTO);
+		return "CreateProject";
 	}
-	
-	/**
-	 * Deletes single project using the projectId given by user.
-	 * 
-	 * @param request- Http servlet request containing request information
-	 * @param response-Http servlet response containing response information
-	 */
-	public void deleteProject(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-		int idToDelete = 0;
-        boolean isRecordDeleted = false;
-        String message = "Project deleted Successfully";
-        String error = "Project Delete unsuccessful!!";
-        ProjectDTO returnedProjectDTO = null;
-        ProjectService projectService = new ProjectServiceImplementation();
-        try {
-        	idToDelete = Integer.parseInt(request.getParameter("projectId"));
-        	returnedProjectDTO = projectService.getProjectById(idToDelete);
-        	if(null != returnedProjectDTO) {
-        		isRecordDeleted = projectService
-        				.deleteOneProject(returnedProjectDTO);
-        	}
-        	request.setAttribute("isUpdated", isRecordDeleted);
-            request.setAttribute("message", message);
-            request.setAttribute("error", error);
 
-	    	request.getRequestDispatcher("Updated.jsp")
-	    	    .forward(request, response);
-        } catch (EmployeeManagementException exception) {
-            EmployeeManagementLogger.logger.error(exception);
-        }
+	/**
+	 * Deletes a project from database.
+	 * 
+	 * @param projectId to delete the project.
+	 * @param model
+	 * @return AllProjectDisplay which displays all projects.
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	@RequestMapping("/deleteProject") 
+	public String deleteProject(@RequestParam Integer projectId, Model model) 
+			throws ServletException, IOException {
+		ProjectDTO returnedProjectDTO= null;
+		List<ProjectDTO> projects = null;
+		try { 
+			returnedProjectDTO = projectService.getProjectById(projectId);
+			if (null !=returnedProjectDTO) { 
+				projectService.deleteOneProject(returnedProjectDTO);
+	    		projects = projectService.viewAllProject();
+	    		model.addAttribute("projects", projects);
+			}
+		} catch (EmployeeManagementException exception) {
+			EmployeeManagementLogger.logger.error(exception);
+		}
+		return "AllProjectDisplay";
 	}
-	
+  
 	/**
-	 * Displays single project to the user.
+	 * Displays a single project to the user.
 	 * 
-	 * @param request- Http servlet request containing request information
-	 * @param response-Http servlet response containing response information
+	 * @param projectId to display project.
+	 * @param model
+	 * @return SingleProjectDisplay - page which display the project.
+	 * @throws ServletException
+	 * @throws IOException
 	 */
-	public void viewSingleProject(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-        ProjectService projectService = new ProjectServiceImplementation();
-        ProjectDTO projectDTO = null;
-        int projectId = 0;
-        try {
-        	projectId = Integer.parseInt(request.getParameter("projectId"));
-        	projectDTO = projectService.getProjectById(projectId);
-        	request.setAttribute("returnedProjectDTO", projectDTO);
-        	request.getRequestDispatcher("SingleProjectDisplay.jsp")
-        	    .forward(request, response);
-        } catch (EmployeeManagementException exception) {
-            EmployeeManagementLogger.logger.error(exception);
-        }
-	}
-	
-	/**
-	 * Displays all Projects.
-	 * 
-	 * @param request- Http servlet request containing request information
-	 * @param response-Http servlet response containing response information
-	 */
-	public void viewAllProjects(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-        ProjectService projectService = new ProjectServiceImplementation();
-        List<ProjectDTO> projects = null;
-        try {
-        	projects = projectService.viewAllProject();
-        	request.setAttribute("projects", projects);
-        	request.getRequestDispatcher("AllProjectDisplay.jsp")
-        	    .forward(request, response);
-        } catch (EmployeeManagementException exception) {
-            EmployeeManagementLogger.logger.error(exception);
-        }
-
-	}
-	
-	/**
-	 * Updates a single project with the data given by the user.
-	 * 
-	 * @param request- Http servlet request containing request information
-	 * @param response-Http servlet response containing response information
-	 */
-	public void updateProject(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-		 ProjectService projectService = new ProjectServiceImplementation();
-	     ProjectDTO projectDTO = null;
-	     boolean isUpdated = false;
-	     String message = "Project updated Successfully";
-	     String error = "project not updated";
-	     int projectId = 0;
-	     try {
-	         projectId = Integer.parseInt(request.getParameter("projectId"));
-	         projectDTO = projectService.getProjectById(projectId);
-
-	         if(null != projectDTO ) {
-	             projectDTO.setProjectId(projectId);
-	             projectDTO.setName(request.getParameter("name"));
-	             projectDTO.setDomainName(request.getParameter("domain"));
-	             projectDTO.setStartDate(LocalDate.parse(request
-	            		 .getParameter("start_date")));
-	             projectDTO.setManager(request.getParameter("manager"));
-		         isUpdated = projectService.updateAllFields(projectDTO);
-	         }
-	         request.setAttribute("isUpdated", isUpdated);
-	         request.setAttribute("projectDTO", projectDTO);
-         	request.setAttribute("error", error);
-
-             request.setAttribute("projectDTO", projectDTO);
-             request.setAttribute("message", message);
-
- 	    	request.getRequestDispatcher("Updated.jsp")
- 	    	    .forward(request, response);
-
-	     } catch (EmployeeManagementException exception) {
-	             EmployeeManagementLogger.logger.error(exception);
-	     }
-	}
-	
-	/**
-	 * Displays the employees assigned or unassigned in a projects based 
-	 * on user's choice. And forward data to appropriate JSP pages.
-	 * 
-	 * @param request- Http servlet request containing request information
-	 * @param response-Http servlet response containing response information
-	 */
-    public void assignAndUnassign(HttpServletRequest request,
-    		HttpServletResponse response) throws ServletException, IOException {
+    @RequestMapping("/viewSingleProject")
+    public String viewSingleProject(@RequestParam Integer projectId,
+    		Model model) throws ServletException, IOException { 
+    	  ProjectDTO projectDTO = null; 
+    	  try { 
+    		  projectDTO = projectService.getProjectById(projectId);
+    		  model.addAttribute("projectDTO", projectDTO);
+    	  } catch (EmployeeManagementException exception) {
+    		  EmployeeManagementLogger.logger.error(exception); 
+    	  }
+    	  model.addAttribute("returnedProjectDTO", projectDTO);
+    	  model.addAttribute("isUpdated",false);
+    	  return "SingleProjectDisplay";
+      }
+  
+    /**
+     * Displays all projects to the user.
+     * 
+     * @param model
+     * @return AllProjectDisplay -the page where all projects are displayed.
+     * @throws ServletException
+     * @throws IOException
+     */
+    @RequestMapping("/viewAllProject") 
+    public String viewAllProjects(Model model)
+    		throws ServletException, IOException { 
+    	List<ProjectDTO> projects = null;
+    	try { 
+    		projects = projectService.viewAllProject();
+    		model.addAttribute("projects", projects);
+    	} catch (EmployeeManagementException exception) {
+    		EmployeeManagementLogger.logger.error(exception); 
+    	}
+    	return "AllProjectDisplay";
+  }
+  
+    /**
+     * Gets the object to be updated and forward it to the update page.
+     * 
+     * @param projectId
+     * @param model
+     * @return UpdateProject, the page where the object is forwarded.
+     * @throws ServletException
+     * @throws IOException
+     */
+    @RequestMapping("/update")
+    public String update(@RequestParam Integer projectId, Model model) 
+    		throws ServletException, IOException { 
+    	ProjectDTO projectDTO =null; 
+    	try { 
+    		projectDTO = projectService.getProjectById(projectId);
+    		model.addAttribute("projectDTO", projectDTO);
+    	} catch (EmployeeManagementException exception) {
+    		EmployeeManagementLogger.logger.error(exception); 
+    	}
+    	return "UpdateProject";
+    }
+  
+    /**
+     * Updates all the fields of a project.
+     * 
+     * @param project projectDTO object which is to be updated.
+     * @param projectId the ID of the updated project.
+     * @param model
+     * @return SingleProjectDisplay - name of the page which Displays the
+     * 							  updated project.
+     * @throws ServletException
+     * @throws IOException
+     */
+    @RequestMapping("/updateProject")
+    public String updateProject(@ModelAttribute("projectDTO") 
+    		ProjectDTO project, @RequestParam Integer projectId, Model model) 
+    		throws ServletException, IOException { 
+    	boolean isUpdated = false; 
+    	ProjectDTO projectDTO = null;
+    	try { 
+    		if (null != project ) {
+    			projectDTO = projectService.getProjectById(projectId);
+    			if (null != projectDTO ) {
+    				projectDTO.setProjectId(projectId);
+    				projectDTO.setName(project.getName());
+    				projectDTO.setDomainName(project.getDomainName());
+    				projectDTO.setStartDate(project.getStartDate());
+    				projectDTO.setManager(project.getManager());
+    			isUpdated = projectService.updateAllFields(projectDTO);
+    			}
+    		}
+    		model.addAttribute("projectDTO", projectDTO);
+    		model.addAttribute("isUpdated",isUpdated);
+    	} catch (EmployeeManagementException exception) {
+    		EmployeeManagementLogger.logger.error(exception); 
+    	}
+    	return "SingleProjectDisplay";
+    }
+    
+    /**
+     * Gets the project object to assign or un assign employee and forward it to
+     *  the corresponding page.
+     * 
+     * @param projectId to assign or unassign employees.
+     * @param type the type of operation to be performed.
+     * @param model
+     * @return forward page name.
+     * @throws ServletException
+     * @throws IOException
+     */
+	@RequestMapping("/assign&unAssign")
+    public String assignProject(@RequestParam Integer projectId, @RequestParam String type, Model model) throws ServletException, IOException {
 		ProjectDTO projectDTO = null;
-		int projectId = 0;
-		String type = "";
-        Set<EmployeeVO> assignedEmployees = null;
+		Set<EmployeeVO> assignedEmployees = null;
         List<EmployeeVO> allEmployees = null;
-		ProjectService projectService = new ProjectServiceImplementation();
+        String returnPage = "";
         try {
-        	projectId = Integer.parseInt(request.getParameter("projectId"));
         	projectDTO = projectService.getProjectById(projectId);
-        	type = request.getParameter("action");
-        	if( null != projectDTO) {
+        	if (null != projectDTO) {
         		assignedEmployees = projectDTO.getEmployeesVO();
         		allEmployees = projectService.getAllEmployeeDTOs();
-                if (assignedEmployees.isEmpty() 
+        		if (assignedEmployees.isEmpty() 
                 		|| (null == assignedEmployees)) {
                 	assignedEmployees = new HashSet<EmployeeVO>();
                 }
-        	}
-        	if(type.equals("assign")) {
-        		allEmployees.removeAll(assignedEmployees);
-            	request.setAttribute("employees", allEmployees);
-        	    request.getRequestDispatcher("AssignEmployee.jsp")
-        	        .forward(request, response);
-        	} else {
-            	request.setAttribute("employees", assignedEmployees);
-            	request.getRequestDispatcher("UnAssignEmployee.jsp")
-            	    .forward(request, response);
+        		if (type.equals("assign")) {
+            		allEmployees.removeAll(assignedEmployees);
+            		model.addAttribute("employees", allEmployees);
+            		returnPage = "AssignEmployee";
+            	} else {
+            		model.addAttribute("employees", assignedEmployees);
+            		returnPage = "UnAssignEmployee";
+            	}
+        		model.addAttribute("projectId", projectId);
         	}
         } catch (EmployeeManagementException exception) {
             EmployeeManagementLogger.logger.error(exception);
         }
+        return returnPage;
     }
-	
+
 	/**
-	 * Assigns employees to the project.
+	 * Assign Employees to the project.
 	 * 
-	 * @param request- Http servlet request containing request information
-	 * @param response-Http servlet response containing response information
+	 * @param projectId the ID of the project to  which the employees to 
+	 * be assigned.
+	 * @param employeeIds employee IDs  toassign to the project.
+	 * @param model
+	 * @return AssignEmployee- the page to unassign Employees.
+	 * @throws ServletException
+	 * @throws IOException
 	 */
-    public void assignEmployee(HttpServletRequest request,
-    		HttpServletResponse response) throws ServletException, IOException {
-		ProjectService projectService = new ProjectServiceImplementation();
-		int projectId = 0;
-		ProjectDTO projectDTO = null;
-		Set<EmployeeVO> assignedEmployees = null;
-		List<EmployeeVO> employeesToAssign;
-        String message = "Employee Assigned Successfully";
-        String error = "Employee Assign not successful";
-        boolean isUpdated = false;
-        int employeeIds[] = new int[1];
+    @RequestMapping("/assignEmployee")
+    public String assignEmployee(@RequestParam Integer projectId,
+    		@RequestParam("employeeIds") int[] employeeIds, Model model) 
+    		throws ServletException, IOException {
+    	ProjectDTO projectDTO = null;
+        List<EmployeeVO> allEmployees = null;
+        Set<EmployeeVO> assignedEmployees = null;
+        List<EmployeeVO> employeesToAssign; 
         try {
-        	projectId = Integer.parseInt(request.getParameter("projectId"));
         	projectDTO = projectService.getProjectById(projectId);
-        	if( null != projectDTO) {
+        	allEmployees = projectService.getAllEmployeeDTOs();
+        	if ( null != projectDTO) {
         		assignedEmployees = projectDTO.getEmployeesVO();
-        		employeeIds[0] = Integer.parseInt(request
-        				.getParameter("employeeId"));
-        		employeesToAssign = projectService.getEmployeeDTOs(employeeIds);
+        		employeesToAssign 
+        			= projectService.getEmployeeDTOs(employeeIds);
                 if (assignedEmployees.isEmpty() 
                 		|| (null == assignedEmployees)) {
                 	assignedEmployees = new HashSet<EmployeeVO>();
@@ -309,66 +295,57 @@ public class ProjectServlet extends HttpServlet {
                 	assignedEmployees.add(employee);
                 }
                 projectDTO.setEmployeesVO(assignedEmployees);
-                isUpdated = projectService.updateAllFields(projectDTO);
-                request.setAttribute("isUpdated", isUpdated);
-            	request.setAttribute("error", error);
+                projectService.updateAllFields(projectDTO);
+                allEmployees.removeAll(assignedEmployees);
 
-                request.setAttribute("projectDTO", projectDTO);
-                request.setAttribute("message", message);
-
-    	    	request.getRequestDispatcher("Updated.jsp")
-    	    	    .forward(request, response);
         	}
         } catch (EmployeeManagementException exception) {
             EmployeeManagementLogger.logger.error(exception);
         }
+        model.addAttribute("projectId", projectId);
+        model.addAttribute("employees",allEmployees);
+        return "AssignEmployee";
     }
-	
+  
 	/**
-	 * Unassigns employees present in the project.
+	 * UnAssign Employees to the project.
 	 * 
-	 * @param request- Http servlet request containing request information
-	 * @param response-Http servlet response containing response information
+	 * @param projectId the ID of the project from which the employees to 
+	 * be unassigned.
+	 * @param employeeIds employee IDs  to unassign to the project.
+	 * @param model
+	 * @return AssignEmployee- the page to assign Employees.
+	 * @throws ServletException
+	 * @throws IOException
 	 */
-    public void unAssignEmployee(HttpServletRequest request,
-    		HttpServletResponse response) throws ServletException, IOException {
-		ProjectService projectService = new ProjectServiceImplementation();
-		int projectId = 0;
-		ProjectDTO projectDTO = null;
-		Set<EmployeeVO> assignedEmployees = null;
-		List<EmployeeVO> employeesToUnAssign;
-        String message = "Employee UnAssigned Successfully";
-        String error = "Employee UnAssign not successful";
-        boolean isUpdated = false;
-        int employeeIds[] = new int[1];
+    @RequestMapping("/UnAssignEmployee")
+    public String unAssignEmployee(@RequestParam Integer projectId, 
+    		@RequestParam("employeeIds") int[] employeeIds, Model model) 
+    		throws ServletException, IOException {
+    	ProjectDTO projectDTO = null;
+        Set<EmployeeVO> assignedEmployees = null;
+        List<EmployeeVO> employeesToUnAssign; 
         try {
-        	projectId = Integer.parseInt(request.getParameter("projectId"));
         	projectDTO = projectService.getProjectById(projectId);
-        	if( null != projectDTO) {
+        	if ( null != projectDTO) {
         		assignedEmployees = projectDTO.getEmployeesVO();
-        		employeeIds[0] = Integer.parseInt(request
-        				.getParameter("employeeId"));
         		employeesToUnAssign 
-        		    = projectService.getEmployeeDTOs(employeeIds);
+        		= projectService.getEmployeeDTOs(employeeIds);
                 if (assignedEmployees.isEmpty() 
                 		|| (null == assignedEmployees)) {
                 	assignedEmployees = new HashSet<EmployeeVO>();
                 }
                 assignedEmployees.removeAll(employeesToUnAssign);
                 projectDTO.setEmployeesVO(assignedEmployees);
-                isUpdated = projectService.updateAllFields(projectDTO);
-                request.setAttribute("isUpdated", isUpdated);
-            	request.setAttribute("error", error);
+                projectService.updateAllFields(projectDTO);
 
-                request.setAttribute("projectDTO", projectDTO);
-                request.setAttribute("message", message);
-
-    	    	request.getRequestDispatcher("Updated.jsp")
-    	    	    .forward(request, response);
         	}
         } catch (EmployeeManagementException exception) {
             EmployeeManagementLogger.logger.error(exception);
         }
+        model.addAttribute("projectId", projectId);
+        model.addAttribute("employees",assignedEmployees);
+        return "UnAssignEmployee";
     }
-	
+    
 }

@@ -2,14 +2,14 @@
 <html>
     <head>
         <title>Project Management System</title>
-        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="resources/css/style.css">
         
     </head>
     <body>
     <header class="header1">
     <div class="row">
     <div class="logo" style = "float: left;" >
-    <img alt="Logo" src="logo.png">
+    <img alt="Logo" src="resources/css/logo.png">
     <h1>Employee Management System</h1>
     </div>
         <ul class="main-nav">
@@ -18,11 +18,12 @@
         </div>
     </header>
     <div style="display:block;">
-        <h2>Welcome to Project Management System</h2>
+    
+        <h2>Welcome to Project Management System<br>Project Menu</h2>
 
-        <button class="button" ><a href = "CreateProject.jsp">Create</a></button><br><br>
-         <button class="button" ><a href = "ViewProject.jsp">View</a></button><br>
-         <button class="button" ><a href = "index.jsp">Back </a><br></button>
+        <a href = "createNewProject"><button class="button" >Create</button></a><br>
+        <a href = "viewAllProject"><button class="button" >View </button></a><br>
+         <a href = "index.jsp"><button class="button" >Back </button></a><br>
         </div>
     </body>
 </html>

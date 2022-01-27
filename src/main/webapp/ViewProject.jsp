@@ -4,14 +4,14 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="resources/css/style.css">
 <title>View project</title>
 </head>
 <body>
     <header class="header1">
     <div class="row">
     <div class="logo" style = "float: left;" >
-    <img alt="Logo" src="logo.png">
+    <img alt="Logo" src="resources/css/logo.png">
     <h1>Employee Management System</h1>
     </div>
         <ul class="main-nav">
@@ -22,8 +22,7 @@
     </header>
     <div style="display:block;margin:100px auto;">
          <button style="border-radius: 20px;width:400px" class="button"><a style="color:black" href = "viewSingleProject.jsp">View single Project </a></button><br>
-         <form action="ProjectServlet" method="post">
-         <input type="hidden" name="type" value="viewAll">
+         <form action="viewAllProject" method="post">
          <input style="border-radius: 20px;width:400px" class="button" type="submit" value="View all projects">
          </form><br>
          <button><a style="background-color:white;" href = "ProjectMenu.jsp">Back </a><br></button>

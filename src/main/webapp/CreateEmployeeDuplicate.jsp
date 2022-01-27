@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="resources/css/style.css">
     <meta charset="UTF-8">
     <title>Create Employee</title>
     </head>
@@ -17,7 +17,7 @@
     <header class="header1">
     <div class="row">
     <div class="logo" style = "float: left;" >
-    <img alt="Logo" src="logo.png">
+    <img alt="Logo" src="resources/css/logo.png">
     <h1>Employee Management System</h1>
     </div>
         <ul class="main-nav">

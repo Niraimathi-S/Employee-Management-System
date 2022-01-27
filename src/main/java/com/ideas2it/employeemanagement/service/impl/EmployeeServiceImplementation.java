@@ -1,7 +1,6 @@
 /*
  * Copyrights (C) Ideas2IT
  */
-
 package com.ideas2it.employeemanagement.service.impl;
 
 import java.util.ArrayList;
@@ -9,7 +8,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
-import com.ideas2it.employeemanagement.dao.daoimpl.EmployeeDAOImplementation;
+import com.ideas2it.employeemanagement.dao.EmployeeDAO;
 import com.ideas2it.employeemanagement.exception.EmployeeManagementException;
 import com.ideas2it.employeemanagement.model.Address;
 import com.ideas2it.employeemanagement.model.AddressDTO;
@@ -31,9 +30,17 @@ import com.ideas2it.employeemanagement.util.Mapper;
  * @version 1.0
  */
 public class EmployeeServiceImplementation implements EmployeeService{
-    private EmployeeDAOImplementation dao = new EmployeeDAOImplementation();
-    private ProjectService projectService = null;
+    private EmployeeDAO employeeDAO;
+    private ProjectService projectService;
 
+	public void setProjectService(ProjectService projectService) {
+		this.projectService = projectService;
+	}
+    
+	public void setEmployeeDAO(EmployeeDAO employeeDAO) {
+		this.employeeDAO = employeeDAO;
+	}
+	
     /**
      * Validates the given input from the user. 
      *
@@ -55,7 +62,7 @@ public class EmployeeServiceImplementation implements EmployeeService{
             throws EmployeeManagementException { 
         Employee employee = Mapper.EmployeeDTOToEmployee(employeeVO);
         employeeVO 
-                = Mapper.EmployeeToEmployeeDTO(dao.createEmployee(employee));
+                = Mapper.EmployeeToEmployeeDTO(employeeDAO.createEmployee(employee));
         return employeeVO;
     }
 
@@ -67,7 +74,7 @@ public class EmployeeServiceImplementation implements EmployeeService{
      */
     public boolean isEmployeeExist(int employeeId)
             throws EmployeeManagementException {
-        return(null != dao.getEmployeeById(employeeId));
+        return(null != employeeDAO.getEmployeeById(employeeId));
     }
 
     /**
@@ -77,7 +84,7 @@ public class EmployeeServiceImplementation implements EmployeeService{
      */
     public boolean isRecordsEmpty()
             throws EmployeeManagementException {
-        List<Employee> employees = dao.getAllEmployees();
+        List<Employee> employees = employeeDAO.getAllEmployees();
         return employees.isEmpty();
     }
 
@@ -89,7 +96,7 @@ public class EmployeeServiceImplementation implements EmployeeService{
      */
     public boolean checkDuplicateMobileNumber(long mobileNumber)
             throws EmployeeManagementException {
-        return (null != dao.getEmployeeByMobileNumber(mobileNumber));
+        return (null != employeeDAO.getEmployeeByMobileNumber(mobileNumber));
     }
 
     /**
@@ -100,7 +107,7 @@ public class EmployeeServiceImplementation implements EmployeeService{
      */
     public boolean checkDuplicateEmail(String email)
             throws EmployeeManagementException {
-        return (null != dao.getEmployeeByEmail(email));
+        return (null != employeeDAO.getEmployeeByEmail(email));
     }
 
     /**
@@ -109,7 +116,7 @@ public class EmployeeServiceImplementation implements EmployeeService{
      */
     public boolean deleteAllEmployee()
             throws EmployeeManagementException {
-        return dao.deleteAllEmployee();
+        return employeeDAO.deleteAllEmployee();
     }
 
     /**
@@ -119,7 +126,7 @@ public class EmployeeServiceImplementation implements EmployeeService{
      */
     public boolean deleteOneEmployee(EmployeeVO employeeVO)
             throws EmployeeManagementException {
-        return dao.deleteOneEmployee(Mapper.EmployeeDTOToEmployee(employeeVO));
+        return employeeDAO.deleteOneEmployee(Mapper.EmployeeDTOToEmployee(employeeVO));
     }
 
     /**
@@ -131,7 +138,7 @@ public class EmployeeServiceImplementation implements EmployeeService{
     public boolean updateAllFields(EmployeeVO employeeVO)
             throws EmployeeManagementException { 
         Employee employee = Mapper.EmployeeDTOToEmployee(employeeVO);
-        return (null != Mapper.EmployeeToEmployeeDTO(dao.updateEmployee(employee)));
+        return (null != Mapper.EmployeeToEmployeeDTO(employeeDAO.updateEmployee(employee)));
     }
 
     /**
@@ -142,7 +149,7 @@ public class EmployeeServiceImplementation implements EmployeeService{
      */
     public EmployeeVO getEmployeeById(int employeeId)
             throws EmployeeManagementException {
-        Employee employee = dao.getEmployeeById(employeeId);
+        Employee employee = employeeDAO.getEmployeeById(employeeId);
         EmployeeVO employeeVO = null;
         if (null != employee) {
             employeeVO = Mapper.EmployeeToEmployeeDTO(employee);
@@ -158,7 +165,7 @@ public class EmployeeServiceImplementation implements EmployeeService{
      */
     public List<EmployeeVO> viewAllEmployee()
             throws EmployeeManagementException {
-        List<Employee> employees = dao.getAllEmployees();
+        List<Employee> employees = employeeDAO.getAllEmployees();
         List<EmployeeVO> employeeDetails = new ArrayList<EmployeeVO>();
         for (Employee employee : employees) {
             employeeDetails.add(Mapper.EmployeeToEmployeeDTO(employee));

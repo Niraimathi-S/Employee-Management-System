@@ -10,6 +10,9 @@ import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.HashSet;
 
 import com.ideas2it.employeemanagement.model.Address;
@@ -25,6 +28,7 @@ public class Employee {
     private int employeeId;
     private long mobileNumber;
     private float salary;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateOfBirth;
     private String name;
     private String email;

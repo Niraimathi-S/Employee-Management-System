@@ -5,7 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Update all fields</title>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="resources/css/style.css">
 </head>
 <body>
 <div>

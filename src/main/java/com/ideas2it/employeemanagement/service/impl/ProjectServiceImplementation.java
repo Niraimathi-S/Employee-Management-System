@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
+import com.ideas2it.employeemanagement.dao.ProjectDAO;
 import com.ideas2it.employeemanagement.dao.daoimpl.ProjectDAOImplementation;
 import com.ideas2it.employeemanagement.exception.EmployeeManagementException;
 import com.ideas2it.employeemanagement.model.Address;
@@ -31,9 +32,17 @@ import com.ideas2it.employeemanagement.util.ProjectMapper;
  * @version 1.0 12-11-2021
  */
 public class ProjectServiceImplementation implements ProjectService{
-    private ProjectDAOImplementation dao = new ProjectDAOImplementation();
-    private EmployeeService employeeService = null;
+    private ProjectDAO projectDAO;
+    private EmployeeService employeeService;
 
+	public void setEmployeeService(EmployeeService employeeService) {
+		this.employeeService = employeeService;
+	}
+  
+	public void setProjectDAO(ProjectDAO projectDAO) {
+		this.projectDAO = projectDAO;
+	}
+	
     /**
      * Validates the given input from the user. 
      *
@@ -55,7 +64,7 @@ public class ProjectServiceImplementation implements ProjectService{
             throws EmployeeManagementException { 
         Project project = ProjectMapper.ProjectDTOToProject(projectDTO);
         projectDTO 
-                = ProjectMapper.ProjectToProjectDTO(dao.createProject(project));
+                = ProjectMapper.ProjectToProjectDTO(projectDAO.createProject(project));
         return projectDTO;
     }
 
@@ -67,7 +76,7 @@ public class ProjectServiceImplementation implements ProjectService{
      */
     public boolean isProjectExist(int projectId)
             throws EmployeeManagementException {
-        return(null != dao.getProjectById(projectId));
+        return(null != projectDAO.getProjectById(projectId));
     }
 
     /**
@@ -77,7 +86,7 @@ public class ProjectServiceImplementation implements ProjectService{
      */
     public boolean isRecordsEmpty()
             throws EmployeeManagementException {
-        List<Project> projects = dao.getAllProjects();
+        List<Project> projects = projectDAO.getAllProjects();
         return projects.isEmpty();
     }
 
@@ -86,7 +95,7 @@ public class ProjectServiceImplementation implements ProjectService{
      *
      */
     public boolean deleteAllProject() throws EmployeeManagementException {
-        return dao.deleteAllProject();
+        return projectDAO.deleteAllProject();
     }
 
     /**
@@ -96,7 +105,7 @@ public class ProjectServiceImplementation implements ProjectService{
      */
     public boolean deleteOneProject(ProjectDTO projectDTO)
             throws EmployeeManagementException {
-        return dao.deleteOneProject(ProjectMapper.ProjectDTOToProject(projectDTO));
+        return projectDAO.deleteOneProject(ProjectMapper.ProjectDTOToProject(projectDTO));
     }
 
     /**
@@ -108,7 +117,7 @@ public class ProjectServiceImplementation implements ProjectService{
     public boolean updateAllFields(ProjectDTO projectDTO)
             throws EmployeeManagementException { 
         Project project = ProjectMapper.ProjectDTOToProject(projectDTO);
-        return (null != ProjectMapper.ProjectToProjectDTO(dao.updateProject(project)));
+        return (null != ProjectMapper.ProjectToProjectDTO(projectDAO.updateProject(project)));
     }
 
     /**
@@ -119,7 +128,7 @@ public class ProjectServiceImplementation implements ProjectService{
      */
     public ProjectDTO getProjectById(int projectId)
             throws EmployeeManagementException {
-        Project project = dao.getProjectById(projectId);
+        Project project = projectDAO.getProjectById(projectId);
         ProjectDTO projectDTO = null;
         if (null != project) {
             projectDTO = ProjectMapper.ProjectToProjectDTO(project);
@@ -134,7 +143,7 @@ public class ProjectServiceImplementation implements ProjectService{
      */
     public List<ProjectDTO> viewAllProject()
             throws EmployeeManagementException {
-        List<Project> projects = dao.getAllProjects();
+        List<Project> projects = projectDAO.getAllProjects();
         List<ProjectDTO> projectDetails = new ArrayList<ProjectDTO>();
         for (Project project : projects) {
             projectDetails.add(ProjectMapper.ProjectToProjectDTO(project));
@@ -172,9 +181,7 @@ public class ProjectServiceImplementation implements ProjectService{
      */
     public List<EmployeeVO> getEmployeeDTOs(int[] employeeIds)
             throws EmployeeManagementException {
-        if (null == employeeService) {
-            employeeService = new EmployeeServiceImplementation();
-        }
+
         return employeeService.getEmployeeDTOs(employeeIds); 
     }
     
@@ -186,9 +193,7 @@ public class ProjectServiceImplementation implements ProjectService{
      */
     public List<EmployeeVO> getAllEmployeeDTOs()
             throws EmployeeManagementException {
-        if (null == employeeService) {
-            employeeService = new EmployeeServiceImplementation();
-        }
+ 
         return employeeService.viewAllEmployee(); 
     }
 

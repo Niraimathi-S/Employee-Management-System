@@ -4,14 +4,43 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="resources/css/style.css">
 <title>All Project Display</title>
 </head>
+<style>
+.view-single {
+	border-color:azure;
+	background-color:azure;
+	border-style: none;
+	color:blue;
+	text-align:center;
+}
+
+.view-single:hover{
+	text-decoration:underline;
+	color:purple;
+}
+.button{
+width:260px;
+}
+.button:hover{
+background-color:#4dc6f5;
+}
+.table-heading {
+background-color:rgb(94,116,192);
+}
+.table-heading th{
+color:white;
+}
+table{
+background-color:white;
+}
+</style>
 <body class="body">
     <header class="header1">
     <div class="row">
     <div class="logo" style = "float: left;" >
-    <img alt="Logo" src="logo.png">
+    <img alt="Logo" src="resources/css/logo.png">
     <h1>Employee Management System</h1>
     </div>
         <ul class="main-nav">
@@ -22,56 +51,41 @@
     </header>
     <h2>Project list</h2>
 <div style=" display:block; font-size:20px; align-items:left;">
-    <%List<ProjectDTO> projects = (ArrayList<ProjectDTO>)request.getAttribute("projects");%>
+    <%List<ProjectDTO> projects = (ArrayList<ProjectDTO>)request.getAttribute("projects");
+      int i=1;%>
         <%if ((null == projects) || (projects.isEmpty())) {%>
-        sorry..Nothing to display!!.<br>  
-        <%} else {
-            for(ProjectDTO projectDTO:projects) {%>
-        <table style="margin-left:40%;text-align:left;">
-        <tr>
-           <td>Project ID     :<%=projectDTO.getProjectId()%></td>
+        <div style="color:black">sorry..Nothing to display!!.</div>  
+        <%} else {%> 
+        <table BORDER="1" style="margin:0 auto;text-align:center;border-spacing:10px 0;border-collapse:collapse;">
+        <tr class="table-heading">
+              <th>S.NO</th>
+              <th>PROJECT ID</th>
+              <th>PROJECT NAME</th>
+              <th>MANAGER</th>
+              <th>START DATE</th>
+              <th>DOMAIN</th>
         </tr>
+        <%for(ProjectDTO projectDTO:projects) {%>
         <tr>
-           <td>Project Name   :<%=projectDTO.getName()%></td>
-           <td>Start Date     :<%=projectDTO.getStartDate()%></td>
-        </tr>
-        <tr>
-           <td>Project Manager:<%=projectDTO.getManager()%></td>
-           <td>Domain         :<%=projectDTO.getDomainName()%></td>
-        </tr>
-
-        <%if (!projectDTO.getEmployeesVO().isEmpty()) {%>
-        <tr>
-          <td> Employees:</td>
-          <td>        
-          <table border="1">
-            <tr>
-              <th>Employee Id</th>
-              <th>Name</th>
-              <th>DOB</th>
-              <th>Email</th>
-              <th>Mobile number</th>
-              <th>Salary</th>
+              <td><%=i %></td>
+              <td><%=projectDTO.getProjectId() %></td>
+              <td><%=projectDTO.getName() %></td>
+              <td><%=projectDTO.getManager() %></td>
+              <td><%=projectDTO.getStartDate() %></td>
+              <td><%=projectDTO.getDomainName() %></td>
+              <td>
+              <form action = "viewSingleProject" method = "post" style="text-align:center;">
+              <input type = "hidden" name = "projectId" value="<%=projectDTO.getProjectId() %>" pattern = "[1-9][0-9]{0,4}" required/><br>
+              <a><input class="view-single" type = "submit" value ="view details"/></a><br><br>
+               </form>
+             </td>
             </tr>
-        <%for (EmployeeVO employeeVO:projectDTO.getEmployeesVO()){ %>
-            <tr>
-              <td><%=employeeVO.getEmployeeId()%></td>
-              <td><%=employeeVO.getName()%></td>
-              <td><%=employeeVO.getDateOfBirth()%></td>
-              <td><%=employeeVO.getEmail()%></td>
-              <td><%=employeeVO.getMobileNumber()%></td>
-              <td><%=employeeVO.getSalary()%></td>
-            </tr>
-        <%} %>
+        <% i++;
+        } %>
         </table>
-        </td>
-        </tr>
         <%} %>
-        </table>
-        <br><br><br>
-        <%} %>
-        <%} %>
-        <a href = "ProjectMenu.jsp">Main menu </a><br>
+        <br>
+        <a href="ProjectMenu.jsp"><button class="button">Project Menu</button></a>
         </div>
 </body>
 </html>

@@ -6,13 +6,23 @@
 <head>
 <meta charset="UTF-8">
 <title>Single project Display</title>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="resources/css/style.css">
 </head>
+<style>
+.table-heading {
+background-color:rgb(94,116,192);
+}
+.table-heading th{
+color:white;
+}
+.button{
+width:200px;}
+</style>
 <body>
     <header class="header1">
     <div class="row">
     <div class="logo" style = "float: left;" >
-    <img alt="Logo" src="logo.png">
+    <img alt="Logo" src="resources/css/logo.png">
     <h1>Employee Management System</h1>
     </div>
         <ul class="main-nav">
@@ -21,12 +31,21 @@
         </ul>
         </div>
     </header>
+    <h2>Single project view</h2>
 <div class="display-single-div">
-    <%ProjectDTO projectDTO = (ProjectDTO)request.getAttribute("returnedProjectDTO");%>
+    <%ProjectDTO projectDTO = (ProjectDTO)request.getAttribute("projectDTO");%>
         <%if (null == projectDTO) {%>
         <%="sorry..No such project ID exists!!." %><br>  
         <%} else {%>
-        <table style="margin: 100px auto auto auto;text-align:left;">
+                <div style="color:black;margin-left:40%">
+
+        <%boolean isUpdated = (Boolean)request.getAttribute("isUpdated");
+        if(isUpdated) {%>
+        <%="Project Updated successfully." %>  
+        <%}%></div>
+        <%="Project Details:" %><br>
+        <table style="margin:0px auto;text-align:left;border-spacing: 10px;">
+
         <tr>
            <td>Project Details:</td>
         </tr>
@@ -42,25 +61,19 @@
            <td>Domain         :<%=projectDTO.getDomainName()%></td>
         </tr>
         </table>
-       <form action = "ProjectServlet" method = "post" style="margin:auto;">
-       <input type="hidden" name="type" value="update">
+       <form action = "update" method = "post" style="margin:auto;">
        <input type = "hidden" name = "projectId" value=<%=projectDTO.getProjectId() %> pattern = "[1-9][0-9]{0,4}"/>
-        <input type = "hidden" name = "name" value=<%=projectDTO.getName()%> pattern = "([a-zA-Z]{3,}([\\s]{1}[a-zA-Z]+)*){0,100}" /> 
-        <input type = "hidden" name = "domain" value=<%=projectDTO.getDomainName()%> pattern = "([a-zA-Z]{3,}([\\s]{1}[a-zA-Z]+)*){0,100}" /> 
-        <input type = "hidden" value=<%=projectDTO.getStartDate()%> value="2000-01-01"  name = "start_date" /> 
-        <input type = "hidden" name = "manager" value=<%=projectDTO.getManager()%> pattern = "([a-zA-Z]{3,}([\\s]{1}[a-zA-Z]+)*){0,100}" />  
-       <input type = "submit" value = "Update"/><br/>
+       <input class="button" type = "submit" value = "Update"/><br/>
        </form>
-       <form action = "ProjectServlet" method = "post">
-       <input type="hidden" name="type" value="delete">
+       <form action = "deleteProject" method = "post">
        <input type = "hidden" name = "projectId" value=<%=projectDTO.getProjectId() %> pattern = "[1-9][0-9]{0,4}"/> 
-       <input type = "submit" value = "Delete"/><br />
+       <input class="button" type = "submit" value = "Delete"/><br />
        </form>
         <%if (!projectDTO.getEmployeesVO().isEmpty()) {%>
         <br>
             Employees:
             <table border="1" style="margin: 0px auto;">
-            <tr>
+            <tr class="table-heading">
               <th>Employee Id</th>
               <th>Name</th>
               <th>DOB</th>
@@ -80,21 +93,20 @@
         <%} %>
         </table>
         <%} %>
-       <form action = "ProjectServlet" method = "get">
-       <input type="hidden" name="type" value="assign&unassign">
+        <br>
+       <form action = "assign&unAssign" method = "get">
+       <input type="hidden" name="type" value="assign">
        <input type = "hidden" name = "projectId" value="<%=projectDTO.getProjectId() %>" pattern = "[1-9][0-9]{0,4}"/> 
-       <input type="hidden" name="action" value="assign">
-       <input type = "submit" value = "Assign"/><br />
+       <input class="button" type = "submit" value = "Assign"/>
        </form>
-       <form action = "ProjectServlet" method = "get">
-       <input type="hidden" name="type" value="assign&unassign">
+       <form action = "assign&unAssign" method = "get">
+       <input type="hidden" name="type" value="unAssign">
        <input type = "hidden" name = "projectId" value="<%=projectDTO.getProjectId() %>" pattern = "[1-9][0-9]{0,4}"/> 
-       <input type="hidden" name="action" value="unassign">
-       <input type = "submit" value = "UnAssign"/><br />
-       </form>
+       <input class="button" type = "submit" value = "UnAssign"/><br />
+       </form><br>
        <%} %>
-       <button><a href="viewSingleProject.jsp">Back</a></button>
-        <button><a href="ProjectMenu.jsp">Project Menu</a></button>
+       <a href="viewAllProject"><button class="button">Back</button></a>
+       <a href="ProjectMenu.jsp"><button class="button">Project Menu</button></a>
 </div>
 </body>
 </html>

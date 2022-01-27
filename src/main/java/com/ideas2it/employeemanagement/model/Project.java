@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.ideas2it.employeemanagement.model.Employee;
 
 /**
@@ -20,6 +22,7 @@ import com.ideas2it.employeemanagement.model.Employee;
  */
 public class Project {
     private int projectId;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
     private String name;
     private String manager;

@@ -1,17 +1,28 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" import="com.ideas2it.employeemanagement.model.EmployeeVO,java.time.LocalDate"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Update all fields</title>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="resources/css/style.css">
 </head>
+<style>
+.button{
+	width:200px;
+	margin:0 auto;
+}
+
+.display-single-div{
+margin:0 36%;
+}
+</style>
 <body>
     <header class="header1">
     <div class="row">
     <div class="logo" style = "float: left;" >
-    <img alt="Logo" src="logo.png">
+    <img alt="Logo" src="resources/css/logo.png">
     <h1>Employee Management System</h1>
     </div>
         <ul class="main-nav">
@@ -20,21 +31,38 @@
         </ul>
         </div>
     </header>
-<div>
- <form action = "EmployeeServlet" class = "form" method = "get">
-         <input type="hidden" name="type" value="updateAllFields">
-         <input type = "hidden" name = "employeeId" value=<%=request.getParameter("employeeId")%> pattern = "[1-9][0-9]{0,4}"/><br />
-         Name: <input type = "text" name = "name" value=<%=request.getParameter("name")%> pattern = "([a-zA-Z]{3,}([\\s]{1}[a-zA-Z]+)*){0,100}" /><br />
-         EmailId: <input type = "email" name = "email" value=<%=request.getParameter("email")%> pattern = "[a-zA-Z][\\w&&[^_]]{2,}([#$%&*!?\\.\\-_]{1}[\\w&&[^_]]+)*?@[a-zA-Z][a-zA-Z0-9]+ 
-([\\.\\-]{1}[a-zA-Z0-9]+){0,4}.[\\w]{2,5}" /><br />
-         Date of Birth: <input type = "date" value="2000-01-01" value=<%=request.getParameter("date_of_birth")%> name = "date_of_birth" /><br />
-         Mobile Number: <input type = "tel" value=<%=request.getParameter("mobile_number")%> name = "mobile_number" pattern = "^[6-9][0-9]{9}" /> <br />
-         Salary: <input type = "number" value=<%=request.getParameter("salary") %> name = "salary" pattern = "[0-9]+([\\.][0-9]{0,4})?" /> <br />
-         <input type = "submit" value = "Submit" />
-         <input type="reset" value="Reset">
-         <input type ="button" value = "Back" onclick="history.back()"/>
-         <button><a href="EmployeeMenu.jsp">Employee Main menu</a></button>       
- </form>
+<h2>Update Employee</h2>
+<div class="display-single-div">
+
+ <form:form action = "updateAllFields" class = "form" method = "get" modelAttribute = "employeeVO">
+       <form:input type = "hidden" path = "employeeId" pattern = "[1-9][0-9]{0,4}"/> 
+         <table>
+         
+         <tr><td>Name         :</td><td> <form:input type = "text" path="name" required = "required" pattern = "([a-zA-Z]{3,}([\\s]{1}[a-zA-Z]+)*){0,100}" /></td></tr>
+         <tr><td>EmailId      :</td><td>  <form:input type = "email" path = "email" required = "required" pattern = "[a-zA-Z][\\w&&[^_]]{2,}([#$%&*!?\\.\\-_]{1}[\\w&&[^_]]+)*?@[a-zA-Z][a-zA-Z0-9]+ 
+([\\.\\-]{1}[a-zA-Z0-9]+){0,4}.[\\w]{2,5}" /></td></tr>
+        
+        <tr><td> </td><td><div style="color:red">
+        <%Boolean isDublicateEmail = (Boolean)request.getAttribute("isDublicateEmail");
+        if(isDublicateEmail) {%>
+        <%="This Email id already exists!!" %>  
+        <%}%>
+        </div></td></tr>
+        <tr><td> Date of Birth:</td><td>  <form:input type = "date" path = "dateOfBirth" required = "required" /></td></tr>
+         <tr><td>Mobile Number:</td><td>  <form:input type = "tel" path = "mobileNumber" required = "required" pattern = "^[6-9][0-9]{9}" /> </td></tr>
+        <tr><td> </td><td><div style="color:red">
+        <%Boolean isDublicateMobileNumber = (Boolean)request.getAttribute("isDublicateMobileNumber");
+        if(isDublicateMobileNumber) {%>
+        <%="This mobile number already exists!!" %>  
+        <%}%>
+        </div></td></tr>
+         <tr><td>Salary       :</td><td>  <form:input type = "number" path = "salary" required = "required"  pattern = "[0-9]+([\\.][0-9]{0,4})?" /></td></tr>
+         </table>
+           <br><input class="button" type = "submit" value = "Submit"/>
+         <input class="button" style="margin-left:70px;" type="submit" formaction="viewSingle" value="Back"><br>      
+ </form:form>
+
+        <br> <button class="button" style="width:300px;margin-left:200px:"><a href="EmployeeMenu.jsp">Employee menu</a></button>
  </div>
 </body>
 </html>

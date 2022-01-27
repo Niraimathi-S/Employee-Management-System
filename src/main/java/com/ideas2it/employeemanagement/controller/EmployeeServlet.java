@@ -5,16 +5,19 @@
 package com.ideas2it.employeemanagement.controller;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ideas2it.employeemanagement.exception.EmployeeManagementException;
 import com.ideas2it.employeemanagement.logger.EmployeeManagementLogger;
@@ -22,321 +25,277 @@ import com.ideas2it.employeemanagement.model.AddressDTO;
 import com.ideas2it.employeemanagement.model.EmployeeVO;
 import com.ideas2it.employeemanagement.model.ProjectDTO;
 import com.ideas2it.employeemanagement.service.EmployeeService;
-import com.ideas2it.employeemanagement.service.impl.EmployeeServiceImplementation;
 
 /**
  * Performs Employee management system's employee side functions. 
  * It gets inputs from the corresponding JSP pages through HttpServlet
  *  and performs appropriate functions.
+ *  
+ *  @author Niraimathi S
+ *  @version 1.2
  */
+@Controller
 public class EmployeeServlet extends HttpServlet {
-
 	private static final long serialVersionUID = 1L;
-	
-	/**
-	 * This method handles the Http GET requests. It gets the request from the 
-	 * user and Forward it the appropriate methods.  
-	 *  
-	 * @param request- Http servlet request containing request information
-	 * @param response-Http servlet response containing response information
-	 */
-	protected void doGet(HttpServletRequest request, 
-			HttpServletResponse response) throws ServletException, IOException {
-		String types = request.getParameter("type");  
-
-		switch (types) {
-		case "AddAddress" :
-			addAddress(request,response);
-			break;
-		case "DeleteAddress" :
-			deleteAddress(request,response);
-			break;
-		case "update" :
-			updateAddress(request,response);
-			break;
-		case "updateAllFields" :
-			updateAllFields(request,response);
-			break;
-		case "assign&unassign":
-			assignAndUnassign(request, response);
-			break;
-		case "assign":
-			assignProject(request, response);
-			break;
-		case "unassign":
-			unAssignProject(request, response);
-			break;
-		}
-		
+	EmployeeService employeeService;
+	public void setEmployeeService(EmployeeService employeeService) {
+		this.employeeService = employeeService;
 	}
 	
 	/**
-	 * This method handles the Http POST requests. It gets the request from the 
-	 * user and Forward it the appropriate methods.  
-	 *  
-	 * @param request- Http servlet request containing request information
-	 * @param response-Http servlet response containing response information
-	 */
-	protected void doPost(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-		String types = request.getParameter("type");  
-
-		switch (types) {
-		case "create" :
-			createEmployee(request,response);
-			break;
-		case "viewSingle" :
-			viewSingleEmployee(request,response);
-			break;
-		case "viewAll" :
-			viewAllEmployees(request,response);
-			break;
-		case "delete" :
-			deleteEmployee(request,response);
-			break;
-		//case "AddAddress" :
-			//addAddress(request,response);
-			//break;
-		case "update" :
-			updateAddress(request,response);
-			break;
-		}		
-	}
-
-	/**
-	 * Creates a new Employee using the data retrieved from the user.
+	 * Shows index page.
 	 * 
-	 * @param request- Http servlet request containing request information
-	 * @param response-Http servlet response containing response information
+	 * @return- index page
 	 */
-	public void createEmployee(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-		AddressDTO addressDTO = null;
-		EmployeeVO employeeVO = new EmployeeVO(request.getParameter("name"),
-				request.getParameter("email"),
-				Long.parseLong(request.getParameter("mobile_number")),
-				LocalDate.parse(request.getParameter("date_of_birth")),
-				Float.parseFloat(request.getParameter("salary")));
-        addressDTO = new AddressDTO(request.getParameter("door_number"),
-        		request.getParameter("street"),request.getParameter("city"),
-        		request.getParameter("state"),request.getParameter("country"),
-        		Integer.parseInt(request.getParameter("pincode")));  
-        Set<AddressDTO> addressList = new HashSet<AddressDTO>();
-        addressList.add(addressDTO);
-        employeeVO.setaddressesDTO(addressList);
-        EmployeeService employeeService = new EmployeeServiceImplementation();
+	@RequestMapping(value = "/")
+	public String showIndex() {
+		return "index";
+	}
+	
+	/**
+	 * Creates a new employee from the values given by the user.
+	 * 
+	 * @param employeeVO EmployeeVO object with values given by the user.
+	 * @param model Contains the objects of the web page.
+	 * @return name of the JSP page to display values.
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/save")
+	public String createEmployee(@ModelAttribute("employeeVO")
+			EmployeeVO employeeVO, Model model) 
+			throws ServletException, IOException  {
         EmployeeVO returnedEmployee = null;
-        try {
-        	returnedEmployee = employeeService.createEmployee(employeeVO);
-        	request.setAttribute("returnedEmployee", returnedEmployee);
-        	request.getRequestDispatcher("createEmployee.jsp")
-        	    .forward(request, response);
+        AddressDTO addressDTO =  employeeVO.getAddressDTO();
+        boolean isDublicateEmail =  false;
+        boolean isDublicateMobileNumber = false;
+    	try {
+    		isDublicateMobileNumber = employeeService
+    			.checkDuplicateMobileNumber(employeeVO.getMobileNumber());
+    		isDublicateEmail = employeeService
+    			.checkDuplicateEmail(employeeVO.getEmail());
+    		if ((true != isDublicateMobileNumber) 
+    				&& (true != isDublicateEmail)) {
+				Set<AddressDTO> addressList = new HashSet<AddressDTO>();
+				addressList.add(addressDTO);
+				employeeVO.setaddressesDTO(addressList);
+				returnedEmployee = employeeService
+					.createEmployee(employeeVO);
+    		}
         } catch (EmployeeManagementException exception) {
             EmployeeManagementLogger.logger.error(exception);
         }
+		model.addAttribute("isDublicateMobileNumber", isDublicateMobileNumber);
+    	model.addAttribute("isDublicateEmail", isDublicateEmail);
+    	model.addAttribute("employeeVO", employeeVO);
+    	model.addAttribute("returnedEmployee", returnedEmployee);
+        return "CreateEmployee";
 	}
 	
 	/**
-	 * Displays a single employee to the user.
+	 * Creates a empty employeeVO object and forward it to the create
+	 *  employee page which is to be used for creation of an new Employee.
 	 * 
-	 * @param request- Http servlet request containing request information
-	 * @param response-Http servlet response containing response information
+	 * @param model
+	 * @return
 	 */
-	public void viewSingleEmployee(HttpServletRequest request, 
-			HttpServletResponse response) throws ServletException, IOException {
-		EmployeeVO employeeVO = null;
-		int employeeId = 0;
-        EmployeeService employeeService = new EmployeeServiceImplementation();
-        try {
-        	employeeId = Integer.parseInt(request.getParameter("employeeId"));
-        	employeeVO = employeeService.getEmployeeById(employeeId);
-        	request.setAttribute("returnedEmployee", employeeVO);
-        	request.getRequestDispatcher("SingleEmployeeDisplay.jsp")
-        	    .forward(request, response);
-        } catch (EmployeeManagementException exception) {
-            EmployeeManagementLogger.logger.error(exception);
-        }
+	@RequestMapping("/CreateNewEmployee")
+    public String CreateNewEmployee(Model model){
+		model.addAttribute("employeeVO",new EmployeeVO());
+		model.addAttribute("isDublicateMobileNumber", false);
+		model.addAttribute("returnedEmployee", null);
+		model.addAttribute("isDublicateEmail", false);
+		return "CreateEmployee";
 	}
-	
-	/**
-	 * Displays all the Employees the user.
-	 * 
-	 * @param request- Http servlet request containing request information
-	 * @param response-Http servlet response containing response information
-	 */
-	public void viewAllEmployees(HttpServletRequest request, 
-			HttpServletResponse response) throws ServletException, IOException {
-        List<EmployeeVO> employees = null;
-        EmployeeService employeeService = new EmployeeServiceImplementation();
-        try {
-            employees = employeeService.viewAllEmployee();
-        	request.setAttribute("Employees", employees);
-        	request.getRequestDispatcher("AllEmployeeDisplay.jsp")
-        	    .forward(request, response);
-        } catch (EmployeeManagementException exception) {
-            EmployeeManagementLogger.logger.error(exception);
-        }
-	}
-
-	/**
-	 * Deletes single employee sing employeeId get from the user.
-	 * 
-	 * @param request- Http servlet request containing request information
-	 * @param response-Http servlet response containing response information
-	 */
-	public void deleteEmployee(HttpServletRequest request, 
-			HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		int idToDelete = 0;
-        String message = "Employee Deleted Successfully";
-        String error = "Employee not Deleted!!";
-        boolean isRecordDeleted = false;
-		EmployeeVO employeeVO = null;
-        EmployeeService employeeService = new EmployeeServiceImplementation();
-        try {
-        	idToDelete = Integer.parseInt(request.getParameter("employeeId"));
-        	employeeVO = employeeService.getEmployeeById(idToDelete);
-        	if (null != employeeVO) {
-        		isRecordDeleted = employeeService.deleteOneEmployee(employeeVO);
-        	}
-        	request.setAttribute("returnedEmployee", employeeVO);
-        	request.setAttribute("isUpdated", isRecordDeleted);
-        	request.setAttribute("message", message);
-        	request.setAttribute("error", error);
-	    	request.getRequestDispatcher("Updated.jsp")
-	    	    .forward(request, response);
-        } catch (EmployeeManagementException exception) {
-            EmployeeManagementLogger.logger.error(exception);
-        }
-	}
-	
-	/**
-	 * Perform Address updation based on user's choice and forward the data to 
-	 * the appropriate JSP pages.
-	 *  
-	 * @param request- Http servlet request containing request information
-	 * @param response-Http servlet response containing response information
-	 */
-    public void updateAddress(HttpServletRequest request, 
-    		HttpServletResponse response) throws ServletException, IOException {
-        EmployeeService employeeService = new EmployeeServiceImplementation();
-        try {
-            EmployeeVO employeeVO = employeeService.getEmployeeById(Integer
-        		.parseInt(request.getParameter("employeeId")));
-            request.setAttribute("returnedEmployee", employeeVO);
-	        request.getRequestDispatcher("deleteAddress.jsp")
-	    	    .forward(request, response);
-        } catch (EmployeeManagementException exception) {
-            EmployeeManagementLogger.logger.error(exception);
-        }
-    }
     
 	/**
-	 * Update all fields in an Employee which is selected by using employeeId
-	 * given by the user.
-	 * @param request- Http servlet request containing request information
-	 * @param response-Http servlet response containing response information
+	 * Displays a single employee to the user
+	 * 
+	 * @param employeeId -employee ID to view a single employee.
+	 * @param model model Contains the objects of the web page
+	 * @return JSP page to display the Employee.
+	 * @throws ServletException
+	 * @throws IOException
 	 */
-    public void updateAllFields(HttpServletRequest request, 
-    		HttpServletResponse response) throws ServletException, IOException {
-        boolean isUpdated = false;
+	@RequestMapping("/viewSingle")
+	public String viewSingleEmployee(@RequestParam Integer employeeId, 
+			Model model) throws ServletException, IOException {
 		EmployeeVO employeeVO = null;
-        int employeeId = 0;
-        EmployeeService employeeService = new EmployeeServiceImplementation();
-        String message =  "Updated successfully";
-        String error = "Update not successfull";
         try {
-        	employeeId = Integer.parseInt(request.getParameter("employeeId"));
         	employeeVO = employeeService.getEmployeeById(employeeId);
-        	request.setAttribute("returnedEmployee", employeeVO);
-        	if (null != employeeVO) {
-                employeeVO.setEmployeeId(employeeId);
-        		employeeVO.setName(request.getParameter("name"));
-        		employeeVO.setDateOfBirth(LocalDate.parse(request
-        				.getParameter("date_of_birth")));
-        		employeeVO.setEmail(request.getParameter("email"));
-        		employeeVO.setSalary(Float.parseFloat(request
-        				.getParameter("salary")));
-        		employeeVO.setMobileNumber(Long.parseLong(request
-        				.getParameter("mobile_number")));
-        		System.out.println("employeeVO"+employeeVO);
-                isUpdated = employeeService.updateAllFields(employeeVO);
-        		System.out.println("isUpdated"+isUpdated);
-
-        	}
-        	request.setAttribute("message", message);
-        	request.setAttribute("error", error);
-
-        	request.setAttribute("isUpdated", isUpdated);
-        	request.getRequestDispatcher("Updated.jsp")
-        	    .forward(request, response);
         } catch (EmployeeManagementException exception) {
             EmployeeManagementLogger.logger.error(exception);
         }
+		model.addAttribute("returnedEmployee",employeeVO);
+        return "SingleEmployeeDisplay";
+	}
+	
+	/**
+	 * Displays all employees in the Database.
+	 * 
+	 * @param model model Contains the objects of the web page.
+	 * @return Name of the page where the employees are displayed.
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	@RequestMapping("/viewAll")
+	public String viewAllEmployees(Model model) 
+			throws ServletException, IOException {
+        List<EmployeeVO> employees = null;
+        try {
+            employees = employeeService.viewAllEmployee();
+        } catch (EmployeeManagementException exception) {
+            EmployeeManagementLogger.logger.error(exception);
+        }
+		model.addAttribute("Employees",employees);
+        return "AllEmployeeDisplay";
 	}
 	
     /**
-     * Add a new address to the Employee.
-     *
-     * @param employeeId-employeeId to add new address to the employee.
+     * Deletes a single Employee using Employee ID.
+     * 
+     * @param employeeId to delete an employee.
+     * @param model Contains the objects of the web page
+     * @return page where the response of the method to be displayed.
+     * @throws ServletException
+     * @throws IOException
      */
-    public void addAddress(HttpServletRequest request, 
-    		HttpServletResponse response) throws ServletException, IOException {
-        boolean isUpdated = false;
-        EmployeeVO employeeVO = null;
-        int employeeId = 0;
-        String message = "Address Added Successfully";
-        String error = "Address not Added!!";
-    	EmployeeService employeeService = new EmployeeServiceImplementation();
-    	try {
-        	employeeId = Integer.parseInt(request.getParameter("employeeId"));
-            employeeVO = employeeService.getEmployeeById(employeeId);
+	@RequestMapping("/delete")
+	public String deleteEmployee(@RequestParam Integer employeeId, 
+			Model model) throws ServletException, IOException {
+        List<EmployeeVO> employees = null;
+		EmployeeVO employeeVO = null;
+        try {
+        	employeeVO = employeeService.getEmployeeById(employeeId);
+        	
         	if (null != employeeVO) {
-
-                AddressDTO addressDTO = new AddressDTO(
-                    request.getParameter("door_number"), 
-                    request.getParameter("street"), request.getParameter("city"),
-                    request.getParameter("state"),
-                    request.getParameter("country"),
-                    Integer.parseInt(request.getParameter("pincode")));
-                Set<AddressDTO> addresses = employeeVO.getaddressesDTO();
-                addresses.add(addressDTO);
-                employeeVO.setaddressesDTO(addresses);
-                isUpdated = employeeService.updateAllFields(employeeVO);
+        		employeeService.deleteOneEmployee(employeeVO);
+        		employees = employeeService.viewAllEmployee();
         	}
-        	request.setAttribute("isUpdated", isUpdated);
-        	request.setAttribute("message", message);
-        	request.setAttribute("error", error);
-	    	request.getRequestDispatcher("Updated.jsp")
-	    	    .forward(request, response);
-    	} catch (EmployeeManagementException exception) {
+        } catch (EmployeeManagementException exception) {
             EmployeeManagementLogger.logger.error(exception);
         }
+        model.addAttribute("Employees",employees);
+		return "AllEmployeeDisplay";
+	}
+	
+	/**
+	 * Create a new AddressDTo object and forward it to the add address page 
+	 * to add a new address to the employee.
+	 * 
+	 * @param employeeId to add a new address to the employee.
+	 * @param model Contains the objects of the web page
+	 * @return Name of the page which the response is being redirected.
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	@RequestMapping("/updateAddress")
+    public String updateAddress(@RequestParam Integer employeeId, 
+    		Model model) throws ServletException, IOException {
+		model.addAttribute("employeeId", employeeId);
+		model.addAttribute("addressDTO", new AddressDTO());
+		return "AddAddress";
     }
     
 	/**
-	 * Delete an address from an Employee.
+	 * Check an employee ID exist in the database and forward it to updation.
 	 * 
-	 * @param request- Http servlet request containing request information
-	 * @param response-Http servlet response containing response information
+	 * @param employeeId to update an employee details.
+	 * @param model Contains the objects of the web page
+	 * @return Name of the redirecting page.
+	 * @throws ServletException
+	 * @throws IOException
 	 */
-    public void deleteAddress(HttpServletRequest request, 
-    		HttpServletResponse response) throws ServletException, IOException {
-        boolean isUpdated = false;
+	@RequestMapping("/updateEmployee")
+    public String updateEmployee(@RequestParam Integer employeeId, 
+    		Model model) throws ServletException, IOException {
+		EmployeeVO employeeVO = null;
+        try {
+        	employeeVO = employeeService.getEmployeeById(employeeId);
+        } catch (EmployeeManagementException exception) {
+            EmployeeManagementLogger.logger.error(exception);
+        }
+        model.addAttribute("isDublicateMobileNumber", false);
+		model.addAttribute("isDublicateEmail", false);
+		model.addAttribute("employeeVO",employeeVO);
+		return "UpdateAllFields";
+    }
+	
+	/**
+	 * Updates all the fields of an Employee.
+	 * 
+	 * @param employee employee object to update.
+	 * @param employeeId Id of the employee which is to be updated.
+	 * @param model Contains the objects of the web page
+	 * @return Name of the page where the response is being forwarded.
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	@RequestMapping("/updateAllFields")
+    public String updateAllFields(@ModelAttribute("employeeVO")
+    EmployeeVO employee, @RequestParam int employeeId, Model model) 
+    		throws ServletException, IOException {
+        boolean isDublicateEmail =  false;
+        boolean isDublicateMobileNumber = false;
+        String redirectPage =  "";
         EmployeeVO employeeVO = null;
-        int employeeId = 0;
-        int addressId = 1;
+		try {
+			if (null != employee) {
+				employeeVO = employeeService.getEmployeeById(employeeId);
+				if (null != employeeVO) {
+					if (!(employeeVO.getEmail().equals(employee.getEmail()))) {
+						isDublicateEmail = employeeService
+								.checkDuplicateEmail(employee.getEmail());
+					}
+					if ((employeeVO.getMobileNumber() 
+							!= employee.getMobileNumber())) {
+						isDublicateMobileNumber = employeeService
+								.checkDuplicateMobileNumber(employee
+										.getMobileNumber());
+					}
+					if ((true != isDublicateMobileNumber) 
+							&& (true != isDublicateEmail)) {
+						employeeVO.setName(employee.getName());
+						employeeVO
+						    .setMobileNumber(employee.getMobileNumber());
+						employeeVO.setEmail(employee.getEmail());
+						employeeVO.setSalary(employee.getSalary());
+						employeeVO.setDateOfBirth(employee.getDateOfBirth());
+						redirectPage = "SingleEmployeeDisplay";
+					} else {
+						redirectPage = "UpdateAllFields";
+					}
+				}
+			    employeeService.updateAllFields(employeeVO);
+			}
+        } catch (EmployeeManagementException exception) {
+            EmployeeManagementLogger.logger.error(exception);
+        }
+        model.addAttribute("isDublicateMobileNumber", isDublicateMobileNumber);
+		model.addAttribute("isDublicateEmail", isDublicateEmail);
+		model.addAttribute("returnedEmployee",employeeVO);
+        return redirectPage;
+	}
+
+	/**
+	 * Deletes an Address from an Employee.
+	 * 
+	 * @param employeeId to delete address.
+	 * @param addressId 
+	 * @param model Contains the objects of the web page
+	 * @return Name of the page which the response is being redirected.
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	@RequestMapping("/deleteAddress")
+    public String deleteAddress(@RequestParam Integer employeeId,
+    		@RequestParam Integer addressId, Model model) 
+    		throws ServletException, IOException {
+        EmployeeVO employeeVO = null;
         AddressDTO addressToDelete = null;
-        String message = "Address deleted Successfully";
-        String error = "Address not successful";
-        
-    	EmployeeService employeeService = new EmployeeServiceImplementation();
     	try {
-        	employeeId = Integer.parseInt(request.getParameter("employeeId"));
             employeeVO = employeeService.getEmployeeById(employeeId);
         	if (null != employeeVO) {
-        		addressId = Integer.parseInt(request.getParameter("addressId"));
-
                 Set<AddressDTO> addresses = employeeVO.getaddressesDTO();
                 for(AddressDTO address:addresses) {
                 	if(addressId == address.getAddressId()) {
@@ -347,37 +306,62 @@ public class EmployeeServlet extends HttpServlet {
                 	addresses.remove(addressToDelete);
                 }
                 employeeVO.setaddressesDTO(addresses);
-                isUpdated = employeeService.updateAllFields(employeeVO);
+                employeeService.updateAllFields(employeeVO);
         	}
-            request.setAttribute("isUpdated", isUpdated);
-        	request.setAttribute("error", error);
-            request.setAttribute("employeeVO", employeeVO);
-            request.setAttribute("message", message);
-	    	request.getRequestDispatcher("Updated.jsp")
-	    	    .forward(request, response);
     	} catch (EmployeeManagementException exception) {
             EmployeeManagementLogger.logger.error(exception);
         }
+    	model.addAttribute("returnedEmployee", employeeVO);
+    	return "SingleEmployeeDisplay";
     }
-    
+	
 	/**
-	 * Displays the Projects assigned or unassigned for an employee based 
-	 * on user's choice. And forward data to appropriate JSP pages.
+	 * Adds an address to an employee.
 	 * 
-	 * @param request- Http servlet request containing request information
-	 * @param response-Http servlet response containing response information
+	 * @param addressDTO addressDTO object containing values from user.
+	 * @param addressId
+	 * @param model Contains the objects of the web page
+	 * @return Name of the page which the response is being redirected.
+	 * @throws ServletException
+	 * @throws IOException
 	 */
-    public void assignAndUnassign(HttpServletRequest request,
-    		HttpServletResponse response) throws ServletException, IOException {
+	@RequestMapping("/addAddress")
+    public String addAddress(@ModelAttribute("addressDTO") 
+    		AddressDTO addressDTO, @RequestParam Integer addressId, 
+    		Model model) throws ServletException, IOException {
+        EmployeeVO employeeVO = null;
+    	try {
+            employeeVO = employeeService.getEmployeeById(addressId);
+        	if (null != employeeVO) {
+                Set<AddressDTO> addresses = employeeVO.getaddressesDTO();
+                addresses.add(addressDTO);
+                employeeVO.setaddressesDTO(addresses);
+                employeeService.updateAllFields(employeeVO);
+        	}
+    	} catch (EmployeeManagementException exception) {
+            EmployeeManagementLogger.logger.error(exception);
+        }
+    	model.addAttribute("returnedEmployee", employeeVO);
+    	return "SingleEmployeeDisplay";
+    }
+	
+	/**
+	 * Gets the employee to assign the projects and forward it to the 
+	 * corresponding pages.
+	 * 
+	 * @param employeeId To get the Employee object to assign projects.
+	 * @param model Contains the objects of the web page
+	 * @return Name of the page which the response is being redirected.
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	@RequestMapping("/assignProject")
+    public String assignProject(@RequestParam Integer employeeId, 
+    		Model model) throws ServletException, IOException {
 		EmployeeVO employeeVO = null;
-		int employeeId = 0;
-		String type = "";
         Set<ProjectDTO> assignedProjects = null;
         List<ProjectDTO> allProjects = null;
-        EmployeeService employeeService = new EmployeeServiceImplementation();
         try {
-        	employeeId = Integer.parseInt(request.getParameter("employeeId"));
-        	type = request.getParameter("action");
         	employeeVO = employeeService.getEmployeeById(employeeId);
         	if( null != employeeVO) {
         		assignedProjects = employeeVO.getProjectsDTO();
@@ -386,45 +370,69 @@ public class EmployeeServlet extends HttpServlet {
                     assignedProjects = new HashSet<ProjectDTO>();
                 }
         	}
-        	if(type.equals("assign")) {
-            	allProjects.removeAll(assignedProjects);
-            	request.setAttribute("projects", allProjects);
-        	    request.getRequestDispatcher("AssignProject.jsp")
-        	        .forward(request, response);
-        	} else {
-            	request.setAttribute("projects", assignedProjects);
-            	request.getRequestDispatcher("UnAssignProject.jsp")
-            	    .forward(request, response);
+            allProjects.removeAll(assignedProjects);
+        } catch (EmployeeManagementException exception) {
+            EmployeeManagementLogger.logger.error(exception);
+        }
+        model.addAttribute("employeeId", employeeId);
+        model.addAttribute("projects",allProjects);
+        return "AssignProject";
+    }
+	
+	/**
+	 * Gets the employee to unassign the projects and forward it to the 
+	 * corresponding pages.
+	 * 
+	 * @param employeeId To get the Employee object to unassign projects.
+	 * @param model Contains the objects of the web page
+	 * @return Name of the page which the response is being redirected.
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	@RequestMapping("/unassignProject")
+    public String unassignProject(@RequestParam Integer employeeId, 
+    		Model model) throws ServletException, IOException {
+		EmployeeVO employeeVO = null;
+        Set<ProjectDTO> assignedProjects = null;
+        try {
+        	employeeVO = employeeService.getEmployeeById(employeeId);
+        	if( null != employeeVO) {
+        		assignedProjects = employeeVO.getProjectsDTO();
+                if (assignedProjects.isEmpty() || (null == assignedProjects)) {
+                    assignedProjects = new HashSet<ProjectDTO>();
+                }
         	}
         } catch (EmployeeManagementException exception) {
             EmployeeManagementLogger.logger.error(exception);
         }
+        model.addAttribute("employeeId", employeeId);
+        model.addAttribute("projects",assignedProjects);
+        return "UnAssignProject";
     }
-    
+	
 	/**
-	 * Assigns a project to an Employee.
+	 * Assign Projects to an employee.
 	 * 
-	 * @param request- Http servlet request containing request information
-	 * @param response-Http servlet response containing response information
+	 * @param employeeId to assign projects.
+	 * @param projectIds
+	 * @param model Contains the objects of the web page
+	 * @return Name of the page which the response is being redirected.
+	 * @throws ServletException
+	 * @throws IOException
 	 */
-    public void assignProject(HttpServletRequest request,
-    		HttpServletResponse response) throws ServletException, IOException {
-    	EmployeeService employeeService = new EmployeeServiceImplementation();
-		int employeeId = 0;
+    @RequestMapping("/assign")
+    public String assignProject(@RequestParam Integer employeeId, 
+    		@RequestParam("projectIds") int[] projectIds, Model model) 
+    				throws ServletException, IOException {
     	EmployeeVO employeeVO = null;
+        List<ProjectDTO> allProjects = null;
         Set<ProjectDTO> assignedProjects = null;
         List<ProjectDTO> projectsToAssign;
-        String message = "Project Assigned Successfully";
-        String error = "Project Assign not successful";
-        boolean isUpdated = false;
-        int projectIds[] = new int[1];
         try {
-        	employeeId = Integer.parseInt(request.getParameter("employeeId"));
         	employeeVO = employeeService.getEmployeeById(employeeId);
+    		allProjects = employeeService.getAllProjectDTOs();
         	if( null != employeeVO) {
         		assignedProjects = employeeVO.getProjectsDTO();
-            	projectIds[0] = Integer.parseInt(request
-            			.getParameter("projectId"));
                 projectsToAssign = employeeService.getProjectDTOs(projectIds);
                 if (assignedProjects.isEmpty() || (null == assignedProjects)) {
                     assignedProjects = new HashSet<ProjectDTO>();
@@ -434,65 +442,53 @@ public class EmployeeServlet extends HttpServlet {
                     assignedProjects.add(project);
                 }
                 employeeVO.setProjectsDTO(assignedProjects);
-                isUpdated = employeeService.updateAllFields(employeeVO);
-                request.setAttribute("isUpdated", isUpdated);
-            	request.setAttribute("error", error);
+                employeeService.updateAllFields(employeeVO);
+                allProjects.removeAll(assignedProjects);
 
-                request.setAttribute("employeeVO", employeeVO);
-                request.setAttribute("message", message);
-
-    	    	request.getRequestDispatcher("Updated.jsp")
-    	    	    .forward(request, response);
         	}
         } catch (EmployeeManagementException exception) {
             EmployeeManagementLogger.logger.error(exception);
         }
+        model.addAttribute("employeeId", employeeId);
+        model.addAttribute("projects",allProjects);
+        return "AssignProject";
     }
 
 	/**
-	 * Unassigns a project from an Employee.
+	 * UnAssign Projects from an employee.
 	 * 
-	 * @param request- Http servlet request containing request information
-	 * @param response-Http servlet response containing response information
+	 * @param employeeId to unassign projects.
+	 * @param projectIds
+	 * @param model Contains the objects of the web page
+	 * @return Name of the page which the response is being redirected.
+	 * @throws ServletException
+	 * @throws IOException
 	 */
-    public void unAssignProject(HttpServletRequest request, 
-    		HttpServletResponse response) throws ServletException, IOException {
-    	EmployeeService employeeService = new EmployeeServiceImplementation();
-		int employeeId = 0;
+	@RequestMapping("/unAssign")
+    public String unAssignProject(@RequestParam Integer employeeId,
+    		@RequestParam("projectIds") int[] projectIds, Model model) 
+    		throws ServletException, IOException {
     	EmployeeVO employeeVO = null;
         Set<ProjectDTO> assignedProjects = null;
         List<ProjectDTO> projectsToUnAssign;
-        String message = "Project UnAssigned Successfully";
-        String error = "Project UnAssign not successful";
-        boolean isUpdated = false;
-        int projectIds[] = new int[1];
         try {
-        	employeeId = Integer.parseInt(request.getParameter("employeeId"));
         	employeeVO = employeeService.getEmployeeById(employeeId);
         	if( null != employeeVO) {
         		assignedProjects = employeeVO.getProjectsDTO();
-            	projectIds[0] = Integer.parseInt(request
-            			.getParameter("projectId"));
-            	projectsToUnAssign = employeeService.getProjectDTOs(projectIds);
+            	projectsToUnAssign = employeeService
+            			.getProjectDTOs(projectIds);
                 if (assignedProjects.isEmpty() || (null == assignedProjects)) {
                     assignedProjects = new HashSet<ProjectDTO>();
                 }
                 assignedProjects.removeAll(projectsToUnAssign);
-                
                 employeeVO.setProjectsDTO(assignedProjects);
-                isUpdated = employeeService.updateAllFields(employeeVO);
-                request.setAttribute("isUpdated", isUpdated);
-            	request.setAttribute("error", error);
-
-                request.setAttribute("employeeVO", employeeVO);
-                request.setAttribute("message", message);
-
-    	    	request.getRequestDispatcher("Updated.jsp")
-    	    	    .forward(request, response);
+                employeeService.updateAllFields(employeeVO);
         	}
         } catch (EmployeeManagementException exception) {
             EmployeeManagementLogger.logger.error(exception);
-        }	
+        }
+        model.addAttribute("employeeId", employeeId);
+        model.addAttribute("projects", assignedProjects);
+        return "UnAssignProject";
     }
-    
 }

@@ -5,13 +5,13 @@
 <head>
 <meta charset="UTF-8">
 <title>View single project</title>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="resources/css/style.css">
 </head>
 <body>
     <header class="header1">
     <div class="row">
     <div class="logo" style = "float: left;" >
-    <img alt="Logo" src="logo.png">
+    <img alt="Logo" src="resources/css/logo.png">
     <h1>Employee Management System</h1>
     </div>
         <ul class="main-nav">
@@ -21,9 +21,8 @@
         </div>
     </header>
     <div style="display:block;margin:100px auto;">
-    <form action = "ProjectServlet" method = "post">
-       <input type="hidden" name="type" value="view">
-       Project Id:<input type = "text" name = "projectId" pattern = "[1-9][0-9]{0,4}"/><br><br>
+    <form action = "viewSingleProject" method = "post">
+       Project Id:<input type = "text" name = "projectId" pattern = "[1-9][0-9]{0,4}" required/><br><br>
         <input class="view-button" type = "submit" value ="Submit"/><br/>
     </form>
    <button class="view-button"><a href="ProjectMenu.jsp">Project Menu</a></button>

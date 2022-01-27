@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 /**
  * Project is a POJO class with getter & setter methods 
  *
@@ -18,6 +20,7 @@ import java.util.Set;
  */
 public class ProjectDTO {
     private int projectId;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
     private String name;
     private String manager;

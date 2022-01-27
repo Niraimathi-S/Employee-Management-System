@@ -9,6 +9,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.HashSet;
 
 import com.ideas2it.employeemanagement.model.AddressDTO;
@@ -24,9 +27,11 @@ public class EmployeeVO {
     private int employeeId;
     private long mobileNumber;
     private float salary;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateOfBirth;
     private String name;
     private String email;
+    private AddressDTO addressDTO = new AddressDTO();
     private Set<AddressDTO> addressesDTO = new HashSet<AddressDTO>();
     private Set<ProjectDTO> projectsDTO = new HashSet<ProjectDTO>();
 
@@ -82,7 +87,20 @@ public class EmployeeVO {
         this.addressesDTO = addressesDTO;
         this.projectsDTO = projectsDTO;
     }
-
+    
+    public EmployeeVO (String name, String email,  
+            long mobileNumber, LocalDate dateOfBirth, float salary,
+            Set<AddressDTO> addressesDTO) {
+        this.employeeId = employeeId;
+        this.name = name;
+        this.email = email;
+        this.mobileNumber = mobileNumber;
+        this.dateOfBirth = dateOfBirth;
+        this.salary = salary;
+        this.addressesDTO = addressesDTO;
+        this.projectsDTO = projectsDTO;
+    }
+    
     /**
      * Method to get Employee id
      *
@@ -191,7 +209,15 @@ public class EmployeeVO {
         this.salary = salary;
     }
 
-    public Set<AddressDTO> getaddressesDTO() {
+    public AddressDTO getAddressDTO() {
+		return addressDTO;
+	}
+
+	public void setAddressDTO(AddressDTO addressDTO) {
+		this.addressDTO = addressDTO;
+	}
+
+	public Set<AddressDTO> getaddressesDTO() {
         return addressesDTO;
     }
 
