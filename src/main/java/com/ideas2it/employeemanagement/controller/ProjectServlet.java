@@ -21,6 +21,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ideas2it.employeemanagement.exception.EmployeeManagementException;
@@ -57,7 +58,7 @@ public class ProjectServlet extends HttpServlet {
 	 * @param model
 	 * @return CreateProject create page.
 	 */
-	@RequestMapping("/createNewProject")
+	@RequestMapping(value="/createNewProject", method = RequestMethod.GET)
     public String createNewProject(Model model){
 		model.addAttribute("projectDTO",new ProjectDTO());
 		System.out.println("createnew project");
@@ -73,7 +74,7 @@ public class ProjectServlet extends HttpServlet {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-	@RequestMapping("/createProject") 
+	@RequestMapping(value = "/createProject", method = RequestMethod.POST) 
 	public String createProject(@ModelAttribute("projectDTO") 
 			ProjectDTO projectDTO, Model model) 
 			throws ServletException, IOException { 
@@ -123,7 +124,7 @@ public class ProjectServlet extends HttpServlet {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-    @RequestMapping("/viewSingleProject")
+    @RequestMapping(value = "/viewSingleProject", method = RequestMethod.GET)
     public String viewSingleProject(@RequestParam Integer projectId,
     		Model model) throws ServletException, IOException { 
     	  ProjectDTO projectDTO = null; 
@@ -168,7 +169,7 @@ public class ProjectServlet extends HttpServlet {
      * @throws ServletException
      * @throws IOException
      */
-    @RequestMapping("/update")
+    @RequestMapping(value = "/update", method = RequestMethod.GET)
     public String update(@RequestParam Integer projectId, Model model) 
     		throws ServletException, IOException { 
     	ProjectDTO projectDTO =null; 
@@ -192,7 +193,7 @@ public class ProjectServlet extends HttpServlet {
      * @throws ServletException
      * @throws IOException
      */
-    @RequestMapping("/updateProject")
+    @RequestMapping(value = "/updateProject", method = RequestMethod.GET)
     public String updateProject(@ModelAttribute("projectDTO") 
     		ProjectDTO project, @RequestParam Integer projectId, Model model) 
     		throws ServletException, IOException { 
@@ -229,7 +230,7 @@ public class ProjectServlet extends HttpServlet {
      * @throws ServletException
      * @throws IOException
      */
-	@RequestMapping("/assign&unAssign")
+	@RequestMapping(value = "/assign&unAssign", method = RequestMethod.GET)
     public String assignProject(@RequestParam Integer projectId, @RequestParam String type, Model model) throws ServletException, IOException {
 		ProjectDTO projectDTO = null;
 		Set<EmployeeVO> assignedEmployees = null;
@@ -271,7 +272,7 @@ public class ProjectServlet extends HttpServlet {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-    @RequestMapping("/assignEmployee")
+    @RequestMapping(value = "/assignEmployee", method = RequestMethod.GET)
     public String assignEmployee(@RequestParam Integer projectId,
     		@RequestParam("employeeIds") int[] employeeIds, Model model) 
     		throws ServletException, IOException {
@@ -318,7 +319,7 @@ public class ProjectServlet extends HttpServlet {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-    @RequestMapping("/UnAssignEmployee")
+    @RequestMapping(value = "/UnAssignEmployee", method = RequestMethod.GET)
     public String unAssignEmployee(@RequestParam Integer projectId, 
     		@RequestParam("employeeIds") int[] employeeIds, Model model) 
     		throws ServletException, IOException {

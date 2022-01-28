@@ -33,6 +33,5 @@
       <mapping resource = "Employee.hbm.xml"/>
       <mapping resource = "Address.hbm.xml"/>
       <mapping resource = "Project.hbm.xml"/>
-      
    </session-factory>
 </hibernate-configuration>

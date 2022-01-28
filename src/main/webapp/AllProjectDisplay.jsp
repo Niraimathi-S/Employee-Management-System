@@ -74,7 +74,7 @@ background-color:white;
               <td><%=projectDTO.getStartDate() %></td>
               <td><%=projectDTO.getDomainName() %></td>
               <td>
-              <form action = "viewSingleProject" method = "post" style="text-align:center;">
+              <form action = "viewSingleProject" method = "get" style="text-align:center;">
               <input type = "hidden" name = "projectId" value="<%=projectDTO.getProjectId() %>" pattern = "[1-9][0-9]{0,4}" required/><br>
               <a><input class="view-single" type = "submit" value ="view details"/></a><br><br>
                </form>

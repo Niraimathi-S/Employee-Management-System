@@ -61,11 +61,11 @@ width:200px;}
            <td>Domain         :<%=projectDTO.getDomainName()%></td>
         </tr>
         </table>
-       <form action = "update" method = "post" style="margin:auto;">
+       <form action = "update" method = "get" style="margin:auto;">
        <input type = "hidden" name = "projectId" value=<%=projectDTO.getProjectId() %> pattern = "[1-9][0-9]{0,4}"/>
        <input class="button" type = "submit" value = "Update"/><br/>
        </form>
-       <form action = "deleteProject" method = "post">
+       <form action = "deleteProject" method = "get">
        <input type = "hidden" name = "projectId" value=<%=projectDTO.getProjectId() %> pattern = "[1-9][0-9]{0,4}"/> 
        <input class="button" type = "submit" value = "Delete"/><br />
        </form>

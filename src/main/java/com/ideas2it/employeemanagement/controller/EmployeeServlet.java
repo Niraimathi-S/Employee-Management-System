@@ -38,6 +38,7 @@ import com.ideas2it.employeemanagement.service.EmployeeService;
 public class EmployeeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	EmployeeService employeeService;
+	
 	public void setEmployeeService(EmployeeService employeeService) {
 		this.employeeService = employeeService;
 	}
@@ -61,7 +62,7 @@ public class EmployeeServlet extends HttpServlet {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-	@RequestMapping(value = "/save")
+	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public String createEmployee(@ModelAttribute("employeeVO")
 			EmployeeVO employeeVO, Model model) 
 			throws ServletException, IOException  {
@@ -117,7 +118,7 @@ public class EmployeeServlet extends HttpServlet {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-	@RequestMapping("/viewSingle")
+	@RequestMapping(value = "/viewSingle",method = RequestMethod.POST)
 	public String viewSingleEmployee(@RequestParam Integer employeeId, 
 			Model model) throws ServletException, IOException {
 		EmployeeVO employeeVO = null;
@@ -160,7 +161,7 @@ public class EmployeeServlet extends HttpServlet {
      * @throws ServletException
      * @throws IOException
      */
-	@RequestMapping("/delete")
+	@RequestMapping(value = "/delete", method = RequestMethod.GET)
 	public String deleteEmployee(@RequestParam Integer employeeId, 
 			Model model) throws ServletException, IOException {
         List<EmployeeVO> employees = null;
@@ -189,7 +190,7 @@ public class EmployeeServlet extends HttpServlet {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-	@RequestMapping("/updateAddress")
+	@RequestMapping(value = "/updateAddress", method = RequestMethod.GET)
     public String updateAddress(@RequestParam Integer employeeId, 
     		Model model) throws ServletException, IOException {
 		model.addAttribute("employeeId", employeeId);
@@ -206,7 +207,7 @@ public class EmployeeServlet extends HttpServlet {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-	@RequestMapping("/updateEmployee")
+	@RequestMapping(value = "/updateEmployee", method = RequestMethod.GET)
     public String updateEmployee(@RequestParam Integer employeeId, 
     		Model model) throws ServletException, IOException {
 		EmployeeVO employeeVO = null;
@@ -231,7 +232,7 @@ public class EmployeeServlet extends HttpServlet {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-	@RequestMapping("/updateAllFields")
+	@RequestMapping(value = "/updateAllFields", method = RequestMethod.GET)
     public String updateAllFields(@ModelAttribute("employeeVO")
     EmployeeVO employee, @RequestParam int employeeId, Model model) 
     		throws ServletException, IOException {
@@ -287,7 +288,7 @@ public class EmployeeServlet extends HttpServlet {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-	@RequestMapping("/deleteAddress")
+	@RequestMapping(value = "/deleteAddress", method = RequestMethod.GET)
     public String deleteAddress(@RequestParam Integer employeeId,
     		@RequestParam Integer addressId, Model model) 
     		throws ServletException, IOException {
@@ -325,7 +326,7 @@ public class EmployeeServlet extends HttpServlet {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-	@RequestMapping("/addAddress")
+	@RequestMapping(value = "/addAddress", method = RequestMethod.GET)
     public String addAddress(@ModelAttribute("addressDTO") 
     		AddressDTO addressDTO, @RequestParam Integer addressId, 
     		Model model) throws ServletException, IOException {
@@ -355,7 +356,7 @@ public class EmployeeServlet extends HttpServlet {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-	@RequestMapping("/assignProject")
+	@RequestMapping(value = "/assignProject", method = RequestMethod.GET)
     public String assignProject(@RequestParam Integer employeeId, 
     		Model model) throws ServletException, IOException {
 		EmployeeVO employeeVO = null;
@@ -389,7 +390,7 @@ public class EmployeeServlet extends HttpServlet {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-	@RequestMapping("/unassignProject")
+	@RequestMapping(value = "/unassignProject", method = RequestMethod.GET)
     public String unassignProject(@RequestParam Integer employeeId, 
     		Model model) throws ServletException, IOException {
 		EmployeeVO employeeVO = null;
@@ -420,7 +421,7 @@ public class EmployeeServlet extends HttpServlet {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-    @RequestMapping("/assign")
+    @RequestMapping(value = "/assign", method = RequestMethod.GET)
     public String assignProject(@RequestParam Integer employeeId, 
     		@RequestParam("projectIds") int[] projectIds, Model model) 
     				throws ServletException, IOException {
@@ -464,7 +465,7 @@ public class EmployeeServlet extends HttpServlet {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-	@RequestMapping("/unAssign")
+	@RequestMapping(value = "/unAssign", method = RequestMethod.GET)
     public String unAssignProject(@RequestParam Integer employeeId,
     		@RequestParam("projectIds") int[] projectIds, Model model) 
     		throws ServletException, IOException {
