@@ -131,11 +131,12 @@ public class ProjectServlet extends HttpServlet {
     	  try { 
     		  projectDTO = projectService.getProjectById(projectId);
     		  model.addAttribute("projectDTO", projectDTO);
+    		  model.addAttribute("project", projectDTO);
+    		  model.addAttribute("employeeList", projectDTO.getEmployeesVO());
+    		  model.addAttribute("isUpdated", false);
     	  } catch (EmployeeManagementException exception) {
     		  EmployeeManagementLogger.logger.error(exception); 
     	  }
-    	  model.addAttribute("returnedProjectDTO", projectDTO);
-    	  model.addAttribute("isUpdated",false);
     	  return "SingleProjectDisplay";
       }
   

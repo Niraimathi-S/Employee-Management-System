@@ -1,0 +1,24 @@
+Date - 2022-01-29 23:07:23
+Priority level - [ERROR]
+Exception - java.lang.IllegalArgumentException: org.hibernate.hql.internal.ast.QuerySyntaxException: mployee is not mapped [select e from mployee e left join fetch e.addresses a left join fetch e.projects p WHERE e.id = :id]
+ 	 at Class name - com.ideas2it.employeemanagement.dao.daoimpl.EmployeeDAOImplementation.getEmployeeById
+ 	 at com.ideas2it.employeemanagement.logger.EmployeeManagementLogger
+
+Date - 2022-01-29 23:07:23
+Priority level - [ERROR]
+Exception - com.ideas2it.employeemanagement.exception.EmployeeManagementException: Exception occured while fetching single employee.
+ 	 at Class name - com.ideas2it.employeemanagement.controller.EmployeeServlet.viewSingleEmployee
+ 	 at com.ideas2it.employeemanagement.logger.EmployeeManagementLogger
+
+Date - 2022-01-29 23:09:02
+Priority level - [ERROR]
+Exception - java.lang.IllegalArgumentException: org.hibernate.hql.internal.ast.QuerySyntaxException: mployee is not mapped [select e from mployee e left join fetch e.addresses a left join fetch e.projects p WHERE e.id = :id]
+ 	 at Class name - com.ideas2it.employeemanagement.dao.daoimpl.EmployeeDAOImplementation.getEmployeeById
+ 	 at com.ideas2it.employeemanagement.logger.EmployeeManagementLogger
+
+Date - 2022-01-29 23:09:02
+Priority level - [ERROR]
+Exception - com.ideas2it.employeemanagement.exception.EmployeeManagementException: Exception occured while fetching single employee.
+ 	 at Class name - com.ideas2it.employeemanagement.controller.EmployeeServlet.viewSingleEmployee
+ 	 at com.ideas2it.employeemanagement.logger.EmployeeManagementLogger
+

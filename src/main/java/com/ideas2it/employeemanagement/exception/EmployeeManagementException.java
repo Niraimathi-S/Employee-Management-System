@@ -14,7 +14,24 @@ import com.ideas2it.employeemanagement.util.ConstantErrors;
  * @version 1.0
  */
 public class EmployeeManagementException extends Exception {
-    public EmployeeManagementException (String errorMessage) {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+    public EmployeeManagementException ( ) {
+        super();
+    }
+	
+	public EmployeeManagementException (String errorMessage) {
         super(ConstantErrors.getError().get(errorMessage));
+    }
+    
+    public EmployeeManagementException ( String errorMessage, Throwable exception) {
+        super(ConstantErrors.getError().get(errorMessage), exception);
+    }
+    
+    public EmployeeManagementException (Throwable exception) {
+        super(exception);
     }
 }

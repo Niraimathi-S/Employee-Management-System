@@ -1657,3 +1657,48 @@ java.lang.IllegalStateException: Neither BindingResult nor plain target object f
 	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:882) [jetty-util-9.4.40.v20210413.jar:9.4.40.v20210413]
 	at org.eclipse.jetty.util.thread.QueuedThreadPool$Runner.run(QueuedThreadPool.java:1036) [jetty-util-9.4.40.v20210413.jar:9.4.40.v20210413]
 	at java.lang.Thread.run(Thread.java:834) [?:?]
+Date - 2022-01-29 19:45:38
+Priority level - [ERROR]
+Logger name - com.ideas2it.employeemanagement.logger.EmployeeManagementLogger
+File name  - EmployeeServlet.java
+Class name - com.ideas2it.employeemanagement.controller.EmployeeServlet
+Method name - viewSingleEmployee
+Exception - com.ideas2it.employeemanagement.exception.EmployeeManagementException: Exception occured while fetching single employee.
+ERROR
+
+Date - 2022-01-29 19:49:31
+Priority level - [ERROR]
+Logger name - com.ideas2it.employeemanagement.logger.EmployeeManagementLogger
+File name  - EmployeeServlet.java
+Class name - com.ideas2it.employeemanagement.controller.EmployeeServlet
+Method name - viewSingleEmployee
+Exception - com.ideas2it.employeemanagement.exception.EmployeeManagementException: Exception occured while fetching single employee.
+ERROR
+
+Date - 2022-01-29 19:52:53
+Priority level - [ERROR]
+Logger name - com.ideas2it.employeemanagement.logger.EmployeeManagementLogger
+File name  - EmployeeServlet.java
+Class name - com.ideas2it.employeemanagement.controller.EmployeeServlet
+Method name - viewSingleEmployee
+Exception - com.ideas2it.employeemanagement.exception.EmployeeManagementException: Exception occured while fetching single employee.
+ERROR
+
+Date - 2022-01-29 19:53:06
+Priority level - [ERROR]
+Logger name - com.ideas2it.employeemanagement.logger.EmployeeManagementLogger
+File name  - EmployeeServlet.java
+Class name - com.ideas2it.employeemanagement.controller.EmployeeServlet
+Method name - viewSingleEmployee
+Exception - com.ideas2it.employeemanagement.exception.EmployeeManagementException: Exception occured while fetching single employee.
+ERROR
+
+Date - 2022-01-29 19:56:22
+Priority level - [ERROR]
+Logger name - com.ideas2it.employeemanagement.logger.EmployeeManagementLogger
+File name  - EmployeeServlet.java
+Class name - com.ideas2it.employeemanagement.controller.EmployeeServlet
+Method name - viewSingleEmployee
+Exception - com.ideas2it.employeemanagement.exception.EmployeeManagementException: Exception occured while fetching single employee.
+ERROR
+

@@ -26,9 +26,9 @@
 <property name="employeeService" ref="employeeServiceImplementation"/>
 <property name="projectDAO" ref="projectDAOImplementation"/>
 </bean>
-<bean id="employeeDAOImplementation" class = "com.ideas2it.employeemanagement.dao.daoimpl.EmployeeDAOImplementation">
+<bean id="employeeDAOImplementation" class = "com.ideas2it.employeemanagement.dao.impl.EmployeeDAOImplementation">
 </bean>
-<bean id="projectDAOImplementation" class = "com.ideas2it.employeemanagement.dao.daoimpl.ProjectDAOImplementation">
+<bean id="projectDAOImplementation" class = "com.ideas2it.employeemanagement.dao.impl.ProjectDAOImplementation">
 </bean>
 <bean id="projectServlet" class="com.ideas2it.employeemanagement.controller.ProjectServlet">
 <property name="projectService" ref="projectServiceImplementation"/>

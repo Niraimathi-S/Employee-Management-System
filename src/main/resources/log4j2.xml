@@ -2,11 +2,11 @@
 <Configuration status = "INFO">
     <Appenders>
         <Console name="Console">
-            <PatternLayout pattern="Date - %d{yyyy-MM-dd HH:mm:ss}%nPriority level - [%p]%nLogger name - %c{3}%nClass name - %C{6}%nFile name  - %F{6}%nMethod name - %M{6}%nException - %m%n"/>
+            <PatternLayout pattern="[%p]%d{yyyy-MM-dd HH:mm:ss}\t%msg%n \t at %C{6}.%M{6}%n \t at %logger{36}%n%n"/>
         </Console>
 
-        <File name="LogFile" fileName="com/ideas2it/employeemanagement/logger/EmployeeManagement.log">
-            <PatternLayout pattern="Date - %d{yyyy-MM-dd HH:mm:ss}%nPriority level - [%p]%nLogger name - %c{6}%nFile name  - %F{6}%nClass name - %C{6}%nMethod name - %M{6}%nException - %m%n"/>
+        <File name="LogFile" fileName="logs/EmployeeManagement.log" append="true">
+            <PatternLayout pattern="[%p]%d{yyyy-MM-dd HH:mm:ss}\t%msg%n \t at %C{6}.%M{6}%n \t at %logger{36}%n%n"/>
         </File>
     </Appenders>
 

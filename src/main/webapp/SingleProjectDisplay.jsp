@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" import="com.ideas2it.employeemanagement.model.EmployeeVO,com.ideas2it.employeemanagement.model.ProjectDTO"
     %>
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -32,47 +33,45 @@ width:200px;}
         </div>
     </header>
     <h2>Single project view</h2>
-<div class="display-single-div">
-    <%ProjectDTO projectDTO = (ProjectDTO)request.getAttribute("projectDTO");%>
-        <%if (null == projectDTO) {%>
-        <%="sorry..No such project ID exists!!." %><br>  
-        <%} else {%>
+<div class="display-single-div" style="color:black;">
+        <c:if test= "${null == project}">
+        <c:out value= "${ 'sorry..No such project ID exists!!.'}" /><br>  
+        </c:if>
+        <c:if test= "${null != project}">
                 <div style="color:black;margin-left:40%">
-
-        <%boolean isUpdated = (Boolean)request.getAttribute("isUpdated");
-        if(isUpdated) {%>
-        <%="Project Updated successfully." %>  
-        <%}%></div>
-        <%="Project Details:" %><br>
+        <c:if test= "${ isUpdated}">
+        <c:out value= "${'Project Updated successfully.'}" /><br>
+        </c:if></div>
+        <c:out value= "${'Project Details:'}" /><br>
         <table style="margin:0px auto;text-align:left;border-spacing: 10px;">
 
         <tr>
            <td>Project Details:</td>
         </tr>
         <tr>
-           <td>Project ID     :<%=projectDTO.getProjectId()%></td>
+           <td>Project ID     :<c:out value = "${ project.projectId}"/></td>
         </tr>
         <tr>
-           <td>Project Name   :<%=projectDTO.getName()%></td>
-           <td>Start Date     :<%=projectDTO.getStartDate()%></td>
+           <td>Project Name   :<c:out value = "${ project.name}"/></td>
+           <td>Start Date     :<c:out value = "${ project.startDate}"/></td>
         </tr>
         <tr>
-           <td>Project Manager:<%=projectDTO.getManager()%></td>
-           <td>Domain         :<%=projectDTO.getDomainName()%></td>
+           <td>Project Manager:<c:out value = "${ project.manager}"/></td>
+           <td>Domain         :<c:out value = "${ project.domainName}"/></td>
         </tr>
         </table>
        <form action = "update" method = "get" style="margin:auto;">
-       <input type = "hidden" name = "projectId" value=<%=projectDTO.getProjectId() %> pattern = "[1-9][0-9]{0,4}"/>
+       <input type = "hidden" name = "projectId"  value = "${ project.projectId}" pattern = "[1-9][0-9]{0,4}"/>
        <input class="button" type = "submit" value = "Update"/><br/>
        </form>
        <form action = "deleteProject" method = "get">
-       <input type = "hidden" name = "projectId" value=<%=projectDTO.getProjectId() %> pattern = "[1-9][0-9]{0,4}"/> 
+       <input type = "hidden" name = "projectId" value = "${ project.projectId}" pattern = "[1-9][0-9]{0,4}"/> 
        <input class="button" type = "submit" value = "Delete"/><br />
        </form>
-        <%if (!projectDTO.getEmployeesVO().isEmpty()) {%>
+        <c:if test = "${!employees.isEmpty()}">
         <br>
             Employees:
-            <table border="1" style="margin: 0px auto;">
+            <table border="1" style="margin: 0px auto;color:black;">
             <tr class="table-heading">
               <th>Employee Id</th>
               <th>Name</th>
@@ -81,30 +80,30 @@ width:200px;}
               <th>Mobile number</th>
               <th>Salary</th>
             </tr>
-        <%for (EmployeeVO employeeVO:projectDTO.getEmployeesVO()){ %>
+        <c:forEach var = "employee" items= "${employeeList}">
             <tr>
-              <td><%=employeeVO.getEmployeeId()%></td>
-              <td><%=employeeVO.getName()%></td>
-              <td><%=employeeVO.getDateOfBirth()%></td>
-              <td><%=employeeVO.getEmail()%></td>
-              <td><%=employeeVO.getMobileNumber()%></td>
-              <td><%=employeeVO.getSalary()%></td>
+              <td><c:out value = "${employee.employeeId}"/></td>
+              <td><c:out value = "${employee.name}"/></td>
+              <td><c:out value = "${employee.dateOfBirth}"/></td>
+              <td><c:out value = "${employee.email}"/></td>
+              <td><c:out value = "${employee.mobileNumber}"/></td>
+              <td><c:out value = "${employee.salary}"/></td>
             </tr>
-        <%} %>
+        </c:forEach>
         </table>
-        <%} %>
+        </c:if>
         <br>
        <form action = "assign&unAssign" method = "get">
        <input type="hidden" name="type" value="assign">
-       <input type = "hidden" name = "projectId" value="<%=projectDTO.getProjectId() %>" pattern = "[1-9][0-9]{0,4}"/> 
+       <input type = "hidden" name = "projectId" value="${ project.projectId}" pattern = "[1-9][0-9]{0,4}"/> 
        <input class="button" type = "submit" value = "Assign"/>
        </form>
        <form action = "assign&unAssign" method = "get">
        <input type="hidden" name="type" value="unAssign">
-       <input type = "hidden" name = "projectId" value="<%=projectDTO.getProjectId() %>" pattern = "[1-9][0-9]{0,4}"/> 
+       <input type = "hidden" name = "projectId" value="${ project.projectId}" pattern = "[1-9][0-9]{0,4}"/> 
        <input class="button" type = "submit" value = "UnAssign"/><br />
        </form><br>
-       <%} %>
+       </c:if>
        <a href="viewAllProject"><button class="button">Back</button></a>
        <a href="ProjectMenu.jsp"><button class="button">Project Menu</button></a>
 </div>

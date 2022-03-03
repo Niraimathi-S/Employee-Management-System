@@ -63,7 +63,7 @@
               <td><%=employeeVO.getMobileNumber()%></td>
               <td><%=employeeVO.getSalary()%></td>
         <td>
-        <form action = "viewSingle" method = "post" class="form">
+        <form action = "viewSingle" method = "get" class="form">
         <input type = "hidden" name = "employeeId" value="<%=employeeVO.getEmployeeId()%>" pattern = "[1-9][0-9]{0,4}"/><br>
         <input class="view-single" type = "submit" value ="view details"/><br><br>
         </form>

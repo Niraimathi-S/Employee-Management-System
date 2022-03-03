@@ -5,6 +5,7 @@
 package com.ideas2it.employeemanagement.controller;
 
 import java.io.IOException;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -118,16 +119,17 @@ public class EmployeeServlet extends HttpServlet {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-	@RequestMapping(value = "/viewSingle",method = RequestMethod.POST)
+	@RequestMapping(value = "/viewSingle",method = RequestMethod.GET)
 	public String viewSingleEmployee(@RequestParam Integer employeeId, 
 			Model model) throws ServletException, IOException {
 		EmployeeVO employeeVO = null;
         try {
         	employeeVO = employeeService.getEmployeeById(employeeId);
+        	model.addAttribute("returnedEmployee",employeeVO);
         } catch (EmployeeManagementException exception) {
             EmployeeManagementLogger.logger.error(exception);
         }
-		model.addAttribute("returnedEmployee",employeeVO);
+		
         return "SingleEmployeeDisplay";
 	}
 	

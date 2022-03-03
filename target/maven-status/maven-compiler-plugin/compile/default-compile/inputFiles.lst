@@ -2,14 +2,14 @@
 /home/user/eclipse-workspace/ems/src/main/java/com/ideas2it/employeemanagement/service/EmployeeService.java
 /home/user/eclipse-workspace/ems/src/main/java/com/ideas2it/employeemanagement/logger/EmployeeManagementLogger.java
 /home/user/eclipse-workspace/ems/src/main/java/com/ideas2it/employeemanagement/controller/ProjectServlet.java
+/home/user/eclipse-workspace/ems/src/main/java/com/ideas2it/employeemanagement/dao/impl/EmployeeDAOImplementation.java
 /home/user/eclipse-workspace/ems/src/main/java/com/ideas2it/employeemanagement/model/EmployeeVO.java
-/home/user/eclipse-workspace/ems/src/main/java/com/ideas2it/employeemanagement/dao/daoimpl/EmployeeDAOImplementation.java
 /home/user/eclipse-workspace/ems/src/main/java/com/ideas2it/employeemanagement/model/Employee.java
 /home/user/eclipse-workspace/ems/src/main/java/com/ideas2it/employeemanagement/service/impl/ProjectServiceImplementation.java
 /home/user/eclipse-workspace/ems/src/main/java/com/ideas2it/employeemanagement/controller/EmployeeFilter.java
 /home/user/eclipse-workspace/ems/src/main/java/com/ideas2it/employeemanagement/util/DatabaseConnection.java
 /home/user/eclipse-workspace/ems/src/main/java/com/ideas2it/employeemanagement/util/Mapper.java
-/home/user/eclipse-workspace/ems/src/main/java/com/ideas2it/employeemanagement/dao/daoimpl/ProjectDAOImplementation.java
+/home/user/eclipse-workspace/ems/src/main/java/com/ideas2it/employeemanagement/dao/impl/ProjectDAOImplementation.java
 /home/user/eclipse-workspace/ems/src/main/java/com/ideas2it/employeemanagement/service/impl/EmployeeServiceImplementation.java
 /home/user/eclipse-workspace/ems/src/main/java/com/ideas2it/employeemanagement/dao/ProjectDAO.java
 /home/user/eclipse-workspace/ems/src/main/java/com/ideas2it/employeemanagement/util/ConstantError.java

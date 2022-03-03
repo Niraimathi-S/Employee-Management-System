@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" import="com.ideas2it.employeemanagement.model.EmployeeVO"
     import="com.ideas2it.employeemanagement.model.AddressDTO,com.ideas2it.employeemanagement.model.ProjectDTO"%>
+    <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -68,7 +69,7 @@ width:200px;
        <input type = "hidden" name = "employeeId" value="<%=employeeVO.getEmployeeId() %>"/> 
        <input class="button" type = "submit" value = "Update"/>
        </form>
-       <form action = "delete" method = "post">
+       <form action = "delete" method = "get">
        <input type = "hidden" name = "employeeId" value="<%=employeeVO.getEmployeeId() %>"/> 
        <input class="button" type = "submit" value = "Delete"/> 
        </form> 
@@ -87,6 +88,7 @@ width:200px;
         <%for (AddressDTO address:employeeVO.getaddressesDTO()){ %>
             <tr>
               <td><%=address.getDoorNumber() %></td>
+              <td><c:out value = 'address.doorNumber'/>
               <td><%=address.getStreet() %></td>
               <td><%=address.getCity() %></td>
               <td><%=address.getState() %></td>
